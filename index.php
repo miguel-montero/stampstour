@@ -28,92 +28,6 @@ $page_og = [
     <!-- REVOLUTION SLIDER CSS -->
     <link rel="stylesheet" type="text/css" href="rev-slider-files/fonts/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="rev-slider-files/css/settings.css">
-
-    <!-- REVOLUTION LAYERS STYLES -->
-    <style>
-        .tp-caption.NotGeneric-Title,
-        .NotGeneric-Title {
-            color: rgba(255, 255, 255, 1.00);
-            font-size: 70px;
-            line-height: 70px;
-            font-weight: 800;
-            font-style: normal;
-            text-decoration: none;
-            background-color: transparent;
-            border-color: transparent;
-            border-style: none;
-            border-width: 0px;
-            border-radius: 0 0 0 0px;
-        }
-
-        .tp-caption.NotGeneric-SubTitle,
-        .NotGeneric-SubTitle {
-            color: rgba(255, 255, 255, 1.00);
-            font-size: 13px;
-            line-height: 20px;
-            font-weight: 500;
-            font-style: normal;
-            text-decoration: none;
-            background-color: transparent;
-            border-color: transparent;
-            border-style: none;
-            border-width: 0px;
-            border-radius: 0 0 0 0px;
-            letter-spacing: 4px;
-        }
-
-        .tp-caption.NotGeneric-Icon,
-        .NotGeneric-Icon {
-            color: rgba(255, 255, 255, 1.00);
-            font-size: 30px;
-            line-height: 30px;
-            font-weight: 400;
-            font-style: normal;
-            text-decoration: none;
-            background-color: rgba(0, 0, 0, 0);
-            border-color: rgba(255, 255, 255, 0);
-            border-style: solid;
-            border-width: 0px;
-            border-radius: 0px 0px 0px 0px;
-            letter-spacing: 3px;
-        }
-
-        .tp-caption.Hero-Button,
-        .Hero-Button {
-            color: rgba(255, 255, 255, 1.00);
-            font-size: 14px;
-            line-height: 14px;
-            font-weight: 500;
-            font-style: normal;
-            text-decoration: none;
-            background-color: rgba(0, 0, 0, 0);
-            border-color: rgba(255, 255, 255, 0.50);
-            border-style: solid;
-            border-width: 1px;
-            border-radius: 0px 0px 0px 0px;
-            letter-spacing: 3px;
-        }
-
-        .tp-caption.Hero-Button:hover,
-        .Hero-Button:hover {
-            color: rgba(0, 0, 0, 1.00);
-            text-decoration: none;
-            background-color: rgba(255, 255, 255, 1.00);
-            border-color: rgba(255, 255, 255, 1.00);
-            border-style: solid;
-            border-width: 1px;
-            border-radius: 0px 0px 0px 0px;
-            cursor: pointer;
-        }
-
-        @media (max-width: 767px) {
-            .NotGeneric-SubTitle {
-                letter-spacing: 2px;
-                text-align: center !important;
-                white-space: normal !important;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -142,6 +56,7 @@ $page_og = [
         <h1 class="visually-hidden">Santiago Day Tours: Valparaíso, Maipo Wine Valley, the Andes &amp; More | Stamps Tour</h1>
 
         <!-- Slider -->
+        <div class="hero-wrap">
         <div id="rev_slider_66_1_wrapper" class="rev_slider_wrapper fullwidthbanner-container" data-alias="image-hero" data-source="gallery" style="margin:0px auto;background:transparent;padding:0px;margin-top:0px;margin-bottom:0px;">
 
             <div id="rev_slider_66_1" class="rev_slider fullwidthabanner" style="display:none;" data-version="5.4.1">
@@ -198,84 +113,6 @@ $page_og = [
                             style="z-index: 5;background-color:rgba(0, 0, 0, 0.35);">
                         </div>
 
-                        <!-- TITLE -->
-                        <div
-                            class="tp-caption NotGeneric-Title"
-                            id="slide-170-layer-1"
-                            data-x="['center','center','center','center']"
-                            data-hoffset="['0','0','0','1']"
-                            data-y="['middle','middle','middle','middle']"
-                            data-voffset="['0','0','-22','0']"
-                            data-fontsize="['70','70','50','36']"
-                            data-lineheight="['70','70','50','36']"
-                            data-fontweight="['700','800','700','700']"
-                            data-width="none"
-                            data-height="none"
-                            data-whitespace="nowrap"
-                            data-type="text"
-                            data-responsive_offset="on"
-                            data-responsive="off"
-                            data-frames='[{"delay":1000,"speed":1500,"frame":"0","from":"z:0;rX:0deg;rY:0;rZ:0;sX:1.5;sY:1.5;skX:0;skY:0;opacity:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"y:[100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power2.easeInOut"}]'
-                            data-textAlign="['center','center','center','center']"
-                            data-paddingtop="[10,10,10,10]"
-                            data-paddingright="[0,0,0,0]"
-                            data-paddingbottom="[10,10,10,10]"
-                            data-paddingleft="[0,0,0,0]"
-                            style="z-index: 7; white-space: nowrap; font-weight: 700;font-family:Montserrat;">
-                            Discover Chile
-                        </div>
-
-                        <!-- SUBTITLE -->
-                        <div
-                            class="tp-caption NotGeneric-SubTitle tp-resizeme"
-                            id="slide-170-layer-4"
-                            data-x="['center','center','center','center']"
-                            data-hoffset="['0','0','0','1']"
-                            data-y="['middle','middle','middle','middle']"
-                            data-voffset="['52','52','28','60']"
-                            data-fontweight="['400','500','500','400']"
-                            data-width="none"
-                            data-height="none"
-                            data-whitespace="nowrap"
-                            data-type="text"
-                            data-responsive_offset="on"
-                            data-frames='[{"delay":1000,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power4.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"y:[100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power2.easeInOut"}]'
-                            data-textAlign="['center','center','center','center']"
-                            data-paddingtop="[0,0,0,0]"
-                            data-paddingright="[0,0,0,0]"
-                            data-paddingbottom="[0,0,0,0]"
-                            data-paddingleft="[0,0,0,0]"
-                            style="z-index: 8; white-space: nowrap; font-weight: 400;font-family:Montserrat;">
-                            Daily tours, expert local guides, unforgettable experiences
-                        </div>
-
-                        <!-- BUTTON -->
-                        <div
-                            class="tp-caption Hero-Button rev-btn"
-                            id="slide-170-layer-7"
-                            data-x="['center','center','center','center']"
-                            data-hoffset="['0','0','0','0']"
-                            data-y="['middle','middle','middle','middle']"
-                            data-voffset="['124','124','80','120']"
-                            data-fontweight="['400','500','500','400']"
-                            data-width="none"
-                            data-height="none"
-                            data-whitespace="nowrap"
-                            data-visibility="['on','on','on','on']"
-                            data-type="button"
-                            data-actions='[{"event":"click","action":"scrollbelow","offset":"-60px","delay":"","speed":"200","ease":"Linear.easeNone"}]'
-                            data-responsive_offset="on"
-                            data-responsive="off"
-                            data-frames='[{"delay":1250,"speed":1500,"frame":"0","from":"y:50px;opacity:0;","to":"o:1;","ease":"Power4.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"y:[175%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power2.easeInOut"},{"frame":"hover","speed":"300","ease":"Power1.easeInOut","to":"o:1;rX:0;rY:0;rZ:0;z:0;","style":"c:rgba(0, 0, 0, 1);bg:rgba(255, 255, 255, 1);bc:rgba(255, 255, 255, 1);bw:1 1 1 1;"}]'
-                            data-textAlign="['left','left','left','left']"
-                            data-paddingtop="[10,10,10,10]"
-                            data-paddingright="[30,30,30,30]"
-                            data-paddingbottom="[10,10,10,10]"
-                            data-paddingleft="[30,30,30,30]"
-                            style="z-index: 9; white-space: nowrap; font-weight: 400;font-family:Montserrat;border-color:rgba(255,255,255,0.50);border-width:1px 1px 1px 1px;outline:none;box-shadow:none;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;cursor:pointer;">
-                            EXPLORE OUR TOURS
-                        </div>
-
                     </li>
                 </ul>
 
@@ -283,6 +120,17 @@ $page_og = [
             </div>
         </div>
         <!-- END REVOLUTION SLIDER -->
+
+        <!-- Hero text overlay: plain Bootstrap-friendly markup, positioned
+             with CSS only (not RevSlider layers), so it stays reliably
+             centered on mobile without per-breakpoint pixel tuning. -->
+        <div class="hero-content text-center text-white">
+            <h2 class="hero-title">Discover Chile</h2>
+            <p class="hero-subtitle">Daily tours, expert local guides, unforgettable experiences</p>
+            <a href="#tours" class="btn_1 white hero-cta">EXPLORE OUR TOURS</a>
+        </div>
+        </div>
+        <!-- End .hero-wrap -->
 
         <div class="container margin_60">
 

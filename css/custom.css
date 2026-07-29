@@ -1,6 +1,61 @@
 @charset "UTF-8";
 /* CSS Document */
 
+html {
+	scroll-behavior: smooth;
+}
+
+/* Homepage hero text overlay - plain CSS positioning (not Revolution
+   Slider layers), so it stays reliably centered at every screen size
+   without per-breakpoint pixel tuning. */
+.hero-wrap {
+	position: relative;
+}
+.hero-content {
+	position: absolute;
+	inset: 0;
+	z-index: 20;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 0 20px;
+	pointer-events: none;
+}
+.hero-content .hero-cta {
+	pointer-events: auto;
+}
+.hero-title {
+	font-family: Montserrat, sans-serif;
+	font-weight: 700;
+	font-size: 70px;
+	line-height: 1;
+	color: #fff;
+	margin: 0 0 18px;
+}
+.hero-subtitle {
+	font-family: Montserrat, sans-serif;
+	font-weight: 400;
+	font-size: 13px;
+	letter-spacing: 4px;
+	color: #fff;
+	margin: 0 0 28px;
+}
+.hero-cta {
+	letter-spacing: 3px;
+}
+@media (max-width: 767px) {
+	.hero-title {
+		font-size: 36px;
+		margin-bottom: 12px;
+	}
+	.hero-subtitle {
+		font-size: 12px;
+		letter-spacing: 2px;
+		margin-bottom: 18px;
+	}
+}
+
 .badge_tripadvisor {
 	position: absolute;
 	top: 30px;
