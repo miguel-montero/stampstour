@@ -1,0 +1,35 @@
+# Composer dependencies - install via `composer install` using composer.lock
+/vendor/
+/includes/vendor/
+/includes/vendor_backup/
+/api/vendor/
+/phpspreadsheet_lib/vendor/
+
+# Runtime-generated data, not source
+/tickets/
+/pdfs/
+/logs/
+/storage/*.log
+/error_log
+
+# This session's local dead-file safety net - git replaces this role
+/_archive/
+
+# Old backup archive, not source (241MB)
+/well-known.zip
+
+# Debug artifact written by shopping.php on each checkout attempt -
+# contains live Getnet auth payload, not meant to be persisted/versioned
+/payload_sent.txt
+
+# Stray unreferenced files - raw badge uploads already processed into img/badges/,
+# and an orphaned homepage snapshot
+/TC BOTB Left Aligned Black - L.png
+/TC BOTB Left Aligned White - L.png
+/Tripadvisor Badge Left.png
+/Tripadvisor TC BOTB Left Aligned Black - L.png
+/Tripadvisor TC BOTB Left Aligned White - L.png
+/index (4).html
+
+# OS cruft
+.DS_Store

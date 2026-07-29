@@ -1,0 +1,86 @@
+<?php
+/* /includes/ticket_template.html
+   Expects a $vars array. Defensive defaults + Date (no time) + simple Airport pickup note. */
+
+$provider      = $provider_name ?? "Stamp's Tour";
+$actividad     = $actividad_nombre ?? '';
+$titular       = $vars['titular_nombre']    ?? 'Guest';
+$pasajeros     = $vars['pasajeros_detalle'] ?? '';
+$idioma        = $vars['idioma']            ?? 'English';
+$codigo        = $vars['codigo_externo']    ?? '';
+$pickupIncl    = !empty($vars['pickup_incluido']);     // true only when airport pickup selected
+$downloadUrl   = $vars['download_url']      ?? '';
+$contactEmail  = $vars['email']             ?? '';
+$contactPhone  = $vars['phone']             ?? '';
+
+// Ensure we have a DateTime; but we’ll display DATE only.
+$dt = $vars['fecha_actividad_dt'] ?? null;
+if (!($dt instanceof DateTime)) {
+  try { $dt = new DateTime(); } catch (Throwable $e) { $dt = new DateTime(); }
+}
+$formattedDate = $dt->format('D, M j, Y'); // Date only
+?>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;margin:0 auto;border:1px solid #e8e8e8;border-radius:12px;font-family:Arial,Helvetica,sans-serif">
+  <tr>
+    <td style="background:#0f172a;color:#fff;padding:20px 24px;border-radius:12px 12px 0 0;">
+      <div style="font-size:20px;font-weight:700;line-height:1.2;">Ticket | <?= htmlspecialchars($provider) ?></div>
+      <?php if ($actividad): ?>
+        <div style="font-size:16px;margin-top:6px;"><?= htmlspecialchars($actividad) ?></div>
+      <?php endif; ?>
+      <div style="font-size:12px;margin-top:8px;letter-spacing:0.3px;">PICK UP AND DROP OFF INCLUDED</div>
+    </td>
+  </tr>
+
+  <tr><td style="padding:18px 24px">
+    <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;color:#0f172a">
+      <tr>
+        <td style="padding:8px 0;width:48%;vertical-align:top">
+          <div style="font-weight:700;">Date</div>
+          <div><?= htmlspecialchars($formattedDate) ?></div>
+        </td>
+        <td style="padding:8px 0;width:48%;vertical-align:top">
+          <div style="font-weight:700;">Travellers</div>
+          <div><?= htmlspecialchars($titular) ?><?= $pasajeros ? ' • ' . htmlspecialchars($pasajeros) : '' ?></div>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding:8px 0;vertical-align:top">
+          <div style="font-weight:700;">Language</div>
+          <div><?= htmlspecialchars($idioma) ?></div>
+        </td>
+        <td style="padding:8px 0;vertical-align:top">
+          <div style="font-weight:700;">Booking ref.</div>
+          <div><?= htmlspecialchars($codigo) ?></div>
+        </td>
+      </tr>
+    </table>
+
+    <?php if ($pickupIncl): ?>
+      <div style="margin-top:10px;padding:10px 12px;border-left:3px solid #0f172a;background:#f1f5f9;font-size:13px;color:#0f172a">
+        Airport pickup included
+      </div>
+    <?php endif; ?>
+
+    <div style="margin:18px 0;padding:12px;border:1px dashed #d7d7d7;border-radius:8px;font-size:13px;color:#334155">
+      <div style="font-weight:700;margin-bottom:6px;">Know Before You Go</div>
+      <?php if ($contactEmail): ?><div>Email: <?= htmlspecialchars($contactEmail) ?></div><?php endif; ?>
+      <?php if ($contactPhone): ?><div>Phone/WhatsApp: <?= htmlspecialchars($contactPhone) ?></div><?php endif; ?>
+      <div style="margin-top:6px">Exact pickup time will be provided the day before at ~20:00.</div>
+    </div>
+
+    <?php if ($downloadUrl): ?>
+    <div style="text-align:center;margin:20px 0">
+      <a href="<?= htmlspecialchars($downloadUrl) ?>" style="background:#0f172a;color:#fff;text-decoration:none;padding:12px 18px;border-radius:8px;display:inline-block">
+        Download Ticket (PDF)
+      </a>
+    </div>
+    <?php endif; ?>
+  </td></tr>
+
+  <tr>
+    <td style="background:#f8fafc;padding:12px 24px;border-radius:0 0 12px 12px;font-size:12px;color:#475569">
+      Activity provider: <?= htmlspecialchars($provider) ?> • https://stampstour.com
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,12 @@
+# Allow all bots to crawl everything by default
+User-agent: *
+
+# Allow your main pages (this is default behavior, so these lines are optional)
+Allow: /
+
+# Disallow any specific folders if you want (example)
+# Disallow: /private/
+# Disallow: /tmp/
+
+# Sitemap
+Sitemap: https://stampstour.com/sitemap.txt

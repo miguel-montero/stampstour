@@ -1,0 +1,67 @@
+<?php /* expects $vars from send_confirmation + optional $customer_firstname */ ?>
+<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background:#f3f4f6">
+    <div style="padding:18px">
+      <div style="max-width:720px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;color:#0f172a">
+        <?php
+          // Safely alias input so we never lose the array reference
+          $data = isset($vars) && is_array($vars) ? $vars : [];
+
+          // Pull values from $data (exact same keys your PDF uses)
+          $titularFull   = trim($data['titular_nombre'] ?? 'Guest');
+          $firstName     = $data['customer_firstname'] ?? (explode(' ', $titularFull)[0] ?? $titularFull);
+          $actividad     = $data['actividad_nombre']  ?? '';
+          $codigo        = $data['codigo_externo']    ?? '';
+          $paxDetail     = $data['pasajeros_detalle'] ?? '';
+          $paxTotal      = $data['pasajeros_total']   ?? null;
+          $pickupAirport = !empty($data['pickup_incluido']); // airport flag
+
+          // Date: DATE ONLY from fecha_actividad_dt
+          $dt = $data['fecha_actividad_dt'] ?? null;
+          if (!($dt instanceof DateTime)) { $dt = new DateTime(); }
+          $displayDate = $dt->format('D, M j, Y');
+        ?>
+
+        <p style="font-size:15px;margin:0 0 12px 0;">
+          Hi <?= htmlspecialchars($firstName) ?>,
+          <br><br>
+          Thanks for your booking! Below is your confirmation.
+        </p>
+
+        <!-- Summary block so the body shows the key fields -->
+        <ul style="margin:0 0 16px 18px;padding:0;font-size:14px;line-height:1.5">
+          <?php if ($actividad): ?>
+            <li><strong>Activity:</strong> <?= htmlspecialchars($actividad) ?></li>
+          <?php endif; ?>
+          <li><strong>Date:</strong> <?= htmlspecialchars($displayDate) ?></li>
+          <?php if ($codigo !== ''): ?>
+            <li><strong>Booking ref:</strong> <?= htmlspecialchars($codigo) ?></li>
+          <?php endif; ?>
+          <?php if ($paxTotal !== null): ?>
+            <li><strong>Travellers:</strong> <?= htmlspecialchars((string)$paxTotal) ?><?= $paxDetail ? ' (' . htmlspecialchars($paxDetail) . ')' : '' ?></li>
+          <?php endif; ?>
+          <li><strong>PICK UP AND DROP OFF INCLUDED</strong></li>
+          <?php if ($pickupAirport): ?>
+            <li><strong>Airport pickup included</strong></li>
+          <?php endif; ?>
+        </ul>
+
+        <?php
+          // Reuse the same ticket block (keeps email + PDF consistent)
+         echo render_template(__DIR__ . '/../includes/ticket_template.html', $data);
+        ?>
+
+        <p style="font-size:13px;color:#334155;margin-top:18px">
+          If you need to make changes, just reply to this email.
+        </p>
+
+        <!-- DEBUG (temporary): uncomment to verify values reaching the email
+        <pre style="font-size:11px;color:#64748b;background:#f8fafc;padding:10px;border-radius:8px;white-space:pre-wrap">
+        <?= htmlspecialchars(json_encode($data, JSON_PRETTY_PRINT)) ?>
+        </pre>
+        -->
+      </div>
+    </div>
+  </body>
+</html>
