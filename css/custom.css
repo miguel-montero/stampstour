@@ -41,13 +41,17 @@ html {
 	color: #fff;
 	margin: 0 0 28px;
 }
-.hero-cta {
+/* a.btn_1 in style.css is an element+class selector (higher specificity
+   than a plain .hero-cta class), so this override must match it with
+   a.btn_1.hero-cta to actually win - same pattern as the .outline typo
+   bug fixed elsewhere in this file. */
+a.btn_1.hero-cta {
 	letter-spacing: 3px;
 	background: transparent;
 	color: #fff;
 	border: 1px solid rgba(255, 255, 255, .5);
 }
-.hero-cta:hover {
+a.btn_1.hero-cta:hover {
 	background: #fff;
 	color: #000;
 	border-color: #fff;
