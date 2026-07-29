@@ -1,9 +1,9 @@
-# Composer dependencies - install via `composer install` using composer.lock
-/vendor/
-/includes/vendor/
+# vendor/, includes/vendor/, api/vendor/, phpspreadsheet_lib/vendor/ are
+# intentionally tracked (not gitignored) - cPanel's deploy target has no
+# Composer, so these must ship as real files in the repo, not be rebuilt
+# from composer.lock. includes/vendor_backup/ is a stale unused duplicate,
+# not referenced anywhere in the codebase - excluded.
 /includes/vendor_backup/
-/api/vendor/
-/phpspreadsheet_lib/vendor/
 
 # Runtime-generated data, not source
 /tickets/

@@ -14,6 +14,14 @@
 	display: block;
 }
 
+@media (max-width: 767px) {
+	.badge_tripadvisor {
+		top: 24px;
+		left: 24px;
+		width: 176px;
+	}
+}
+
 /* The "Save X%" badge (badge_save, defined in style.css) sits flush at
    top:0; right:0 with no breathing room, same issue the tripadvisor
    badge had before. Nudging it inward to match. */
