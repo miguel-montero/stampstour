@@ -58,7 +58,7 @@ a.btn_1.hero-cta:hover {
 }
 @media (max-width: 767px) {
 	.hero-content {
-		transform: translateY(-30px);
+		transform: translateY(-10px);
 	}
 	.hero-title {
 		font-size: 36px;
