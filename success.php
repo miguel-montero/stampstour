@@ -220,7 +220,7 @@ if ($wasPending && !empty($reserva['email'])) {
               </div>
               <div class="text-end mt-2" id="feedback" style="display:none;">
                 <small class="text-muted">hotel added successfully</small><br>
-                <a href="index.html" class="btn_1 mt-2">Do you want to go back?</a>
+                <a href="/" class="btn_1 mt-2">Do you want to go back?</a>
               </div>
             </form>
           </div>

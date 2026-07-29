@@ -1,7 +1,7 @@
 <?php
 // confirmation.php
 if (empty($_GET['external_reference'])) {
-    header('Location: index.html');
+    header('Location: /');
     exit;
 }
 $idReserva = (int)$_GET['external_reference'];

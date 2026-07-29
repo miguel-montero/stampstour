@@ -1,7 +1,7 @@
 <?php
 // save_reservation.php
 if (empty($_POST['order_id']) || empty($_POST['hotel'])) {
-    header('Location: index.html');
+    header('Location: /');
     exit;
 }
 $idReserva = (int)$_POST['order_id'];

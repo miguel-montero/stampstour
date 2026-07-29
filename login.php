@@ -104,10 +104,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="row">
      <div class="col-3">
       <div id="logo">
-       <a href="index.html">
+       <a href="/">
         <img alt="City tours" class="logo_normal" height="47" src="img/logolargo.png"/>
        </a>
-       <a href="index.html">
+       <a href="/">
         <img alt="City tours" class="logo_sticky" height="34" src="img/logo_sticky.png"/>
        </a>
       </div>
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        </a>
        <ul>
         <li>
-         <a href="index.html">
+         <a href="/">
           Home
          </a>
         </li>

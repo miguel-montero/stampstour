@@ -314,7 +314,7 @@ $_SESSION['last_status'][$reference] = $status;
               </div>
               <div class="text-end mt-2" id="feedback" style="display:none;">
                 <small class="text-muted">Hotel added successfully</small><br>
-                <a href="index.html" class="btn_1 mt-2">Go back to home</a>
+                <a href="/" class="btn_1 mt-2">Go back to home</a>
               </div>
             </form>
           </div>

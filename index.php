@@ -557,10 +557,10 @@ $page_og = [
 
     <script>
         jQuery(function($){
-            var isHome = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+            var isHome = window.location.pathname === '/' || window.location.pathname === '/index.php';
             if (!isHome) return;
 
-            $('a[href="index.html"]').on('click', function(e){
+            $('a[href="/"]').on('click', function(e){
                 e.preventDefault();
 
                 $('html, body').stop().animate({
