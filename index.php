@@ -127,7 +127,7 @@ $page_og = [
         <div class="hero-content text-center text-white">
             <h2 class="hero-title">Discover Chile</h2>
             <p class="hero-subtitle">Daily tours, expert local guides, unforgettable experiences</p>
-            <a href="#tours" class="btn_1 white hero-cta">EXPLORE OUR TOURS</a>
+            <a href="#tours" class="btn_1 hero-cta">EXPLORE OUR TOURS</a>
         </div>
         </div>
         <!-- End .hero-wrap -->
