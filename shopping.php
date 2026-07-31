@@ -118,6 +118,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google Consent Mode v2: default-deny until the visitor chooses via the
+     cookie banner (includes/cookie-banner.php). Must run before gtag.js. -->
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+
+ gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied',
+  'wait_for_update': 500
+ });
+
+ (function () {
+  try {
+   if (localStorage.getItem('stamp_cookie_consent') === 'granted') {
+    gtag('consent', 'update', {
+     'ad_storage': 'granted',
+     'ad_user_data': 'granted',
+     'ad_personalization': 'granted',
+     'analytics_storage': 'granted'
+    });
+   }
+  } catch (e) { /* localStorage unavailable: default-deny stands */ }
+ })();
+</script>
+<!-- Google tag (gtag.js) -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GWM59ECSLZ"></script>
+<script>
+ gtag('js', new Date());
+ gtag('config', 'G-GWM59ECSLZ');
+</script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
