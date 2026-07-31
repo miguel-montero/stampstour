@@ -66,7 +66,7 @@ try {
   <div class="container">
     <!-- Visible logo -->
     <div class="logo-container">
-      <img src="/img/logolargo.png" alt="Stamp’s Tour Logo"/>
+      <img src="/img/logolargo.png" alt="Stamp’s Tour Logo" width="320" height="114"/>
     </div>
 
     <div class="row justify-content-center">

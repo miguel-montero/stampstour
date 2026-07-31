@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
   <!-- Mobile-only logo -->
   <img src="img/logolargo.png" alt="StampTour Logo"
        class="d-block d-md-none ms-2"
-       style="height:28px;">
+       style="height:28px; width:79px;">
 </div>
                     <div class="step booking-summary-compact">
                         <table class="table table-striped confirm table-sm mb-2">

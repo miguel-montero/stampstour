@@ -105,10 +105,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      <div class="col-3">
       <div id="logo">
        <a href="/">
-        <img alt="City tours" class="logo_normal" height="47" src="img/logolargo.png"/>
+        <img alt="City tours" class="logo_normal" height="47" width="132" src="img/logolargo.png"/>
        </a>
        <a href="/">
-        <img alt="City tours" class="logo_sticky" height="34" src="img/logo_sticky.png"/>
+        <img alt="City tours" class="logo_sticky" height="34" width="147" src="img/logo_sticky.png"/>
        </a>
       </div>
      </div>
