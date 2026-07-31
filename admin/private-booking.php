@@ -40,6 +40,10 @@ if (empty($tours)) {
   <title>Custom / Private Booking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="/css/style.css" rel="stylesheet"/>
+  <link href="/css/vendors.css" rel="stylesheet"/>
+  <link href="/css/admin.css" rel="stylesheet"/>
+  <link href="/css/custom.css" rel="stylesheet"/>
   <style>
     .private-booking-form { max-width: 900px; margin: 24px auto; padding: 0 16px; }
     .row { display:flex; gap:1rem; flex-wrap:wrap; }

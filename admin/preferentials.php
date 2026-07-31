@@ -46,6 +46,7 @@ try {
   <link href="/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="/css/style.css" rel="stylesheet"/>
   <link href="/css/vendors.css" rel="stylesheet"/>
+  <link href="/css/admin.css" rel="stylesheet"/>
   <link href="/css/custom.css" rel="stylesheet"/>
 
   <!-- jQuery UI for hotel autocomplete (self-hosted, trimmed to just what's used) -->

@@ -124,6 +124,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title><?= $id ? 'Edit' : 'New' ?> Blog Post | Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="/css/style.css" rel="stylesheet"/>
+  <link href="/css/vendors.css" rel="stylesheet"/>
+  <link href="/css/admin.css" rel="stylesheet"/>
+  <link href="/css/custom.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 </head>
 <body>

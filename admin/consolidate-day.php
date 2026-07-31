@@ -1218,6 +1218,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <title>Booking Consolidator — Copy Groups</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+<link href="/css/vendors.css" rel="stylesheet">
+<link href="/css/admin.css" rel="stylesheet">
+<link href="/css/custom.css" rel="stylesheet">
 <style>
   :root{--bg:#0b0e13;--card:#121722;--chip:#1b2331;--muted:#9aa3b2;--ink:#e6ebf2;--brand:#6aa1ff;--ok:#65d6ad}
   *{box-sizing:border-box}

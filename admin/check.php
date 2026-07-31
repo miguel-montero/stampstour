@@ -1639,6 +1639,10 @@ function countByStatus(array $results, string $status): int
     <title>Stamp's Tour — Check Reservations</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/vendors.css" rel="stylesheet">
+    <link href="/css/admin.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
