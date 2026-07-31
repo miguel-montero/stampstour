@@ -22,7 +22,7 @@ $page_canonical   = 'https://stampstour.com/blog';
 <html lang="en">
 <head>
 <?php include __DIR__ . '/includes/head.php'; ?>
-<link href="css/blog.css" rel="stylesheet"/>
+<link href="/css/blog.css" rel="stylesheet"/>
 </head>
 <body>
   <?php include __DIR__ . '/includes/header.php'; ?>
