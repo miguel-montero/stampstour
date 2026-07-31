@@ -56,17 +56,28 @@ if ($post) {
         <p>Sorry, we couldn't find that blog post. <a href="/blog">Back to the blog</a>.</p>
       <?php else: ?>
         <div class="row">
-          <div class="col-lg-8">
-            <h1><?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?></h1>
-            <p class="text-muted"><?= date('F j, Y', strtotime($post['published_at'])) ?></p>
-            <?php if (!empty($post['featured_image'])): ?>
-              <img src="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>" class="img-fluid margin_30">
-            <?php endif; ?>
-            <div class="blog_post_content">
-              <?= $post['content'] ?>
+          <div class="col-lg-9">
+            <div class="box_style_1">
+              <div class="post nopadding">
+                <?php if (!empty($post['featured_image'])): ?>
+                  <img src="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>" class="img-fluid">
+                <?php endif; ?>
+                <div class="post_info clearfix">
+                  <div class="post-left">
+                    <ul>
+                      <li><i class="icon-calendar-empty"></i> On <span><?= date('j M Y', strtotime($post['published_at'])) ?></span></li>
+                    </ul>
+                  </div>
+                </div>
+                <h1><?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?></h1>
+                <div class="blog_post_content">
+                  <?= $post['content'] ?>
+                </div>
+              </div>
+              <!-- end post -->
             </div>
-            <hr>
-            <p><a href="/blog" class="btn_1">&larr; Back to the blog</a></p>
+            <!-- end box_style_1 -->
+            <p class="margin_30"><a href="/blog" class="btn_1">&larr; Back to the blog</a></p>
           </div>
         </div>
       <?php endif; ?>
