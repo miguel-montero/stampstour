@@ -198,6 +198,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
     </style>
 </head>
 <body>
+<script>
+(function () {
+  if (typeof gtag !== 'function') return;
+  var reference = <?= json_encode($reference) ?>;
+  var value = <?= json_encode($originalTotal) ?>;
+  var itemName = <?= json_encode($activity) ?>;
+  var qty = <?= (int)$adults + (int)$children + (int)$infants ?>;
+
+  gtag('event', 'begin_checkout', {
+    transaction_id: reference,
+    value: value,
+    currency: 'USD',
+    items: [{ item_name: itemName, quantity: qty }]
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var getnetForm = document.getElementById('getnet-form');
+    if (getnetForm) {
+      getnetForm.addEventListener('submit', function () {
+        gtag('event', 'add_payment_info', {
+          transaction_id: reference,
+          value: value,
+          currency: 'USD',
+          payment_type: 'getnet'
+        });
+      });
+    }
+  });
+})();
+</script>
 
     <div id="preloader">
         <div class="sk-spinner sk-spinner-wave">
@@ -305,7 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
                           <div class="pay-card">
                             <div class="head">Tarjeta de crédito, débito o prepago</div>
                             <div class="body">
-                              <form method="POST">
+                              <form method="POST" id="getnet-form">
                                 <button type="submit" name="pay_with_getnet" class="btn text-start w-100 p-3 border-0 rounded-0" style="background-color:#fff;">
                                   <div class="text-muted fw-semibold small mb-2">
                                     Paga con Getnet (todas las tarjetas).
@@ -411,6 +441,14 @@ function postJson(url, data){
           .then(res => {
             if (res && res.ok && res.status === 'COMPLETED') {
               document.getElementById('paypal-status').textContent = 'Payment approved ✔';
+              if (typeof gtag === 'function') {
+                gtag('event', 'add_payment_info', {
+                  transaction_id: ref,
+                  value: <?= json_encode($originalTotal) ?>,
+                  currency: 'USD',
+                  payment_type: 'paypal'
+                });
+              }
               window.location.href = 'return.php?provider=paypal&reference=' + encodeURIComponent(ref);
             } else {
               throw new Error('Capture not completed: ' + JSON.stringify(res));
