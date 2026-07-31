@@ -201,9 +201,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
 <script>
 (function () {
   if (typeof gtag !== 'function') return;
-  var reference = <?= json_encode($reference) ?>;
-  var value = <?= json_encode($originalTotal) ?>;
-  var itemName = <?= json_encode($activity) ?>;
+  var reference = <?= json_encode($reference, JSON_INVALID_UTF8_SUBSTITUTE) ?>;
+  var value = <?= json_encode($originalTotal, JSON_INVALID_UTF8_SUBSTITUTE) ?>;
+  var itemName = <?= json_encode($activity, JSON_INVALID_UTF8_SUBSTITUTE) ?>;
   var qty = <?= (int)$adults + (int)$children + (int)$infants ?>;
 
   gtag('event', 'begin_checkout', {
@@ -441,14 +441,16 @@ function postJson(url, data){
           .then(res => {
             if (res && res.ok && res.status === 'COMPLETED') {
               document.getElementById('paypal-status').textContent = 'Payment approved ✔';
-              if (typeof gtag === 'function') {
-                gtag('event', 'add_payment_info', {
-                  transaction_id: ref,
-                  value: <?= json_encode($originalTotal) ?>,
-                  currency: 'USD',
-                  payment_type: 'paypal'
-                });
-              }
+              try {
+                if (typeof gtag === 'function') {
+                  gtag('event', 'add_payment_info', {
+                    transaction_id: ref,
+                    value: <?= json_encode($originalTotal, JSON_INVALID_UTF8_SUBSTITUTE) ?>,
+                    currency: 'USD',
+                    payment_type: 'paypal'
+                  });
+                }
+              } catch (e) { /* analytics must never block the redirect */ }
               window.location.href = 'return.php?provider=paypal&reference=' + encodeURIComponent(ref);
             } else {
               throw new Error('Capture not completed: ' + JSON.stringify(res));
