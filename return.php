@@ -268,6 +268,26 @@ $_SESSION['last_status'][$reference] = $status;
 
 </head>
 <body>
+<?php if ($status === 'APPROVED'): ?>
+<script>
+(function () {
+  if (typeof gtag !== 'function') return;
+  var ref = <?= json_encode($reserva['reference_id']) ?>;
+  var key = 'ga_purchase_tracked_' + ref;
+  var already;
+  try { already = sessionStorage.getItem(key); } catch (e) { already = null; }
+  if (already !== '1') {
+    gtag('event', 'purchase', {
+      transaction_id: ref,
+      value: <?= json_encode((float)$reserva['total_venta']) ?>,
+      currency: 'USD',
+      items: [{ item_name: <?= json_encode($reserva['actividad']) ?> }]
+    });
+    try { sessionStorage.setItem(key, '1'); } catch (e) {}
+  }
+})();
+</script>
+<?php endif; ?>
   <!-- Header (igual al original) -->
 
   <!-- Hero -->
