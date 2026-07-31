@@ -1,0 +1,124 @@
+# =========================
+# Optional custom 404 page
+ErrorDocument 404 /404.html
+
+# Avoid MultiViews conflicts
+Options -MultiViews
+
+# Use mod_rewrite
+RewriteEngine On
+
+# =========================
+# Explicit DirectoryIndex order (added for index.php migration, 2026-07-28)
+# index.html is kept on disk as an instant rollback: if index.php ever
+# breaks, remove this line (or flip the order) and Apache falls straight
+# back to serving the old file, no restore needed.
+DirectoryIndex index.php index.html
+
+# =========================
+# Canonical: force HTTPS + non-www (single hop)
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.stampstour\.com$ [NC]
+RewriteRule ^ https://stampstour.com%{REQUEST_URI} [R=301,L]
+
+# =========================
+# 1) OLD root pages -> NEW final slugs (absolute targets for single-hop from any host/scheme)
+
+# .php legacy
+Redirect 301 /Maipo.php      https://stampstour.com/maipo-valley-wine-tour-santiago
+Redirect 301 /Valparaiso.php https://stampstour.com/valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca
+Redirect 301 /Santiago.php   https://stampstour.com/discover-santiago-city-tour
+Redirect 301 /Andes.php      https://stampstour.com/portillo-inca-lagoon-andes-mountains-vineyard
+
+# .html legacy (your current menu uses these)
+Redirect 301 /Maipo.html     https://stampstour.com/maipo-valley-wine-tour-santiago
+Redirect 301 /Santiago.html  https://stampstour.com/discover-santiago-city-tour
+Redirect 301 /Andes.html     https://stampstour.com/portillo-inca-lagoon-andes-mountains-vineyard
+
+# (If you ever had Valparaiso.html)
+Redirect 301 /Valparaiso.html https://stampstour.com/valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca
+
+# =========================
+# 2) If someone hits the NEW PHP filenames directly, send to clean slug
+#    (THE_REQUEST avoids loops by only catching direct browser requests)
+RewriteCond %{THE_REQUEST} \s/+maipo-valley-wine-tour-santiago\.php(?:\s|\?) [NC]
+RewriteRule ^maipo-valley-wine-tour-santiago\.php$ /maipo-valley-wine-tour-santiago [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca\.php(?:\s|\?) [NC]
+RewriteRule ^valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca\.php$ /valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+discover-santiago-city-tour\.php(?:\s|\?) [NC]
+RewriteRule ^discover-santiago-city-tour\.php$ /discover-santiago-city-tour [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+portillo-inca-lagoon-andes-mountains-vineyard\.php(?:\s|\?) [NC]
+RewriteRule ^portillo-inca-lagoon-andes-mountains-vineyard\.php$ /portillo-inca-lagoon-andes-mountains-vineyard [R=301,L,NE]
+
+# =========================
+# 3) Internal rewrites: slug -> actual PHP file (no redirect)
+#    (Your actual files exist with these names)
+RewriteRule ^maipo-valley-wine-tour-santiago/?$ maipo-valley-wine-tour-santiago.php [L]
+RewriteRule ^valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca/?$ valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca.php [L]
+RewriteRule ^discover-santiago-city-tour/?$ discover-santiago-city-tour.php [L]
+RewriteRule ^portillo-inca-lagoon-andes-mountains-vineyard/?$ portillo-inca-lagoon-andes-mountains-vineyard.php [L]
+
+# Blog (added 2026-07-28)
+RewriteRule ^blog/?$ blog.php [L]
+RewriteRule ^blog/([a-zA-Z0-9-]+)/?$ blog-post.php?slug=$1 [L,QSA]
+
+# Let real files/dirs pass through untouched
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# =========================
+# cPanel PHP handler (keep)
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php83___lsphp .php .php8 .phtml
+</IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the "ea-php83" package as the default "PHP" programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php83___lsphp .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
+
+# =========================
+# Performance: compression + browser caching (added 2026-07-28)
+# Both blocks are IfModule-guarded: if a module isn't enabled on the
+# server, the block is simply skipped, no error.
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json application/xml text/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg          "access plus 1 year"
+  ExpiresByType image/jpg           "access plus 1 year"
+  ExpiresByType image/png           "access plus 1 year"
+  ExpiresByType image/webp          "access plus 1 year"
+  ExpiresByType image/gif           "access plus 1 year"
+  ExpiresByType image/svg+xml       "access plus 1 year"
+  ExpiresByType image/x-icon        "access plus 1 year"
+  ExpiresByType font/woff2          "access plus 1 year"
+  ExpiresByType font/woff           "access plus 1 year"
+  ExpiresByType text/css            "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript     "access plus 1 month"
+  ExpiresByType text/html           "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpg|jpeg|png|webp|gif|svg|ico|woff2|woff|css|js)$">
+    Header set Cache-Control "public"
+  </FilesMatch>
+
+  # HSTS: once a browser sees this, it forces HTTPS for future visits without
+  # waiting on the 301 redirect above, closing the brief plain-HTTP window on
+  # first contact. Site is already fully on HTTPS with no mixed content.
+  Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
