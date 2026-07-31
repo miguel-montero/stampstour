@@ -60,7 +60,7 @@ if ($post) {
             <div class="box_style_1">
               <div class="post nopadding">
                 <?php if (!empty($post['featured_image'])): ?>
-                  <img src="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>" class="img-fluid">
+                  <img src="<?= htmlspecialchars('/' . ltrim($post['featured_image'], '/'), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>" class="img-fluid">
                 <?php endif; ?>
                 <div class="post_info clearfix">
                   <div class="post-left">

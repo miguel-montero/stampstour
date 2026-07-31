@@ -28,7 +28,7 @@ $page_canonical   = 'https://stampstour.com/blog';
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
 
-  <section id="hero_2" class="background-image" data-background="url(img/Tours/Stgo/big.jpg)">
+  <section id="hero_2" class="background-image" data-background="url(/img/Tours/Stgo/big.jpg)">
     <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.45)">
       <div class="intro_title">
         <h1>Blog</h1>
@@ -48,7 +48,7 @@ $page_canonical   = 'https://stampstour.com/blog';
                 <div class="post">
                   <?php if (!empty($post['featured_image'])): ?>
                     <a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>" title="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>">
-                      <img src="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" loading="lazy">
+                      <img src="<?= htmlspecialchars('/' . ltrim($post['featured_image'], '/'), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" loading="lazy">
                     </a>
                   <?php endif; ?>
                   <div class="post_info clearfix">
