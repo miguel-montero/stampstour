@@ -102,9 +102,9 @@ $page_canonical   = 'https://stampstour.com/maipo-valley-wine-tour-santiago';
         <?php endfor; ?>
        </div>
        <div class="sp-thumbnails">
-        <img class="sp-thumbnail" src="img/Tours/Maipo/portada.webp" alt="Maipo thumbnail cover">
+        <img class="sp-thumbnail" src="img/Tours/Maipo/portada.webp" alt="Maipo thumbnail cover" loading="lazy">
         <?php for ($i = 1; $i <= 8; $i++): ?>
-         <img class="sp-thumbnail" src="img/Tours/Maipo/<?php echo $i; ?>_medium.webp" alt="Maipo thumbnail <?php echo $i; ?>">
+         <img class="sp-thumbnail" src="img/Tours/Maipo/<?php echo $i; ?>_medium.webp" alt="Maipo thumbnail <?php echo $i; ?>" loading="lazy">
         <?php endfor; ?>
        </div>
       </div>

@@ -105,9 +105,9 @@ $page_canonical   = 'https://stampstour.com/portillo-inca-lagoon-andes-mountains
         <?php endfor; ?>
        </div>
        <div class="sp-thumbnails">
-        <img class="sp-thumbnail" src="img/Tours/Andes/portada.webp" alt="Andes thumbnail cover">
+        <img class="sp-thumbnail" src="img/Tours/Andes/portada.webp" alt="Andes thumbnail cover" loading="lazy">
         <?php for ($i = 1; $i <= 39; $i++): ?>
-         <img class="sp-thumbnail" src="img/Tours/Andes/<?php echo $i; ?>_medium.webp" alt="Andes thumbnail <?php echo $i; ?>">
+         <img class="sp-thumbnail" src="img/Tours/Andes/<?php echo $i; ?>_medium.webp" alt="Andes thumbnail <?php echo $i; ?>" loading="lazy">
         <?php endfor; ?>
        </div>
       </div>

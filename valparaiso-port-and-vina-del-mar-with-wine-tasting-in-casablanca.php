@@ -110,9 +110,9 @@ $page_canonical   = 'https://stampstour.com/valparaiso-port-and-vina-del-mar-wit
         <?php endfor; ?>
        </div>
        <div class="sp-thumbnails">
-        <img class="sp-thumbnail" src="img/Tours/Valpo/portada.webp" alt="Valparaiso thumbnail cover">
+        <img class="sp-thumbnail" src="img/Tours/Valpo/portada.webp" alt="Valparaiso thumbnail cover" loading="lazy">
         <?php for ($i = 1; $i <= 44; $i++): ?>
-         <img class="sp-thumbnail" src="img/Tours/Valpo/<?php echo $i; ?>_medium.webp" alt="Valparaiso thumbnail <?php echo $i; ?>">
+         <img class="sp-thumbnail" src="img/Tours/Valpo/<?php echo $i; ?>_medium.webp" alt="Valparaiso thumbnail <?php echo $i; ?>" loading="lazy">
         <?php endfor; ?>
        </div>
       </div>

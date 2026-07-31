@@ -104,9 +104,9 @@ $page_canonical   = 'https://stampstour.com/discover-santiago-city-tour';
         <?php endfor; ?>
        </div>
        <div class="sp-thumbnails">
-        <img class="sp-thumbnail" src="img/Tours/Stgo/portada.webp" alt="Stgo thumbnail cover">
+        <img class="sp-thumbnail" src="img/Tours/Stgo/portada.webp" alt="Stgo thumbnail cover" loading="lazy">
         <?php for ($i = 1; $i <= 8; $i++): ?>
-         <img class="sp-thumbnail" src="img/Tours/Stgo/<?php echo $i; ?>_medium.webp" alt="Stgo thumbnail <?php echo $i; ?>">
+         <img class="sp-thumbnail" src="img/Tours/Stgo/<?php echo $i; ?>_medium.webp" alt="Stgo thumbnail <?php echo $i; ?>" loading="lazy">
         <?php endfor; ?>
        </div>
       </div>
