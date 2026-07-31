@@ -124,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title><?= $id ? 'Edit' : 'New' ?> Blog Post | Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 </head>
 <body>
 <?php require __DIR__ . '/_nav.php'; stamp_admin_nav('blog'); ?>
@@ -163,8 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Content <small class="text-muted">(HTML &mdash; same tags used elsewhere on the site: &lt;p&gt;, &lt;h2&gt;, &lt;ul&gt;, &lt;img&gt;, etc.)</small></label>
-      <textarea name="content" class="form-control" rows="16" style="font-family: monospace;"><?= htmlspecialchars($post['content'], ENT_QUOTES, 'UTF-8') ?></textarea>
+      <label class="form-label">Content</label>
+      <div id="content-editor" style="background: #fff;"><?= $post['content'] ?></div>
+      <textarea name="content" id="content-input" style="display: none;"></textarea>
     </div>
 
     <div class="mb-3">
@@ -201,5 +203,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a href="blog.php" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script>
+  var quill = new Quill('#content-editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        [{ header: [2, 3, false] }],
+        ['bold', 'italic', 'underline', 'link'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['blockquote', 'image'],
+        ['clean']
+      ]
+    }
+  });
+
+  document.querySelector('form').addEventListener('submit', function () {
+    document.getElementById('content-input').value = quill.root.innerHTML;
+  });
+</script>
 </body>
 </html>

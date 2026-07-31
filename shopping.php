@@ -88,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
         'userAgent'       => $_SERVER['HTTP_USER_AGENT'] ?? 'Mozilla/5.0',
         'notificationUrl' => 'https://stampstour.com/getnet_notify.php'
     ];
-    file_put_contents('payload_sent.txt', json_encode($payload, JSON_PRETTY_PRINT));
     $response = callGetnet('/api/session', $payload);
 
     // Extraer el process_id (requestId o payment.id)

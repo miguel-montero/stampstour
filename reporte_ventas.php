@@ -1,9 +1,17 @@
 <?php
 // reportes_ventas.php
+require_once __DIR__ . '/admin/_auth.php';
 require_once __DIR__ . '/../db_config.php';
 
-$start_date = $_GET['start_date'] ?? date('Y-m-01');
-$end_date   = $_GET['end_date']   ?? date('Y-m-t');
+function stampstour_valid_date($value, $default) {
+    if (is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+        return $value;
+    }
+    return $default;
+}
+
+$start_date = stampstour_valid_date($_GET['start_date'] ?? null, date('Y-m-01'));
+$end_date   = stampstour_valid_date($_GET['end_date'] ?? null, date('Y-m-t'));
 
 $CUSTOM_EXPR = "e.nombre_publico = 'Custom Invoice'";
 $JOYCE_ONLY  = "v.id_vendedor = 11";

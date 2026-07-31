@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/admin/_auth.php';
 header('Content-Type: application/json; charset=utf-8');
 
 // Incluye tu configuración de base de datos (mysqli) sin modificarla
