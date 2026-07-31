@@ -76,7 +76,6 @@
 <!-- COMMON CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet"/>
 <link href="css/style.css" rel="stylesheet"/>
-<link href="css/style-rtl.css" rel="stylesheet"/>
 <link href="css/vendors.css" rel="stylesheet"/>
 <!-- CUSTOM CSS -->
 <link href="css/custom.css" rel="stylesheet"/>
