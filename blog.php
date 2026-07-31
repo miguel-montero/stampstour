@@ -42,23 +42,34 @@ $page_canonical   = 'https://stampstour.com/blog';
         <p>No posts published yet &mdash; check back soon!</p>
       <?php else: ?>
         <div class="row">
-          <?php foreach ($posts as $post): $href = '/blog/' . rawurlencode($post['slug']); ?>
-            <div class="col-md-4 margin_30">
-              <div class="blog_post_card">
-                <?php if (!empty($post['featured_image'])): ?>
-                  <a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>">
-                    <img src="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" loading="lazy">
-                  </a>
-                <?php endif; ?>
-                <h3><a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?></a></h3>
-                <p class="text-muted small"><?= date('F j, Y', strtotime($post['published_at'])) ?></p>
-                <?php if (!empty($post['excerpt'])): ?>
-                  <p><?= htmlspecialchars($post['excerpt'], ENT_QUOTES, 'UTF-8') ?></p>
-                <?php endif; ?>
-                <a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>" class="btn_1">Read more</a>
-              </div>
+          <div class="col-lg-9">
+            <div class="box_style_1">
+              <?php foreach ($posts as $i => $post): $href = '/blog/' . rawurlencode($post['slug']); ?>
+                <div class="post">
+                  <?php if (!empty($post['featured_image'])): ?>
+                    <a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>" title="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>">
+                      <img src="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" loading="lazy">
+                    </a>
+                  <?php endif; ?>
+                  <div class="post_info clearfix">
+                    <div class="post-left">
+                      <ul>
+                        <li><i class="icon-calendar-empty"></i> On <span><?= date('j M Y', strtotime($post['published_at'])) ?></span></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <h2><a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?></a></h2>
+                  <?php if (!empty($post['excerpt'])): ?>
+                    <p><?= htmlspecialchars($post['excerpt'], ENT_QUOTES, 'UTF-8') ?></p>
+                  <?php endif; ?>
+                  <a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>" class="btn_1" title="<?= htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8') ?>">Read more</a>
+                </div>
+                <!-- end post -->
+                <?php if ($i < count($posts) - 1): ?><hr><?php endif; ?>
+              <?php endforeach; ?>
             </div>
-          <?php endforeach; ?>
+            <!-- end box_style_1 -->
+          </div>
         </div>
       <?php endif; ?>
     </div>
