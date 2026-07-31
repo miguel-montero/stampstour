@@ -65,17 +65,17 @@
 <?php endif; ?>
 <?php endif; ?>
 <!-- Favicons-->
-<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
-<link href="img/apple-touch-icon-57x57-precomposed.png" rel="apple-touch-icon" type="image/x-icon"/>
-<link href="img/apple-touch-icon-72x72-precomposed.png" rel="apple-touch-icon" sizes="72x72" type="image/x-icon"/>
-<link href="img/apple-touch-icon-114x114-precomposed.png" rel="apple-touch-icon" sizes="114x114" type="image/x-icon"/>
-<link href="img/apple-touch-icon-144x144-precomposed.png" rel="apple-touch-icon" sizes="144x144" type="image/x-icon"/>
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/img/apple-touch-icon-57x57-precomposed.png" rel="apple-touch-icon" type="image/x-icon"/>
+<link href="/img/apple-touch-icon-72x72-precomposed.png" rel="apple-touch-icon" sizes="72x72" type="image/x-icon"/>
+<link href="/img/apple-touch-icon-114x114-precomposed.png" rel="apple-touch-icon" sizes="114x114" type="image/x-icon"/>
+<link href="/img/apple-touch-icon-144x144-precomposed.png" rel="apple-touch-icon" sizes="144x144" type="image/x-icon"/>
 <!-- GOOGLE WEB FONT (self-hosted) -->
 <link rel="preconnect" href="https://cdn.openwidget.com">
-<link href="fonts/fonts.css" rel="stylesheet"/>
+<link href="/fonts/fonts.css" rel="stylesheet"/>
 <!-- COMMON CSS -->
-<link href="css/bootstrap.min.css" rel="stylesheet"/>
-<link href="css/style.css" rel="stylesheet"/>
-<link href="css/vendors.css" rel="stylesheet"/>
+<link href="/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="/css/style.css" rel="stylesheet"/>
+<link href="/css/vendors.css" rel="stylesheet"/>
 <!-- CUSTOM CSS -->
-<link href="css/custom.css" rel="stylesheet"/>
+<link href="/css/custom.css" rel="stylesheet"/>
