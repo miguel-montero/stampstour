@@ -167,3 +167,10 @@ button.btn_1.outline:hover {
 button.btn_1 {
 	cursor: pointer;
 }
+/* blog-post.php has no hero image behind the fixed header (unlike every
+   other page), so .margin_60's normal 60px top padding isn't enough to
+   clear the header's ~100px height - the header was overlapping the top
+   of the post card. Bumped to clear the header plus some breathing room. */
+.blog_post_wrap {
+	padding-top: 140px;
+}

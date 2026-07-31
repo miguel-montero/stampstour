@@ -46,11 +46,11 @@ if ($post) {
 <link href="/css/blog.css" rel="stylesheet"/>
 </head>
 <body>
-  <?php include __DIR__ . '/includes/header.php'; ?>
+  <?php $header_style = 'plain'; include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
 
   <main>
-    <div class="container margin_60">
+    <div class="container margin_60 blog_post_wrap">
       <?php if (!$post): ?>
         <h1>Post not found</h1>
         <p>Sorry, we couldn't find that blog post. <a href="/blog">Back to the blog</a>.</p>

@@ -12,7 +12,7 @@
       <p class="cookie-consent-text">
         We use cookies for site analytics (Google Analytics) and our live-chat widget.
         We won't set them unless you click Accept. See our
-        <a href="privacy.php">Privacy Policy</a>.
+        <a href="/privacy.php">Privacy Policy</a>.
       </p>
       <div class="cookie-consent-actions">
         <button type="button" id="cookie-consent-reject" class="btn_1 outline">Reject</button>

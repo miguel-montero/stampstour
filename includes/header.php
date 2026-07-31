@@ -1,6 +1,13 @@
-<?php /* includes/header.php */ ?>
+<?php /* includes/header.php
+ * Set $header_style = 'plain' before including this file on pages with
+ * no hero image behind the header (e.g. blog-post.php) - the header is
+ * position:fixed with a transparent background and white nav text by
+ * default, relying on a hero photo for contrast. header#plain gives it
+ * a white background and dark nav text instead (theme-provided, was
+ * unused anywhere until now).
+ */ ?>
 <!-- Header================================================== -->
-<header>
+<header<?= (isset($header_style) && $header_style === 'plain') ? ' id="plain"' : '' ?>>
         <div id="top_line">
             <div class="container">
                 <div class="row">
@@ -8,7 +15,7 @@
                     <div class="col-6">
                         <ul id="top_links">
                             <!-- li><a href="#sign-in-dialog" id="access_link">Sign in</a></li>
-                            <li><a href="wishlist.html" id="wishlist_link">Wishlist</a></li>
+                            <li><a href="/wishlist.html" id="wishlist_link">Wishlist</a></li>
                             template</a></li> -->
                             <li><a href="https://www.instagram.com/stampstour/"><i class="bi bi-instagram"></i></a></li>
                             <li><a href="https://www.facebook.com/stampstour"><i class="bi bi-facebook"></i></a></li>
@@ -24,14 +31,14 @@
       <div id="logo">
        <a href="/">
         <picture>
-         <source srcset="img/logolargo.webp" type="image/webp">
-         <img alt="City tours" class="logo_normal" height="47" width="132" src="img/logolargo.png"/>
+         <source srcset="/img/logolargo.webp" type="image/webp">
+         <img alt="City tours" class="logo_normal" height="47" width="132" src="/img/logolargo.png"/>
         </picture>
        </a>
        <a href="/">
         <picture>
-         <source srcset="img/logo_sticky.webp" type="image/webp">
-         <img alt="Stamps Tour" class="logo_sticky" height="34" width="147" src="img/logo_sticky.png"/>
+         <source srcset="/img/logo_sticky.webp" type="image/webp">
+         <img alt="Stamps Tour" class="logo_sticky" height="34" width="147" src="/img/logo_sticky.png"/>
         </picture>
        </a>
       </div>
@@ -45,8 +52,8 @@
       <div class="main-menu">
        <div id="header_menu">
         <picture>
-         <source srcset="img/logo_sticky.webp" type="image/webp">
-         <img alt="City tours" height="34" src="img/logo_sticky.png" width="160"/>
+         <source srcset="/img/logo_sticky.webp" type="image/webp">
+         <img alt="City tours" height="34" src="/img/logo_sticky.png" width="160"/>
         </picture>
        </div>
        <a class="open_close" href="#" id="close_in">
@@ -67,30 +74,30 @@
          </a>
          <ul>
           <li>
-           <a href="valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca.php">
+           <a href="/valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca.php">
             Valparaíso
            </a>
           </li>
           <li>
-           <a href="maipo-valley-wine-tour-santiago.php">
+           <a href="/maipo-valley-wine-tour-santiago.php">
             Isla de Maipo
            </a>
           </li>
           <li>
-           <a href="portillo-inca-lagoon-andes-mountains-vineyard.php">
+           <a href="/portillo-inca-lagoon-andes-mountains-vineyard.php">
             Andes Tour
            </a>
           </li>
           <li>
-           <a href="discover-santiago-city-tour.php">
+           <a href="/discover-santiago-city-tour.php">
             Santiago City Tour
            </a>
           </li>
-          <li><a href="cruise-transfer.php">Cruise Transfer with Tour</a></li>
+          <li><a href="/cruise-transfer.php">Cruise Transfer with Tour</a></li>
          </ul>
         </li>
         <li>
-         <a href="gallery.html">
+         <a href="/gallery.html">
           Gallery
          </a>
         </li>
