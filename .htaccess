@@ -65,6 +65,11 @@ RewriteRule ^portillo-inca-lagoon-andes-mountains-vineyard/?$ portillo-inca-lago
 RewriteRule ^blog/?$ blog.php [L]
 RewriteRule ^blog/([a-zA-Z0-9-]+)/?$ blog-post.php?slug=$1 [L,QSA]
 
+# Dynamic sitemap (added 2026-07-31): clean URL -> generator script,
+# so it always includes current published blog posts, not just the
+# static pages sitemap.txt was manually listing.
+RewriteRule ^sitemap\.xml$ sitemap-generator.php [L]
+
 # Let real files/dirs pass through untouched
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

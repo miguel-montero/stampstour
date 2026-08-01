@@ -9,4 +9,4 @@ Allow: /
 # Disallow: /tmp/
 
 # Sitemap
-Sitemap: https://stampstour.com/sitemap.txt
+Sitemap: https://stampstour.com/sitemap.xml
