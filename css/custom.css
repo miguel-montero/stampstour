@@ -6,29 +6,21 @@ html {
 }
 
 /* Homepage hero - plain CSS, replacing Revolution Slider (see index.php).
-   RevSlider's "fullwidth" layout scales height proportionally to viewport
-   width per breakpoint tier (height = width * gridheight/gridwidth), not a
-   flat pixel cap - these vw-based heights match its old tier ratios
-   (480:400, 778:400, 1024:500, 1240:600) so wide screens get the same
-   taller hero they used to. */
+   Heights match RevSlider's old gridheight breakpoints (600/500/400) so the
+   layout doesn't shift compared to before. */
 .hero-wrap {
 	position: relative;
-	height: 83.333vw;
+	height: 400px;
 	overflow: hidden;
-}
-@media (min-width: 778px) {
-	.hero-wrap {
-		height: 51.414vw;
-	}
 }
 @media (min-width: 1024px) {
 	.hero-wrap {
-		height: 48.828vw;
+		height: 500px;
 	}
 }
 @media (min-width: 1240px) {
 	.hero-wrap {
-		height: 48.387vw;
+		height: 600px;
 	}
 }
 .hero-bg {
