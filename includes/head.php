@@ -70,12 +70,31 @@
 <link href="/img/apple-touch-icon-72x72-precomposed.png" rel="apple-touch-icon" sizes="72x72" type="image/x-icon"/>
 <link href="/img/apple-touch-icon-114x114-precomposed.png" rel="apple-touch-icon" sizes="114x114" type="image/x-icon"/>
 <link href="/img/apple-touch-icon-144x144-precomposed.png" rel="apple-touch-icon" sizes="144x144" type="image/x-icon"/>
+<!-- Homepage-only inlined critical CSS (covers the fixed header/nav + hero -
+     everything visible without scrolling). Generated once via the `critical`
+     npm package against a local rendering of index.php at 390x844 and
+     1470x900 viewports - it is a static snapshot, not auto-regenerated. If
+     the header or hero markup changes meaningfully, regenerate with:
+       npx critical <homepage-url> --dimensions 390x844 --dimensions 1470x900
+     and replace includes/critical/home.css with the output (root-absolute
+     any fonts/css/img url() paths it produces). -->
+<?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
+<style><?= file_get_contents($critical_css_file) ?></style>
+<?php endif; ?>
+
 <!-- GOOGLE WEB FONT (self-hosted) -->
 <link rel="preconnect" href="https://cdn.openwidget.com">
-<link href="/fonts/fonts.css" rel="stylesheet"/>
+<link rel="preload" href="/fonts/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="/fonts/fonts.css" rel="stylesheet"></noscript>
 <!-- COMMON CSS -->
-<link href="/css/bootstrap.min.css" rel="stylesheet"/>
-<link href="/css/style.css" rel="stylesheet"/>
-<link href="/css/vendors.css" rel="stylesheet"/>
+<link rel="preload" href="/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="/css/bootstrap.min.css" rel="stylesheet"></noscript>
+<link rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="/css/style.css" rel="stylesheet"></noscript>
+<link rel="preload" href="/css/vendors.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="/css/vendors.css" rel="stylesheet"></noscript>
+<link rel="preload" href="/css/bs-icon-font/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="/css/bs-icon-font/bootstrap-icons.min.css" rel="stylesheet"></noscript>
 <!-- CUSTOM CSS -->
-<link href="/css/custom.css" rel="stylesheet"/>
+<link rel="preload" href="/css/custom.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="/css/custom.css" rel="stylesheet"></noscript>

@@ -8,6 +8,7 @@ $page_og = [
   'url'         => 'https://stampstour.com/',
   'image'       => 'https://stampstour.com/img/Tours/portada.jpg',
 ];
+$critical_css_file = __DIR__ . '/includes/critical/home.css';
 ?>
 <!DOCTYPE html>
 <html lang="en">
