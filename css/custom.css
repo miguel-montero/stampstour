@@ -5,11 +5,60 @@ html {
 	scroll-behavior: smooth;
 }
 
-/* Homepage hero text overlay - plain CSS positioning (not Revolution
-   Slider layers), so it stays reliably centered at every screen size
-   without per-breakpoint pixel tuning. */
+/* Homepage hero - plain CSS, replacing Revolution Slider entirely (see
+   index.php and docs/superpowers/specs/2026-08-01-hero-revslider-
+   replacement-design.md). Heights snap to Bootstrap's own breakpoints
+   (576/768/992/1200px) rather than RevSlider's non-standard curve -
+   values were hand-picked to look visually equivalent at each tier, not
+   formula-matched to RevSlider's exact numbers. */
 .hero-wrap {
 	position: relative;
+	overflow: hidden;
+	height: 260px;
+}
+@media (min-width: 576px) {
+	.hero-wrap {
+		height: 340px;
+	}
+}
+@media (min-width: 768px) {
+	.hero-wrap {
+		height: 420px;
+	}
+}
+@media (min-width: 992px) {
+	.hero-wrap {
+		height: 520px;
+	}
+}
+@media (min-width: 1200px) {
+	.hero-wrap {
+		height: 600px;
+	}
+}
+.hero-bg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center center;
+	animation: hero-zoom 20s ease-in-out infinite alternate;
+}
+.hero-overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 10;
+	background-color: rgba(0, 0, 0, 0.35);
+}
+@keyframes hero-zoom {
+	from { transform: scale(1); }
+	to   { transform: scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+	.hero-bg {
+		animation: none;
+	}
 }
 .hero-content {
 	position: absolute;
