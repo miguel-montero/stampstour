@@ -44,7 +44,7 @@ $page_canonical   = 'https://stampstour.com/maipo-valley-wine-tour-santiago';
       <div class="col-md-4">
        <div id="price_single_main">
         Special offer
-        <span><sup>$</sup><span id="dynamic_price">--</span></span>
+        <span><sup>$</sup><span id="dynamic_price"></span></span>
        </div>
       </div>
      </div>

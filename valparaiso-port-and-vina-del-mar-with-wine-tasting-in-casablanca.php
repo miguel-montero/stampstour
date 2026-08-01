@@ -50,9 +50,7 @@ $page_canonical   = 'https://stampstour.com/valparaiso-port-and-vina-del-mar-wit
          <sup>
           $
          </sup>
-         <span id="dynamic_price">
-          --
-         </span>
+         <span id="dynamic_price"></span>
         </span>
        </div>
       </div>

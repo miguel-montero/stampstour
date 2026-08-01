@@ -44,9 +44,7 @@ $page_canonical   = 'https://stampstour.com/discover-santiago-city-tour';
          <sup>
           $
          </sup>
-         <span id="dynamic_price">
-          --
-         </span>
+         <span id="dynamic_price"></span>
         </span>
        </div>
       </div>

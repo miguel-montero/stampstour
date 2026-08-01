@@ -44,9 +44,7 @@ $page_canonical   = 'https://stampstour.com/portillo-inca-lagoon-andes-mountains
          <sup>
           $
          </sup>
-         <span id="dynamic_price">
-          --
-         </span>
+         <span id="dynamic_price"></span>
         </span>
        </div>
       </div>
