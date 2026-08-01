@@ -3,7 +3,16 @@
 "use strict";
 
 /* Preload */
-$(window).on('load', function () { // makes sure the whole site is loaded
+$(function () { // fires once the DOM is ready - on pages with blocking CSS
+                 // (everywhere except the homepage) that already implies the
+                 // page is fully styled; on the homepage the inlined critical
+                 // CSS covers everything visible without scrolling, so this
+                 // is also correct there. See
+                 // docs/superpowers/specs/2026-08-01-preloader-timing-fix-design.md
+                 // for the full analysis - this used to wait for window.load
+                 // (every subresource including images and, since a related
+                 // change, deferred stylesheets), which meant this overlay
+                 // masked any benefit from making those stylesheets non-blocking.
 	$('#status').fadeOut(); // will first fade out the loading animation
 	$('#preloader').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website.
 	$('body').delay(350).css({
