@@ -25,6 +25,9 @@ $page_og = [
         }
     </style>
 
+    <!-- REVOLUTION SLIDER CSS -->
+    <link rel="stylesheet" type="text/css" href="rev-slider-files/fonts/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="rev-slider-files/css/settings.css">
 </head>
 
 <body>
@@ -52,18 +55,71 @@ $page_og = [
 
         <h1 class="visually-hidden">Santiago Day Tours: Valparaíso, Maipo Wine Valley, the Andes &amp; More | Stamps Tour</h1>
 
-        <!-- Hero background image (static, CSS-animated - replaces Revolution
-             Slider, which was loading 9 JS files + 2 stylesheets to animate
-             a single non-carousel image). -->
+        <!-- Slider -->
         <div class="hero-wrap">
-        <img
-            src="img/Tours/portada.webp"
-            width="1883"
-            height="1059"
-            fetchpriority="high"
-            alt="Colorful hillside houses in Valparaíso, Chile"
-            class="hero-bg">
-        <div class="hero-overlay"></div>
+        <div id="rev_slider_66_1_wrapper" class="rev_slider_wrapper fullwidthbanner-container" data-alias="image-hero" data-source="gallery" style="margin:0px auto;background:transparent;padding:0px;margin-top:0px;margin-bottom:0px;">
+
+            <div id="rev_slider_66_1" class="rev_slider fullwidthabanner" style="display:none;" data-version="5.4.1">
+                <ul>
+                    <li
+                        data-index="rs-170"
+                        data-transition="zoomout"
+                        data-slotamount="default"
+                        data-hideafterloop="0"
+                        data-hideslideonmobile="off"
+                        data-easein="Power3.easeInOut"
+                        data-easeout="Power3.easeInOut"
+                        data-masterspeed="3000"
+                        data-thumb="img/Tours/portada.webp"
+                        data-rotate="0"
+                        data-saveperformance="off"
+                        data-title="Intro"
+                        data-description="">
+
+                        <!-- MAIN IMAGE / HERO BACKGROUND -->
+                        <img
+                            src="img/Tours/portada.webp"
+                            width="1883"
+                            height="1059"
+                            fetchpriority="high"
+                            alt="Colorful hillside houses in Valparaíso, Chile"
+                            data-bgposition="center center"
+                            data-bgfit="cover"
+                            data-bgparallax="10"
+                            class="rev-slidebg"
+                            data-no-retina>
+
+                        <!-- DARK OVERLAY -->
+                        <div
+                            class="tp-caption tp-shape tp-shapewrapper"
+                            id="slide-170-layer-10"
+                            data-x="['center','center','center','center']"
+                            data-hoffset="['0','0','0','0']"
+                            data-y="['middle','middle','middle','middle']"
+                            data-voffset="['0','0','0','0']"
+                            data-width="full"
+                            data-height="full"
+                            data-whitespace="nowrap"
+                            data-type="shape"
+                            data-basealign="slide"
+                            data-responsive_offset="on"
+                            data-responsive="off"
+                            data-frames='[{"delay":750,"speed":1500,"frame":"0","from":"opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":300,"frame":"999","ease":"nothing"}]'
+                            data-textAlign="['left','left','left','left']"
+                            data-paddingtop="[0,0,0,0]"
+                            data-paddingright="[0,0,0,0]"
+                            data-paddingbottom="[0,0,0,0]"
+                            data-paddingleft="[0,0,0,0]"
+                            style="z-index: 5;background-color:rgba(0, 0, 0, 0.35);">
+                        </div>
+
+                    </li>
+                </ul>
+
+                <div class="tp-bannertimer tp-bottom" style="visibility: hidden !important;"></div>
+            </div>
+        </div>
+        <!-- END REVOLUTION SLIDER -->
 
         <!-- Hero text overlay: plain Bootstrap-friendly markup, positioned
              with CSS only (not RevSlider layers), so it stays reliably
@@ -267,6 +323,68 @@ $page_og = [
     <script src="js/functions.js"></script>
 
     <!-- SLIDER REVOLUTION SCRIPTS -->
+    <script type="text/javascript" src="rev-slider-files/js/jquery.themepunch.tools.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/jquery.themepunch.revolution.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.actions.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.carousel.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.kenburn.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.layeranimation.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.migration.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.navigation.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.parallax.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.slideanims.min.js"></script>
+
+    <script type="text/javascript">
+        var tpj = jQuery;
+        var revapi66;
+
+        tpj(document).ready(function() {
+            if (tpj("#rev_slider_66_1").revolution == undefined) {
+                revslider_showDoubleJqueryError("#rev_slider_66_1");
+            } else {
+                revapi66 = tpj("#rev_slider_66_1").show().revolution({
+                    sliderType: "standard",
+                    jsFileLocation: "rev-slider-files/js/",
+                    sliderLayout: "fullwidth",
+                    dottedOverlay: "none",
+                    delay: 9000,
+                    navigation: {
+                        onHoverStop: "off",
+                    },
+                    responsiveLevels: [1240, 1024, 778, 480],
+                    visibilityLevels: [1240, 1024, 778, 480],
+                    gridwidth: [1240, 1024, 778, 480],
+                    gridheight: [600, 500, 400, 400],
+                    lazyType: "none",
+                    parallax: {
+                        type: "scroll",
+                        origo: "slidercenter",
+                        speed: 2000,
+                        levels: [2,3,4,5,6,7,12,16,10,50,47,48,49,50,51,55],
+                    },
+                    shadow: 0,
+                    spinner: "off",
+                    stopLoop: "on",
+                    stopAfterLoops: 0,
+                    stopAtSlide: 1,
+                    shuffle: "off",
+                    autoHeight: "off",
+                    disableProgressBar: "on",
+                    hideThumbsOnMobile: "off",
+                    hideSliderAtLimit: 0,
+                    hideCaptionAtLimit: 0,
+                    hideAllCaptionAtLilmit: 0,
+                    debugMode: false,
+                    fallbacks: {
+                        simplifyAll: "off",
+                        nextSlideOnWindowFocus: "off",
+                        disableFocusListener: false,
+                    }
+                });
+            }
+        });
+    </script>
+
     <script>
         jQuery(function($){
             var $menu = $('.main-menu');

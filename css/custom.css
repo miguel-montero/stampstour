@@ -5,47 +5,11 @@ html {
 	scroll-behavior: smooth;
 }
 
-/* Homepage hero - plain CSS, replacing Revolution Slider (see index.php).
-   Heights match RevSlider's old gridheight breakpoints (600/500/400) so the
-   layout doesn't shift compared to before. */
+/* Homepage hero text overlay - plain CSS positioning (not Revolution
+   Slider layers), so it stays reliably centered at every screen size
+   without per-breakpoint pixel tuning. */
 .hero-wrap {
 	position: relative;
-	height: 400px;
-	overflow: hidden;
-}
-@media (min-width: 1024px) {
-	.hero-wrap {
-		height: 500px;
-	}
-}
-@media (min-width: 1240px) {
-	.hero-wrap {
-		height: 600px;
-	}
-}
-.hero-bg {
-	position: absolute;
-	inset: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	object-position: center center;
-	animation: hero-zoom 20s ease-in-out infinite alternate;
-}
-.hero-overlay {
-	position: absolute;
-	inset: 0;
-	z-index: 10;
-	background-color: rgba(0, 0, 0, 0.35);
-}
-@keyframes hero-zoom {
-	from { transform: scale(1); }
-	to   { transform: scale(1.08); }
-}
-@media (prefers-reduced-motion: reduce) {
-	.hero-bg {
-		animation: none;
-	}
 }
 .hero-content {
 	position: absolute;
