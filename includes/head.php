@@ -84,6 +84,12 @@
 
 <!-- GOOGLE WEB FONT (self-hosted) -->
 <link rel="preconnect" href="https://cdn.openwidget.com">
+<?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
+<!-- Homepage has matching critical CSS above, so it's safe to defer these -
+     see the comment on the critical-CSS block. Other pages (below) don't
+     have their own critical CSS yet, so they keep blocking stylesheets to
+     avoid a flash of unstyled content - see docs/superpowers/plans/2026-08-01-homepage-critical-css.md
+     final review for why this couldn't safely be sitewide. -->
 <link rel="preload" href="/fonts/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/fonts/fonts.css" rel="stylesheet"></noscript>
 <!-- COMMON CSS -->
@@ -98,3 +104,13 @@
 <!-- CUSTOM CSS -->
 <link rel="preload" href="/css/custom.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/custom.css" rel="stylesheet"></noscript>
+<?php else: ?>
+<link href="/fonts/fonts.css" rel="stylesheet"/>
+<!-- COMMON CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="/css/style.css" rel="stylesheet"/>
+<link href="/css/vendors.css" rel="stylesheet"/>
+<link href="/css/bs-icon-font/bootstrap-icons.min.css" rel="stylesheet"/>
+<!-- CUSTOM CSS -->
+<link href="/css/custom.css" rel="stylesheet"/>
+<?php endif; ?>
