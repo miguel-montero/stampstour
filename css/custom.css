@@ -225,3 +225,30 @@ button.btn_1 {
 .blog_post_wrap {
 	padding-top: 140px;
 }
+
+/* Tour page banners - plain CSS, replacing parallax.js entirely (see
+   docs/superpowers/specs/2026-08-01-tour-banner-parallax-removal-design.md).
+   Heights are real values measured directly against production via CDP
+   device-metrics override, not derived from a formula: flat 360px below
+   768px width, flat 470px at/above it (matches Bootstrap's own md
+   breakpoint and the old data-natural-height="470" value exactly).
+   No overlay element here - .parallax-content-2's own existing
+   background gradient (css/style.css) already handles text contrast. */
+.tour-banner {
+	position: relative;
+	overflow: hidden;
+	height: 360px;
+}
+@media (min-width: 768px) {
+	.tour-banner {
+		height: 470px;
+	}
+}
+.tour-banner-bg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center center;
+}
