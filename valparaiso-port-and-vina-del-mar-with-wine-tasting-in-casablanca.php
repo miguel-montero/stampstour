@@ -28,7 +28,8 @@ $page_canonical   = 'https://stampstour.com/valparaiso-port-and-vina-del-mar-wit
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <!-- End Header -->
-  <section class="parallax-window" data-parallax="scroll" data-image-src="img/Tours/Valpo/big.jpg" data-natural-height="470">
+  <section class="tour-banner">
+   <img src="img/Tours/Valpo/big.jpg" width="1920" height="716" fetchpriority="high" alt="Valparaíso banner" class="tour-banner-bg">
    <div class="badge_tripadvisor_circle">
      <picture>
        <source srcset="img/badges/tripadvisor-circle-2026.webp" type="image/webp">

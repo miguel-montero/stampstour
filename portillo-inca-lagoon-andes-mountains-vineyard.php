@@ -26,7 +26,8 @@ $page_canonical   = 'https://stampstour.com/portillo-inca-lagoon-andes-mountains
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <!-- End Header -->
-  <section class="parallax-window" data-parallax="scroll" data-image-src="img/Tours/Andes/big.jpg" data-natural-height="470">
+  <section class="tour-banner">
+   <img src="img/Tours/Andes/big.jpg" width="1920" height="1440" fetchpriority="high" alt="Andes banner" class="tour-banner-bg">
    <div class="parallax-content-2">
     <div class="container">
      <div class="row">

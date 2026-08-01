@@ -26,7 +26,8 @@ $page_canonical   = 'https://stampstour.com/discover-santiago-city-tour';
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <!-- End Header -->
-  <section class="parallax-window" data-parallax="scroll" data-image-src="img/Tours/Stgo/big.jpg" data-natural-height="470">
+  <section class="tour-banner">
+   <img src="img/Tours/Stgo/big.jpg" width="1400" height="1050" fetchpriority="high" alt="Santiago banner" class="tour-banner-bg">
    <div class="parallax-content-2">
     <div class="container">
      <div class="row">

@@ -46,7 +46,8 @@ $page_og = [
   <!-- End Header -->
 
 <!-- Parallax Hero Section -->
-<section class="parallax-window" data-parallax="scroll" data-image-src="img/Tours/Cruise/big.jpg" data-natural-height="470">
+<section class="tour-banner">
+<img src="img/Tours/Cruise/big.jpg" width="2000" height="1269" fetchpriority="high" alt="Cruise transfer banner" class="tour-banner-bg">
   <div class="parallax-content-2">
     <div class="container">
       <div class="row">

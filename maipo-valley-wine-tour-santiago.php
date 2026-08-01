@@ -26,7 +26,8 @@ $page_canonical   = 'https://stampstour.com/maipo-valley-wine-tour-santiago';
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <!-- End Header -->
-  <section class="parallax-window" data-parallax="scroll" data-image-src="img/Tours/Maipo/big.jpg" data-natural-height="470">
+  <section class="tour-banner">
+   <img src="img/Tours/Maipo/big.jpg" width="720" height="480" fetchpriority="high" alt="Maipo Valley banner" class="tour-banner-bg">
    <div class="badge_tripadvisor_circle">
      <picture>
        <source srcset="img/badges/tripadvisor-circle-2026.webp" type="image/webp">
