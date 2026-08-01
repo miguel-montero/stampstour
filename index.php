@@ -26,7 +26,9 @@ $page_og = [
     </style>
 
     <!-- REVOLUTION SLIDER CSS -->
-    <link rel="stylesheet" type="text/css" href="rev-slider-files/fonts/font-awesome/css/font-awesome.css">
+    <!-- font-awesome.css dropped: it's only RevSlider's icon font for nav
+         arrows/bullets/thumbnails, none of which this single-slide hero
+         uses. settings.css is the core structural CSS and stays. -->
     <link rel="stylesheet" type="text/css" href="rev-slider-files/css/settings.css">
 </head>
 
@@ -323,16 +325,21 @@ $page_og = [
     <script src="js/functions.js"></script>
 
     <!-- SLIDER REVOLUTION SCRIPTS -->
+    <!-- Trimmed to the core engine + the extensions this single-slide hero
+         actually uses (slideanims: the "zoomout" entrance transition that
+         reveals the slide at all - even a single slide needs this, it's
+         not just for transitioning between multiple slides; kenburn:
+         continuous background pan/zoom; layeranimation: overlay fade-in;
+         parallax: scroll parallax set in the init config below). Dropped
+         actions/carousel/navigation (no hotspots, thumbnails, or
+         arrows/bullets are used - single slide) and migration (only
+         needed for pre-5.0 slide XML format). -->
     <script type="text/javascript" src="rev-slider-files/js/jquery.themepunch.tools.min.js"></script>
     <script type="text/javascript" src="rev-slider-files/js/jquery.themepunch.revolution.min.js"></script>
-    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.actions.min.js"></script>
-    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.carousel.min.js"></script>
+    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.slideanims.min.js"></script>
     <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.kenburn.min.js"></script>
     <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.layeranimation.min.js"></script>
-    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.migration.min.js"></script>
-    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.navigation.min.js"></script>
     <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.parallax.min.js"></script>
-    <script type="text/javascript" src="rev-slider-files/js/extensions/revolution.extension.slideanims.min.js"></script>
 
     <script type="text/javascript">
         var tpj = jQuery;
