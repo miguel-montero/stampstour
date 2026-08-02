@@ -3,6 +3,7 @@ $page_title       = 'Discover Santiago Half Day Guided Tour Included Local Snack
 $page_description = 'Half-day guided city tour of Santiago with an English-speaking guide. Hotel pickup, snack included, views, historic center & market.';
 $page_canonical   = 'https://stampstour.com/discover-santiago-city-tour';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
+$lcp_preload_image = 'img/Tours/Stgo/big.jpg';
 ?>
 <!DOCTYPE html>
 <html lang="en">

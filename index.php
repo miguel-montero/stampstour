@@ -9,6 +9,7 @@ $page_og = [
   'image'       => 'https://stampstour.com/img/Tours/portada.jpg',
 ];
 $critical_css_file = __DIR__ . '/includes/critical/home.css';
+$lcp_preload_image = 'img/Tours/portada.webp';
 ?>
 <!DOCTYPE html>
 <html lang="en">

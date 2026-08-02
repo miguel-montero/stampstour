@@ -82,6 +82,10 @@
 <style><?= file_get_contents($critical_css_file) ?></style>
 <?php endif; ?>
 
+<?php if (!empty($lcp_preload_image)): ?>
+<link rel="preload" as="image" href="/<?= htmlspecialchars($lcp_preload_image, ENT_QUOTES, 'UTF-8') ?>" fetchpriority="high">
+<?php endif; ?>
+
 <!-- GOOGLE WEB FONT (self-hosted) -->
 <link rel="preconnect" href="https://cdn.openwidget.com">
 <?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>

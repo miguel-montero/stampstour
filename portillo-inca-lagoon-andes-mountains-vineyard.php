@@ -3,6 +3,7 @@ $page_title       = 'Andes Range Tour at Inca Lagoon & InSitu Winery Snack Inclu
 $page_description = 'See the Andes and the turquoise Inca Lagoon at Portillo, plus a winery tasting. Small-group or private tour with hotel pickup in Santiago.';
 $page_canonical   = 'https://stampstour.com/portillo-inca-lagoon-andes-mountains-vineyard';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
+$lcp_preload_image = 'img/Tours/Andes/big.jpg';
 ?>
 <!DOCTYPE html>
 <html lang="en">

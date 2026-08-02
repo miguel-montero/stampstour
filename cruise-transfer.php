@@ -33,6 +33,7 @@ $page_og = [
   'image'       => 'https://stampstour.com/img/Tours/Cruise/big.jpg',
 ];
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
+$lcp_preload_image = 'img/Tours/Cruise/big.jpg';
 ?>
 <!DOCTYPE html>
 <html lang="en">
