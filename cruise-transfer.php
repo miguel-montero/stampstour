@@ -32,6 +32,7 @@ $page_og = [
   'url'         => $page_canonical,
   'image'       => 'https://stampstour.com/img/Tours/Cruise/big.jpg',
 ];
+$critical_css_file = __DIR__ . '/includes/critical/tour.css';
 ?>
 <!DOCTYPE html>
 <html lang="en">
