@@ -123,7 +123,7 @@ Test these exact scenarios:
 | Single-column, DPR 1 (previous fix's behavior, must be unaffected) | 375 | 1 | ends in `portada-mobile.webp` |
 | Single-column, DPR 1 (previous fix's behavior, must be unaffected) | 650 | 1 | ends in `portada-mobile.webp` |
 | Single-column, very high DPR (medium tier still a floor, not ceiling — falling to full size here is correct) | 375 | 3 | ends in `portada.webp` (full size, NOT `-medium` or `-mobile`) |
-| Two-column, DPR 1, with new `60vw` value | 992 | 1 | ends in `portada-medium.webp` or `portada.webp` — record whichever is selected and confirm it is not `-mobile` (which would mean under-selection) |
+| Two-column, DPR 1, with new `60vw` value | 992 | 1 | ends in `portada-mobile.webp` — Bootstrap's container caps at 960px here (not fluid to the raw viewport), so the real rendered need (~547px) is already covered by the 600w file; this is correct, not under-selection (corrected after the final review found the original expectation here was based on naive viewport-percentage math instead of the real, container-capped layout width) |
 | Two-column, DPR 2, with new `60vw` value | 1470 | 2 | ends in `portada.webp` (full size) |
 
 - [ ] **Step 3: Confirm Valparaíso, Maipo, and Cruise are completely unaffected**
