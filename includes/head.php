@@ -1,10 +1,20 @@
 <?php /* includes/head.php
  * Shared <head> boilerplate for the marketing pages.
  * Caller sets these before including:
- *   $page_title       (required)
- *   $page_description (required)
- *   $page_canonical   (required) - full https://stampstour.com/... URL
- *   $page_og          (optional) - array with keys: title, description, url, image
+ *   $page_title        (required)
+ *   $page_description  (required)
+ *   $page_canonical    (required) - full https://stampstour.com/... URL
+ *   $page_og           (optional) - array with keys: title, description, url, image
+ *   $critical_css_file (optional) - path to a file of inlined critical CSS for this
+ *                        page (e.g. includes/critical/home.css). When set and the
+ *                        file exists, it's inlined in a <style> block and the main
+ *                        stylesheets below load via a non-blocking preload+swap
+ *                        instead of render-blocking <link rel="stylesheet">.
+ *   $lcp_preload_image (optional) - root-relative image path (no leading slash,
+ *                        e.g. 'img/Tours/Maipo/big.jpg') for this page's LCP image.
+ *                        When set and the file exists, it's preloaded with
+ *                        fetchpriority="high" so it isn't starved by the deferred
+ *                        stylesheet preloads above.
  */
 ?>
 <!-- Google Consent Mode v2: default-deny until the visitor chooses via the
@@ -82,7 +92,7 @@
 <style><?= file_get_contents($critical_css_file) ?></style>
 <?php endif; ?>
 
-<?php if (!empty($lcp_preload_image)): ?>
+<?php if (!empty($lcp_preload_image) && is_file(__DIR__ . '/../' . $lcp_preload_image)): ?>
 <link rel="preload" as="image" href="/<?= htmlspecialchars($lcp_preload_image, ENT_QUOTES, 'UTF-8') ?>" fetchpriority="high">
 <?php endif; ?>
 
@@ -90,10 +100,22 @@
 <link rel="preconnect" href="https://cdn.openwidget.com">
 <?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
 <!-- Pages with matching critical CSS above already have everything needed
-     for first paint inlined, so these can safely load at low fetch priority
-     - freeing bandwidth for the page's LCP image, which otherwise competes
-     for the same high-priority tier as preloaded stylesheets under a
-     throttled connection. See
+     for first paint inlined, so these stylesheets are preloaded with
+     fetchpriority="low" instead of render-blocking <link rel="stylesheet">
+     tags. In Chrome/Blink, fetchpriority="low" on a preloaded stylesheet only
+     demotes it from the VeryHigh bucket (which render-blocking-style
+     preloads get) down to High - it does NOT reach Blink's Low tier. Before
+     this fix, these 7 stylesheets sat at VeryHigh while the LCP image (with
+     fetchpriority="high") sat at High, so the image was strictly outranked
+     by every stylesheet - a real priority inversion, not mere "same tier"
+     contention. This fix brings the stylesheets down to High, tying them
+     with the image's own explicit preload below (also fetchpriority="high"),
+     which removes the inversion so the image gets a fair share of bandwidth
+     instead of being starved below the sheets entirely. It does not achieve
+     true separation (image outright beating the sheets); that would require
+     a different technique, e.g. the media="print" onload-swap idiom, which
+     does reach Blink's Low tier, if ever pursued as a follow-up. Measured via
+     CDP against actual Chrome priority buckets. See
      docs/superpowers/specs/2026-08-02-tour-pages-lcp-priority-fix-design.md. -->
 <link rel="preload" href="/fonts/fonts.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/fonts/fonts.css" rel="stylesheet"></noscript>
