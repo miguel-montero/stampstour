@@ -241,7 +241,8 @@ $(function () {
            display: 'none'
          }).appendTo($headerRow),
          $hdrBtn = $('<button class="btn_full">Book now</button>').appendTo($hdrWrap),
-         stickyThreshold = $('.parallax-window').outerHeight() - $headerRow.outerHeight();
+         $banner = $('.tour-banner, .parallax-window'),
+         stickyThreshold = ($banner.outerHeight() || 470) - ($headerRow.outerHeight() || 0);
      function toggleHdrBtn() {
        var scrollTop = $win.scrollTop(),
            winBottom = scrollTop + $win.height(),
