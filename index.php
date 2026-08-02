@@ -89,7 +89,7 @@ $critical_css_file = __DIR__ . '/includes/critical/home.css';
                         <div class="img_container">
                             <a href="valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca.php">
                                 <picture>
-                                    <source srcset="img/Tours/Valpo/portada-mobile.webp 600w, img/Tours/Valpo/portada.webp 955w" sizes="(max-width: 767px) 100vw, 50vw" type="image/webp">
+                                    <source srcset="img/Tours/Valpo/portada-mobile.webp 600w, img/Tours/Valpo/portada.webp 955w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
                                     <img src="img/Tours/Valpo/portada.jpeg" width="800" height="533" class="img-fluid" alt="Valparaíso tour" loading="lazy">
                                 </picture>
                                 <div class="badge_tripadvisor">
@@ -119,7 +119,7 @@ $critical_css_file = __DIR__ . '/includes/critical/home.css';
                         <div class="img_container">
                             <a href="maipo-valley-wine-tour-santiago.php">
                                 <picture>
-                                    <source srcset="img/Tours/Maipo/portada-mobile.webp 600w, img/Tours/Maipo/portada.webp 720w" sizes="(max-width: 767px) 100vw, 50vw" type="image/webp">
+                                    <source srcset="img/Tours/Maipo/portada-mobile.webp 600w, img/Tours/Maipo/portada.webp 720w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
                                     <img src="img/Tours/Maipo/portada.jpg" width="800" height="533" class="img-fluid" alt="Maipo Wine Tour" loading="lazy">
                                 </picture>
                                 <div class="badge_tripadvisor">
@@ -149,7 +149,7 @@ $critical_css_file = __DIR__ . '/includes/critical/home.css';
                         <div class="img_container">
                             <a href="portillo-inca-lagoon-andes-mountains-vineyard.php">
                                 <picture>
-                                    <source srcset="img/Tours/Andes/portada-mobile.webp 600w, img/Tours/Andes/portada.webp 1400w" sizes="(max-width: 767px) 100vw, 50vw" type="image/webp">
+                                    <source srcset="img/Tours/Andes/portada-mobile.webp 600w, img/Tours/Andes/portada.webp 1400w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
                                     <img src="img/Tours/Andes/portada.jpg" width="800" height="533" class="img-fluid" alt="Andes tour" loading="lazy">
                                 </picture>
                                 <div class="badge_save">Save<strong>20%</strong></div>
@@ -173,7 +173,7 @@ $critical_css_file = __DIR__ . '/includes/critical/home.css';
                         <div class="img_container">
                             <a href="discover-santiago-city-tour.php">
                                 <picture>
-                                    <source srcset="img/Tours/Stgo/portada-mobile.webp 600w, img/Tours/Stgo/portada.webp 1440w" sizes="(max-width: 767px) 100vw, 50vw" type="image/webp">
+                                    <source srcset="img/Tours/Stgo/portada-mobile.webp 600w, img/Tours/Stgo/portada.webp 1440w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
                                     <img src="img/Tours/Stgo/portada.jpg" width="800" height="533" class="img-fluid" alt="Santiago City Tour" loading="lazy">
                                 </picture>
                                 <div class="short_info">
@@ -193,7 +193,7 @@ $critical_css_file = __DIR__ . '/includes/critical/home.css';
                         <div class="img_container">
                             <a href="cruise-transfer.php">
                                 <picture>
-                                    <source srcset="img/Tours/Cruise/portada-mobile.webp 600w, img/Tours/Cruise/portada.webp 900w" sizes="(max-width: 767px) 100vw, 50vw" type="image/webp">
+                                    <source srcset="img/Tours/Cruise/portada-mobile.webp 600w, img/Tours/Cruise/portada.webp 900w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
                                     <img src="img/Tours/Cruise/portada.jpeg" width="800" height="533" class="img-fluid" alt="Cruise transfer with Valparaíso tour" loading="lazy">
                                 </picture>
                                 <div class="badge_save">Save<strong>20%</strong></div>
