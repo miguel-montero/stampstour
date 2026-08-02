@@ -227,15 +227,6 @@ $(function () {
 
 });
 
-/* Footer reveal */
-if ($(window).width() >= 768) {
-	$('footer.revealed').footerReveal({
-	shadow: false,
-	opacity:0.6,
-	zIndex: 0
-});
-}
-
 /* Search */
 $(".search-overlay-menu-btn").on('click', function (a) {
 $('body').addClass('has-fullscreen-modal')
