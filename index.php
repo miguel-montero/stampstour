@@ -149,7 +149,7 @@ $critical_css_file = __DIR__ . '/includes/critical/home.css';
                         <div class="img_container">
                             <a href="portillo-inca-lagoon-andes-mountains-vineyard.php">
                                 <picture>
-                                    <source srcset="img/Tours/Andes/portada-mobile.webp 600w, img/Tours/Andes/portada-medium.webp 1100w, img/Tours/Andes/portada.webp 1400w" sizes="(max-width: 767px) 600px, 60vw" type="image/webp">
+                                    <source srcset="img/Tours/Andes/portada-mobile.webp 600w, img/Tours/Andes/portada-medium.webp 1100w, img/Tours/Andes/portada.webp 1400w" sizes="(max-width: 767px) 600px, 65vw" type="image/webp">
                                     <img src="img/Tours/Andes/portada.jpg" width="800" height="533" class="img-fluid" alt="Andes tour" loading="lazy">
                                 </picture>
                                 <div class="badge_save">Save<strong>20%</strong></div>
@@ -173,7 +173,7 @@ $critical_css_file = __DIR__ . '/includes/critical/home.css';
                         <div class="img_container">
                             <a href="discover-santiago-city-tour.php">
                                 <picture>
-                                    <source srcset="img/Tours/Stgo/portada-mobile.webp 600w, img/Tours/Stgo/portada-medium.webp 1100w, img/Tours/Stgo/portada.webp 1440w" sizes="(max-width: 767px) 600px, 60vw" type="image/webp">
+                                    <source srcset="img/Tours/Stgo/portada-mobile.webp 600w, img/Tours/Stgo/portada-medium.webp 1100w, img/Tours/Stgo/portada.webp 1440w" sizes="(max-width: 767px) 600px, 65vw" type="image/webp">
                                     <img src="img/Tours/Stgo/portada.jpg" width="800" height="533" class="img-fluid" alt="Santiago City Tour" loading="lazy">
                                 </picture>
                                 <div class="short_info">
