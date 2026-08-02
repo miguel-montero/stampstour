@@ -8,7 +8,7 @@ $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 <html lang="en">
  <head>
 <?php include __DIR__ . '/includes/head.php'; ?>
-  <link rel="preload" href="css/timeline.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/timeline.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="css/timeline.css" rel="stylesheet"></noscript>
  </head>
  <body>

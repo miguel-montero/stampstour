@@ -85,24 +85,25 @@
 <!-- GOOGLE WEB FONT (self-hosted) -->
 <link rel="preconnect" href="https://cdn.openwidget.com">
 <?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
-<!-- Homepage has matching critical CSS above, so it's safe to defer these -
-     see the comment on the critical-CSS block. Other pages (below) don't
-     have their own critical CSS yet, so they keep blocking stylesheets to
-     avoid a flash of unstyled content - see docs/superpowers/plans/2026-08-01-homepage-critical-css.md
-     final review for why this couldn't safely be sitewide. -->
-<link rel="preload" href="/fonts/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<!-- Pages with matching critical CSS above already have everything needed
+     for first paint inlined, so these can safely load at low fetch priority
+     - freeing bandwidth for the page's LCP image, which otherwise competes
+     for the same high-priority tier as preloaded stylesheets under a
+     throttled connection. See
+     docs/superpowers/specs/2026-08-02-tour-pages-lcp-priority-fix-design.md. -->
+<link rel="preload" href="/fonts/fonts.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/fonts/fonts.css" rel="stylesheet"></noscript>
 <!-- COMMON CSS -->
-<link rel="preload" href="/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/css/bootstrap.min.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/bootstrap.min.css" rel="stylesheet"></noscript>
-<link rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/css/style.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/style.css" rel="stylesheet"></noscript>
-<link rel="preload" href="/css/vendors.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/css/vendors.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/vendors.css" rel="stylesheet"></noscript>
-<link rel="preload" href="/css/bs-icon-font/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/css/bs-icon-font/bootstrap-icons.min.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/bs-icon-font/bootstrap-icons.min.css" rel="stylesheet"></noscript>
 <!-- CUSTOM CSS -->
-<link rel="preload" href="/css/custom.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/css/custom.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/custom.css" rel="stylesheet"></noscript>
 <?php else: ?>
 <link href="/fonts/fonts.css" rel="stylesheet"/>
