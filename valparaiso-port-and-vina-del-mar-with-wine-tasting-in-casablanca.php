@@ -193,7 +193,6 @@ $critical_css_file = __DIR__ . '/includes/critical/tour.css';
          <li> Minimum numbers apply (4 people) . There is a possibility of cancellation after confirmation if there are not enough passengers to meet requirements. In the event of this occurring, you will be offered an alternative or full refund</li>
          <li>This experience requires good weather. If it’s canceled due to poor weather, you’ll be offered a different date or a full refund.</li>
          <li>This tour/activity will have a maximum of 15 travelers</li>
-         <li>On Sundays and national holidays, the winery is closed, and the wine tasting will be held at an alternative location.</li>
         </ul>
        </div>
       </div>
