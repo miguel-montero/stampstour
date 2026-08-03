@@ -33,3 +33,10 @@
 
 # OS cruft
 .DS_Store
+
+# Gallery pipeline: local-only intake/review state, never source
+/gallery-pipeline/incoming/
+/gallery-pipeline/.state.json
+/gallery-pipeline/.approved-queue.json
+/gallery-pipeline/.env
+/gallery-pipeline/node_modules/
