@@ -33,3 +33,7 @@
 
 # OS cruft
 .DS_Store
+
+# Claude Code session scratch space - can accumulate leftover worktrees from
+# other sessions (hundreds of MB), never source
+/.claude/
