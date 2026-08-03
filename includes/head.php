@@ -100,31 +100,36 @@
 <link rel="preconnect" href="https://cdn.openwidget.com">
 <?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
 <!-- Pages with matching critical CSS above already have everything needed
-     for first paint inlined, so these stylesheets can genuinely wait. They
-     load via the media="print" onload-swap idiom ("loadCSS"): the browser
-     downloads them immediately but doesn't apply them (media="print" doesn't
-     match on-screen rendering), then onload swaps media to "all" once ready.
-     Unlike the previous fetchpriority="low" preload approach (which only
-     demoted these from Blink's VeryHigh bucket to High - still tied with the
-     LCP image's own fetchpriority="high" preload above), media="print"
-     reaches Blink's actual Low priority tier, so these now rank genuinely
-     below the LCP image instead of tying with it. That tie was the suspected
-     cause of a bimodal LCP/CLS split observed in PageSpeed Insights after
-     the fetchpriority="low" fix shipped - see
-     docs/superpowers/specs/2026-08-03-lcp-priority-true-separation-design.md. -->
-<link rel="stylesheet" href="/fonts/fonts.css" media="print" onload="this.media='all';this.onload=null;">
+     for first paint inlined, so these stylesheets are preloaded with
+     fetchpriority="low" instead of render-blocking <link rel="stylesheet">
+     tags. In Chrome/Blink, fetchpriority="low" on a preloaded stylesheet only
+     demotes it from the VeryHigh bucket (which render-blocking-style
+     preloads get) down to High - it does NOT reach Blink's Low tier. Before
+     this fix, these 7 stylesheets sat at VeryHigh while the LCP image (with
+     fetchpriority="high") sat at High, so the image was strictly outranked
+     by every stylesheet - a real priority inversion, not mere "same tier"
+     contention. This fix brings the stylesheets down to High, tying them
+     with the image's own explicit preload below (also fetchpriority="high"),
+     which removes the inversion so the image gets a fair share of bandwidth
+     instead of being starved below the sheets entirely. It does not achieve
+     true separation (image outright beating the sheets); that would require
+     a different technique, e.g. the media="print" onload-swap idiom, which
+     does reach Blink's Low tier, if ever pursued as a follow-up. Measured via
+     CDP against actual Chrome priority buckets. See
+     docs/superpowers/specs/2026-08-02-tour-pages-lcp-priority-fix-design.md. -->
+<link rel="preload" href="/fonts/fonts.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/fonts/fonts.css" rel="stylesheet"></noscript>
 <!-- COMMON CSS -->
-<link rel="stylesheet" href="/css/bootstrap.min.css" media="print" onload="this.media='all';this.onload=null;">
+<link rel="preload" href="/css/bootstrap.min.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/bootstrap.min.css" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/css/style.css" media="print" onload="this.media='all';this.onload=null;">
+<link rel="preload" href="/css/style.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/style.css" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/css/vendors.css" media="print" onload="this.media='all';this.onload=null;">
+<link rel="preload" href="/css/vendors.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/vendors.css" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/css/bs-icon-font/bootstrap-icons.min.css" media="print" onload="this.media='all';this.onload=null;">
+<link rel="preload" href="/css/bs-icon-font/bootstrap-icons.min.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/bs-icon-font/bootstrap-icons.min.css" rel="stylesheet"></noscript>
 <!-- CUSTOM CSS -->
-<link rel="stylesheet" href="/css/custom.css" media="print" onload="this.media='all';this.onload=null;">
+<link rel="preload" href="/css/custom.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/custom.css" rel="stylesheet"></noscript>
 <?php else: ?>
 <link href="/fonts/fonts.css" rel="stylesheet"/>
