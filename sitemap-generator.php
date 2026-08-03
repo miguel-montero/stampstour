@@ -16,6 +16,7 @@ $staticPages = [
     ['loc' => '/discover-santiago-city-tour'],
     ['loc' => '/cruise-transfer.php'],
     ['loc' => '/blog'],
+    ['loc' => '/gallery.php'],
     ['loc' => '/contact-us.php'],
     ['loc' => '/refunds-cancellations.php'],
     ['loc' => '/privacy.php'],
