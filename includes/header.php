@@ -97,7 +97,7 @@
          </ul>
         </li>
         <li>
-         <a href="/gallery.html">
+         <a href="/gallery.php">
           Gallery
          </a>
         </li>
