@@ -107,7 +107,7 @@
      Unlike the previous fetchpriority="low" preload approach (which only
      demoted these from Blink's VeryHigh bucket to High - still tied with the
      LCP image's own fetchpriority="high" preload above), media="print"
-     reaches Blink's actual Low priority tier, so these now rank genuinely
+     reaches Blink's actual VeryLow priority tier, so these now rank genuinely
      below the LCP image instead of tying with it. That tie was the suspected
      cause of a bimodal LCP/CLS split observed in PageSpeed Insights after
      the fetchpriority="low" fix shipped - see
