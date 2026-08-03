@@ -2,12 +2,7 @@
 declare(strict_types=1);
 require __DIR__ . '/_auth.php';
 require __DIR__ . '/../../db_config.php';
-
-function stamp_blog_slugify(string $s): string {
-    $s = strtolower(trim($s));
-    $s = preg_replace('/[^a-z0-9]+/', '-', $s) ?? '';
-    return trim($s, '-');
-}
+require __DIR__ . '/../includes/blog-slug.php';
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : (isset($_POST['id']) ? (int)$_POST['id'] : 0);
 $post = ['slug' => '', 'title' => '', 'excerpt' => '', 'content' => '', 'featured_image' => '', 'meta_title' => '', 'meta_description' => '', 'status' => 'draft', 'published_at' => ''];

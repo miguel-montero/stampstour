@@ -12,6 +12,11 @@
 /storage/*.log
 /error_log
 
+# Working files for the seo-keyword-research / seo-post-writer skill pipeline -
+# briefs and drafts are staging area, not source; the CMS DB is the source of
+# truth once a post is inserted
+/content-drafts/
+
 # This session's local dead-file safety net - git replaces this role
 /_archive/
 
