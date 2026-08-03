@@ -107,9 +107,9 @@ $lcp_preload_image = 'img/Tours/Andes/big.jpg';
         <?php endfor; ?>
        </div>
        <div class="sp-thumbnails">
-        <img class="sp-thumbnail" src="img/Tours/Andes/portada.webp" alt="Andes thumbnail cover" loading="lazy">
+        <img class="sp-thumbnail" src="img/Tours/Andes/portada_thumb.webp" alt="Andes thumbnail cover" loading="lazy">
         <?php for ($i = 1; $i <= 39; $i++): ?>
-         <img class="sp-thumbnail" src="img/Tours/Andes/<?php echo $i; ?>_medium.webp" alt="Andes thumbnail <?php echo $i; ?>" loading="lazy">
+         <img class="sp-thumbnail" src="img/Tours/Andes/<?php echo $i; ?>_thumb.webp" alt="Andes thumbnail <?php echo $i; ?>" loading="lazy">
         <?php endfor; ?>
        </div>
       </div>

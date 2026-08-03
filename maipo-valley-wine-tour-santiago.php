@@ -106,9 +106,9 @@ $lcp_preload_image = 'img/Tours/Maipo/big.jpg';
         <?php endfor; ?>
        </div>
        <div class="sp-thumbnails">
-        <img class="sp-thumbnail" src="img/Tours/Maipo/portada.webp" alt="Maipo thumbnail cover" loading="lazy">
+        <img class="sp-thumbnail" src="img/Tours/Maipo/portada_thumb.webp" alt="Maipo thumbnail cover" loading="lazy">
         <?php for ($i = 1; $i <= 8; $i++): ?>
-         <img class="sp-thumbnail" src="img/Tours/Maipo/<?php echo $i; ?>_medium.webp" alt="Maipo thumbnail <?php echo $i; ?>" loading="lazy">
+         <img class="sp-thumbnail" src="img/Tours/Maipo/<?php echo $i; ?>_thumb.webp" alt="Maipo thumbnail <?php echo $i; ?>" loading="lazy">
         <?php endfor; ?>
        </div>
       </div>

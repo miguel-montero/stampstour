@@ -116,9 +116,9 @@ $lcp_preload_image = 'img/Tours/Cruise/big.jpg';
             <?php endfor; ?>
           </div>
           <div class="sp-thumbnails">
-            <img class="sp-thumbnail" src="img/Tours/Cruise/cover.webp" alt="Cover thumbnail" loading="lazy">
+            <img class="sp-thumbnail" src="img/Tours/Cruise/cover_thumb.webp" alt="Cover thumbnail" loading="lazy">
             <?php for ($i = 0; $i <= 20; $i++): ?>
-              <img class="sp-thumbnail" src="img/Tours/Cruise/<?= $i ?>_medium.webp" alt="Thumbnail <?= $i ?>" loading="lazy">
+              <img class="sp-thumbnail" src="img/Tours/Cruise/<?= $i ?>_thumb.webp" alt="Thumbnail <?= $i ?>" loading="lazy">
             <?php endfor; ?>
           </div>
         </div>
