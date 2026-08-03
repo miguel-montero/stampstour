@@ -67,11 +67,28 @@ function safeFilename(rawName) {
   return filename;
 }
 
+// safeFilename() only sanitizes the name - it doesn't confirm what it points
+// to. '_published' and '_rejected' both survive path.basename() untouched
+// (they're real subdirectories of INCOMING_DIR), so any route that stops at
+// fs.existsSync() would happily rename/read a whole directory as if it were a
+// photo. isRegularFile() closes that gap: it's the same fs.statSync(...)
+// .isFile() check listPendingFiles() already uses above, just tolerant of a
+// missing path (ENOENT -> false) so callers can use it as their existence
+// check too.
+function isRegularFile(fullPath) {
+  try {
+    return fs.statSync(fullPath).isFile();
+  } catch (err) {
+    if (err.code === 'ENOENT') return false;
+    throw err;
+  }
+}
+
 app.post('/api/photos/:filename/reject', (req, res) => {
   const filename = safeFilename(req.params.filename);
   if (!filename) return res.status(404).json({ error: 'not found' });
   const source = path.join(INCOMING_DIR, filename);
-  if (!fs.existsSync(source)) return res.status(404).json({ error: 'not found' });
+  if (!isRegularFile(source)) return res.status(404).json({ error: 'not found' });
   fs.renameSync(source, path.join(REJECTED_DIR, filename));
   writeQueue(readQueue().filter((item) => item.filename !== filename));
   res.json({ ok: true });
@@ -81,7 +98,7 @@ app.post('/api/photos/:filename/suggest', async (req, res) => {
   const filename = safeFilename(req.params.filename);
   if (!filename) return res.status(404).json({ error: 'not found' });
   const source = path.join(INCOMING_DIR, filename);
-  if (!fs.existsSync(source)) return res.status(404).json({ error: 'not found' });
+  if (!isRegularFile(source)) return res.status(404).json({ error: 'not found' });
   const validTags = loadTags(TAGS_PATH);
   const imageBase64 = fs.readFileSync(source).toString('base64');
   const suggestion = await requestTitleAndTags({ imageBase64, validTags, ollamaHost: OLLAMA_HOST });
@@ -92,7 +109,7 @@ app.post('/api/photos/:filename/approve', (req, res) => {
   const filename = safeFilename(req.params.filename);
   if (!filename) return res.status(404).json({ error: 'not found' });
   const { title, tags } = req.body;
-  if (!fs.existsSync(path.join(INCOMING_DIR, filename))) {
+  if (!isRegularFile(path.join(INCOMING_DIR, filename))) {
     return res.status(404).json({ error: 'not found' });
   }
   // Validate the FILTERED tags, not the raw request body: a body full of tags
