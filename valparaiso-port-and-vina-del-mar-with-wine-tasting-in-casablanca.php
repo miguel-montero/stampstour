@@ -10,7 +10,7 @@ $lcp_preload_image = 'img/Tours/Valpo/big.jpg';
 
  <head>
 <?php include __DIR__ . '/includes/head.php'; ?>
-  <link rel="preload" href="css/timeline.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="css/timeline.css" media="print" onload="this.media='all';this.onload=null;">
   <noscript><link href="css/timeline.css" rel="stylesheet"></noscript>
  </head>
  <body>
