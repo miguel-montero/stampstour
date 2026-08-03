@@ -70,6 +70,7 @@ Rules for the draft:
 - Wherever a photo would naturally break up the text (after the intro, and roughly every 2-3 sections), insert an inline placeholder on its own line: `[IMAGE: <description>]`. The user will replace each body placeholder with a real `<img src="/img/blog/<slug>/<file>.jpg" alt="...">` tag once they've added their own photo to that path.
 - Never fabricate specific facts (opening hours, prices, exact addresses) that aren't in the brief or well-established public knowledge — keep those general, since inserting wrong specifics is worse than omitting them.
 - **Important:** The `featured_image` field in frontmatter must be replaced with a bare image path (e.g., `/img/blog/<slug>/hero.jpg`), **not** wrapped in an `<img>` tag — it is stored as metadata, not rendered directly. Only the `[IMAGE: ...]` placeholders in the post body are replaced with full `<img>` tags.
+- Write body text as plain paragraphs only — do not use markdown lists, bold/italic, or `[text](url)` links; the insert script's markdown converter only understands `##`/`###` headings, blank-line-separated paragraphs, and raw HTML lines starting with `<`, and silently mangles anything else. For an inline link (e.g. the tour-page CTA), write a raw HTML tag directly: `<a href="/page.php">link text</a>`.
 
 ### 3. Hand off
 

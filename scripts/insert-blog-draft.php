@@ -26,6 +26,10 @@ try {
 $fields = $parsed['fields'];
 $bodyHtml = stamp_markdown_to_html($parsed['body']);
 
+if (str_contains($bodyHtml, '[IMAGE:')) {
+    stamp_insert_fail('Draft still contains unreplaced [IMAGE: ...] placeholder(s) in the body.');
+}
+
 $missingFields = stamp_missing_required_fields($fields, $bodyHtml);
 if (!empty($missingFields)) {
     stamp_insert_fail('Missing required field(s): ' . implode(', ', $missingFields));
@@ -72,11 +76,13 @@ $stmt->bind_param(
     $slug, $title, $excerpt, $bodyHtml, $featuredImage, $metaTitle, $metaDescription, $status
 );
 
-if (!$stmt->execute()) {
+try {
+    $stmt->execute();
+} catch (mysqli_sql_exception $e) {
     if ($conn->errno === 1062) {
         stamp_insert_fail("That slug is already used by another post: $slug");
     }
-    stamp_insert_fail('Database error: ' . $stmt->error);
+    stamp_insert_fail('Database error: ' . $e->getMessage());
 }
 
 $id = (int)$stmt->insert_id;
