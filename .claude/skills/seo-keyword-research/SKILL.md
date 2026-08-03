@@ -15,7 +15,6 @@ allowed-tools:
   - WebSearch
   - WebFetch
   - Write
-  - Bash
 ---
 
 # SEO Keyword Research
