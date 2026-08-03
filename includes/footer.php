@@ -44,7 +44,7 @@
       <h3>Discover</h3>
       <ul>
        <li><a href="/blog">Blog</a></li>
-       <li><a href="#">Gallery</a></li>
+       <li><a href="/gallery.php">Gallery</a></li>
       </ul>
      </div>
 

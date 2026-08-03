@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gallery Review</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 2rem; background: #111; color: #eee; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; }
+  .card { background: #1c1c1c; border-radius: 8px; padding: 0.75rem; }
+  .card img { width: 100%; border-radius: 4px; display: block; }
+  .card.approved { outline: 2px solid #4caf50; }
+  .card input[type="text"] { width: 100%; margin-top: 0.5rem; }
+  .tag { display: inline-block; padding: 0.15rem 0.5rem; margin: 0.15rem; border-radius: 999px; border: 1px solid #555; cursor: pointer; font-size: 0.8rem; }
+  .tag.selected { background: #4caf50; border-color: #4caf50; color: #111; }
+  button { margin-top: 0.5rem; margin-right: 0.5rem; }
+  #publish { position: sticky; top: 0; background: #222; padding: 1rem; margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+<div id="publish">
+  <button id="publish-btn">Publish approved</button>
+  <span id="publish-status"></span>
+</div>
+<div id="grid" class="grid"></div>
+<script>
+let TAGS = [];
+
+async function loadTagsList() {
+  const res = await fetch('/tags.json');
+  TAGS = await res.json();
+}
+
+async function loadPhotos() {
+  const res = await fetch('/api/photos');
+  return res.json();
+}
+
+function renderCard(photo) {
+  const card = document.createElement('div');
+  card.className = 'card' + (photo.status === 'approved' ? ' approved' : '');
+
+  const img = document.createElement('img');
+  img.src = '/incoming/' + encodeURIComponent(photo.filename);
+  card.appendChild(img);
+
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text';
+  titleInput.placeholder = 'Title';
+  titleInput.value = photo.title || '';
+  card.appendChild(titleInput);
+
+  const tagsDiv = document.createElement('div');
+  const selected = new Set(photo.tags || []);
+  TAGS.forEach((tag) => {
+    const pill = document.createElement('span');
+    pill.className = 'tag' + (selected.has(tag) ? ' selected' : '');
+    pill.textContent = tag;
+    pill.onclick = () => pill.classList.toggle('selected');
+    tagsDiv.appendChild(pill);
+  });
+  card.appendChild(tagsDiv);
+
+  const suggestBtn = document.createElement('button');
+  suggestBtn.textContent = 'Suggest with AI';
+  suggestBtn.onclick = async () => {
+    suggestBtn.textContent = 'Thinking...';
+    const res = await fetch(`/api/photos/${encodeURIComponent(photo.filename)}/suggest`, { method: 'POST' });
+    const data = await res.json();
+    suggestBtn.textContent = 'Suggest with AI';
+    if (data.error) { alert('Ollama unavailable — enter title/tags manually.'); return; }
+    titleInput.value = data.title;
+    tagsDiv.querySelectorAll('.tag').forEach((pill) => {
+      pill.classList.toggle('selected', data.tags.includes(pill.textContent));
+    });
+  };
+  card.appendChild(suggestBtn);
+
+  const approveBtn = document.createElement('button');
+  approveBtn.textContent = 'Approve';
+  approveBtn.onclick = async () => {
+    const tags = Array.from(tagsDiv.querySelectorAll('.tag.selected')).map((el) => el.textContent);
+    await fetch(`/api/photos/${encodeURIComponent(photo.filename)}/approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: titleInput.value, tags }),
+    });
+    refresh();
+  };
+  card.appendChild(approveBtn);
+
+  const rejectBtn = document.createElement('button');
+  rejectBtn.textContent = 'Reject';
+  rejectBtn.onclick = async () => {
+    await fetch(`/api/photos/${encodeURIComponent(photo.filename)}/reject`, { method: 'POST' });
+    refresh();
+  };
+  card.appendChild(rejectBtn);
+
+  return card;
+}
+
+async function refresh() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const photos = await loadPhotos();
+  photos.forEach((photo) => grid.appendChild(renderCard(photo)));
+}
+
+document.getElementById('publish-btn').onclick = async () => {
+  const status = document.getElementById('publish-status');
+  status.textContent = 'Publishing...';
+  const res = await fetch('/api/publish', { method: 'POST' });
+  const data = await res.json();
+  status.textContent = data.ok ? 'Published!' : 'Failed: ' + data.error;
+  refresh();
+};
+
+(async () => {
+  await loadTagsList();
+  await refresh();
+})();
+</script>
+</body>
+</html>

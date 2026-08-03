@@ -1,0 +1,17 @@
+{
+  "name": "gallery-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "watch": "node watch.js",
+    "review": "node review-server.js",
+    "publish": "node publish.js"
+  },
+  "dependencies": {
+    "chokidar": "^4.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "sharp": "^0.33.5"
+  }
+}
