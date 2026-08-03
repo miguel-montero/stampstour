@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test test/*.test.js",
     "watch": "node watch.js",
     "review": "node review-server.js",
     "publish": "node publish.js"
