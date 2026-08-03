@@ -212,18 +212,20 @@ $('#map_filter ul li a').on('click', function () {
 /* Input range slider */
 $(function () {
 	'use strict';
-	$("#range").ionRangeSlider({
-		hide_min_max: true,
-		keyboard: true,
-		min: 0,
-		max: 150,
-		from: 30,
-		to: 100,
-		type: 'double',
-		step: 1,
-		prefix: "$",
-		grid: true
-	});
+	if ($.fn.ionRangeSlider) {
+		$("#range").ionRangeSlider({
+			hide_min_max: true,
+			keyboard: true,
+			min: 0,
+			max: 150,
+			from: 30,
+			to: 100,
+			type: 'double',
+			step: 1,
+			prefix: "$",
+			grid: true
+		});
+	}
 
 });
 
@@ -271,42 +273,45 @@ $('.opacity-mask').each(function() {
 });
 
 /* Carousel home */
-$("#carousel-home .owl-carousel").on("initialized.owl.carousel", function() {
-    setTimeout(function() {
-        $("#carousel-home .owl-carousel .owl-item.active .owl-slide-animated").addClass("is-transitioned");
-        $("section").show();
-    }, 200);
-});
+if ($.fn.owlCarousel) {
+	$("#carousel-home .owl-carousel").on("initialized.owl.carousel", function() {
+	    setTimeout(function() {
+	        $("#carousel-home .owl-carousel .owl-item.active .owl-slide-animated").addClass("is-transitioned");
+	        $("section").show();
+	    }, 200);
+	});
 
-const $owlCarousel = $("#carousel-home .owl-carousel").owlCarousel({
-    items: 1,
-    loop: true,
-    nav: false,
-    dots: true,
-    responsive: {
-        0: {
-            dots: false
-        },
-        767: {
-            dots: false
-        },
-        768: {
-            dots: true
-        }
-    }
-});
+	const $owlCarousel = $("#carousel-home .owl-carousel").owlCarousel({
+	    items: 1,
+	    loop: true,
+	    nav: false,
+	    dots: true,
+	    responsive: {
+	        0: {
+	            dots: false
+	        },
+	        767: {
+	            dots: false
+	        },
+	        768: {
+	            dots: true
+	        }
+	    }
+	});
 
-$owlCarousel.on("changed.owl.carousel", function(e) {
-    $(".owl-slide-animated").removeClass("is-transitioned");
-    const $currentOwlItem = $(".owl-item").eq(e.item.index);
-    $currentOwlItem.find(".owl-slide-animated").addClass("is-transitioned");
-});
+	$owlCarousel.on("changed.owl.carousel", function(e) {
+	    $(".owl-slide-animated").removeClass("is-transitioned");
+	    const $currentOwlItem = $(".owl-item").eq(e.item.index);
+	    $currentOwlItem.find(".owl-slide-animated").addClass("is-transitioned");
+	});
 
-$owlCarousel.on("resize.owl.carousel", function() {
-    setTimeout(function() {}, 50);
-});
+	$owlCarousel.on("resize.owl.carousel", function() {
+	    setTimeout(function() {}, 50);
+	});
+}
 
 // Carousel
+if ($.fn.owlCarousel) {
 	$('.list_carousel').owlCarousel({
 		center: false,
 		items: 2,
@@ -331,8 +336,10 @@ $owlCarousel.on("resize.owl.carousel", function() {
 			}
 		}
 	});
+}
 
 // Carousel
+if ($.fn.owlCarousel) {
 	$('.carousel_item').owlCarousel({
 		center: false,
 		items: 1,
@@ -343,6 +350,7 @@ $owlCarousel.on("resize.owl.carousel", function() {
 		nav: true,
         navText: ["<i class='arrow_carrot-left'></i>","<i class='arrow_carrot-right'></i>"]
 	});
+}
 
 // Panel Dropdown
     function close_panel_dropdown() {
