@@ -38,7 +38,7 @@
 
 ---
 
-### Task A: Scaffold the gallery-pipeline project
+### Task 1: Scaffold the gallery-pipeline project
 
 **Files:**
 - Create: `gallery-pipeline/package.json`
@@ -49,7 +49,7 @@
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: the project skeleton every later task builds inside. `tags.json` and `gallery-data.json` are read by `lib/tags.js` (Task D) and `lib/manifest.js` (Task C) respectively.
+- Produces: the project skeleton every later task builds inside. `tags.json` and `gallery-data.json` are read by `lib/tags.js` (Task 4) and `lib/manifest.js` (Task 3) respectively.
 
 - [ ] **Step 1: Create the directory and `package.json`**
 
@@ -138,14 +138,14 @@ git commit -m "Scaffold gallery-pipeline project"
 
 ---
 
-### Task B: Pull the Ollama vision model
+### Task 2: Pull the Ollama vision model
 
 **Files:**
 - None — environment setup only.
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: a locally-running `llava` model that Task D's tests reference conceptually and Task G's smoke test exercises for real.
+- Produces: a locally-running `llava` model that Task 4's tests reference conceptually and Task 7's smoke test exercises for real.
 
 - [ ] **Step 1: Pull the model**
 
@@ -166,7 +166,7 @@ Expected: `ollama list` shows `llava` in the table; the `curl` response is a JSO
 
 ---
 
-### Task C: Manifest + slugify utilities
+### Task 3: Manifest + slugify utilities
 
 **Files:**
 - Create: `gallery-pipeline/lib/slugify.js`
@@ -176,7 +176,7 @@ Expected: `ollama list` shows `llava` in the table; the `curl` response is a JSO
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: `slugify(title): string`, and from `manifest.js` — `readManifest(manifestPath): array`, `writeManifest(manifestPath, entries): void`, `findBySourceFile(entries, sourceFile): entry|undefined`, `uniqueSlug(entries, baseSlug): string`. `publish.js` (Task H) is the consumer of all of these.
+- Produces: `slugify(title): string`, and from `manifest.js` — `readManifest(manifestPath): array`, `writeManifest(manifestPath, entries): void`, `findBySourceFile(entries, sourceFile): entry|undefined`, `uniqueSlug(entries, baseSlug): string`. `publish.js` (Task 8) is the consumer of all of these.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -313,7 +313,7 @@ git commit -m "Add slugify and manifest utility modules"
 
 ---
 
-### Task D: Tag vocabulary + Ollama captioning client
+### Task 4: Tag vocabulary + Ollama captioning client
 
 **Files:**
 - Create: `gallery-pipeline/lib/tags.js`
@@ -322,8 +322,8 @@ git commit -m "Add slugify and manifest utility modules"
 - Test: `gallery-pipeline/test/ollama-client.test.js`
 
 **Interfaces:**
-- Consumes: nothing (tests mock `fetch`; real usage in Task G passes the global `fetch`).
-- Produces: `loadTags(tagsPath): string[]`, `filterValidTags(candidateTags, validTags): string[]` (deduped, capped at 5, only entries present in `validTags`, case-insensitive match returning canonical casing). `buildPrompt(validTags): string`, `parseOllamaResponse(rawText): {title, tags}`, `requestTitleAndTags({imageBase64, validTags, ollamaHost, fetchImpl}): Promise<{title, tags, error}>`. `review-server.js` (Task G) consumes all of these.
+- Consumes: nothing (tests mock `fetch`; real usage in Task 7 passes the global `fetch`).
+- Produces: `loadTags(tagsPath): string[]`, `filterValidTags(candidateTags, validTags): string[]` (deduped, capped at 5, only entries present in `validTags`, case-insensitive match returning canonical casing). `buildPrompt(validTags): string`, `parseOllamaResponse(rawText): {title, tags}`, `requestTitleAndTags({imageBase64, validTags, ollamaHost, fetchImpl}): Promise<{title, tags, error}>`. `review-server.js` (Task 7) consumes all of these.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -507,7 +507,7 @@ git commit -m "Add tag vocabulary and Ollama captioning client modules"
 
 ---
 
-### Task E: Watch-state tracking + image variant generation
+### Task 5: Watch-state tracking + image variant generation
 
 **Files:**
 - Create: `gallery-pipeline/lib/state.js`
@@ -518,7 +518,7 @@ git commit -m "Add tag vocabulary and Ollama captioning client modules"
 
 **Interfaces:**
 - Consumes: nothing new.
-- Produces: `loadState(statePath): {copied}`, `saveState(statePath, state): void`, `hasCopied(state, filename): boolean`, `markCopied(state, filename): state` (consumed by `watch.js`, Task F). `generateVariants(sourcePath, outDir, slug): Promise<{thumbPath, largePath}>` (consumed by `publish.js`, Task H) — writes `${slug}-thumb.webp` (≤500px wide) and `${slug}-large.webp` (≤1600px wide) into `outDir`.
+- Produces: `loadState(statePath): {copied}`, `saveState(statePath, state): void`, `hasCopied(state, filename): boolean`, `markCopied(state, filename): state` (consumed by `watch.js`, Task 6). `generateVariants(sourcePath, outDir, slug): Promise<{thumbPath, largePath}>` (consumed by `publish.js`, Task 8) — writes `${slug}-thumb.webp` (≤500px wide) and `${slug}-large.webp` (≤1600px wide) into `outDir`.
 
 - [ ] **Step 1: Generate the test fixture image**
 
@@ -677,14 +677,14 @@ git commit -m "Add watch-state tracking and image variant generation modules"
 
 ---
 
-### Task F: Folder watcher (`watch.js`)
+### Task 6: Folder watcher (`watch.js`)
 
 **Files:**
 - Create: `gallery-pipeline/watch.js`
 
 **Interfaces:**
-- Consumes: `lib/state.js` (Task E) — `loadState`, `saveState`, `hasCopied`, `markCopied`.
-- Produces: files copied into `incoming/`, consumed by `review-server.js` (Task G).
+- Consumes: `lib/state.js` (Task 5) — `loadState`, `saveState`, `hasCopied`, `markCopied`.
+- Produces: files copied into `incoming/`, consumed by `review-server.js` (Task 7).
 
 - [ ] **Step 1: Implement `watch.js`**
 
@@ -759,7 +759,7 @@ rm -f incoming/sample1.jpg
 rm -f .state.json
 ```
 
-(Leave `sample1.jpg` removed from `incoming/` and `.state.json` cleared so Task G starts from a clean slate — both files are gitignored, so this is just local cleanup, not a git operation.)
+(Leave `sample1.jpg` removed from `incoming/` and `.state.json` cleared so Task 7 starts from a clean slate — both files are gitignored, so this is just local cleanup, not a git operation.)
 
 - [ ] **Step 5: Commit**
 
@@ -770,15 +770,15 @@ git commit -m "Add WhatsApp-sync-folder watcher"
 
 ---
 
-### Task G: Review server (`review-server.js` + `public/review.html`)
+### Task 7: Review server (`review-server.js` + `public/review.html`)
 
 **Files:**
 - Create: `gallery-pipeline/review-server.js`
 - Create: `gallery-pipeline/public/review.html`
 
 **Interfaces:**
-- Consumes: `lib/tags.js` (`loadTags`, `filterValidTags`) and `lib/ollama-client.js` (`requestTitleAndTags`) from Task D.
-- Produces: `incoming/_rejected/` (rejected photos), `.approved-queue.json` (approved photos awaiting publish) — consumed by `publish.js` (Task H).
+- Consumes: `lib/tags.js` (`loadTags`, `filterValidTags`) and `lib/ollama-client.js` (`requestTitleAndTags`) from Task 4.
+- Produces: `incoming/_rejected/` (rejected photos), `.approved-queue.json` (approved photos awaiting publish) — consumed by `publish.js` (Task 8).
 
 - [ ] **Step 1: Implement `review-server.js`**
 
@@ -1046,7 +1046,7 @@ curl -s http://localhost:4000/api/photos
 
 Expected: approve returns `{"ok":true}`; the photos list shows `approve-test.jpg` with `"status":"approved"`, `"title":"Test approve"`, `"tags":["Wine"]`.
 
-- [ ] **Step 4: Smoke test — AI suggestion (requires Task B's Ollama model)**
+- [ ] **Step 4: Smoke test — AI suggestion (requires Task 2's Ollama model)**
 
 ```bash
 curl -s -X POST http://localhost:4000/api/photos/approve-test.jpg/suggest
@@ -1077,14 +1077,14 @@ git commit -m "Add local review server and review UI"
 
 ---
 
-### Task H: Publish (`publish.js`)
+### Task 8: Publish (`publish.js`)
 
 **Files:**
 - Create: `gallery-pipeline/publish.js`
 
 **Interfaces:**
-- Consumes: `lib/manifest.js` (`readManifest`, `writeManifest`, `findBySourceFile`, `uniqueSlug`), `lib/slugify.js` (`slugify`), `lib/image-processing.js` (`generateVariants`) — all from Tasks C/E. Reads `.approved-queue.json` written by `review-server.js` (Task G).
-- Produces: `gallery-pipeline/gallery-data.json` entries and `STAMP/img/Gallery/*.webp` files — consumed by `gallery.php` (Task I).
+- Consumes: `lib/manifest.js` (`readManifest`, `writeManifest`, `findBySourceFile`, `uniqueSlug`), `lib/slugify.js` (`slugify`), `lib/image-processing.js` (`generateVariants`) — all from Tasks 3/5. Reads `.approved-queue.json` written by `review-server.js` (Task 7).
+- Produces: `gallery-pipeline/gallery-data.json` entries and `STAMP/img/Gallery/*.webp` files — consumed by `gallery.php` (Task 9).
 
 - [ ] **Step 1: Implement `publish.js`**
 
@@ -1211,7 +1211,7 @@ Expected: `gallery-data.json` contains one entry — `id: "test-approve"`, `titl
 GALLERY_SKIP_GIT=1 node publish.js
 ```
 
-Expected output: `No new approved photos to publish.` — and `gallery-data.json` is byte-for-byte unchanged (confirm with `git diff gallery-pipeline/gallery-data.json` showing no diff, since Task A already committed the empty-array version and this test hasn't committed the new entry yet).
+Expected output: `No new approved photos to publish.` — and `gallery-data.json` is byte-for-byte unchanged (confirm with `git diff gallery-pipeline/gallery-data.json` showing no diff, since Task 1 already committed the empty-array version and this test hasn't committed the new entry yet).
 
 - [ ] **Step 4: Clean up test artifacts**
 
@@ -1232,7 +1232,7 @@ git commit -m "Add publish script (resize, manifest, git push)"
 
 ---
 
-### Task I: Gallery page (`gallery.php`) + nav link updates
+### Task 9: Gallery page (`gallery.php`) + nav link updates
 
 **Files:**
 - Create: `gallery.php`
@@ -1242,7 +1242,7 @@ git commit -m "Add publish script (resize, manifest, git push)"
 - Modify: `includes/footer.php` (placeholder Gallery link → `/gallery.php`)
 
 **Interfaces:**
-- Consumes: `gallery-pipeline/gallery-data.json` (Task H's output format: `{id, title, tags, thumb, large, sourceFile, dateAdded}`).
+- Consumes: `gallery-pipeline/gallery-data.json` (Task 8's output format: `{id, title, tags, thumb, large, sourceFile, dateAdded}`).
 - Produces: the public-facing gallery page — final task with a user-visible deliverable.
 
 - [ ] **Step 1: Update the header nav link**
@@ -1562,13 +1562,13 @@ git commit -m "Add gallery.php page and wire up nav links"
 
 ---
 
-### Task J: Full pipeline dry run and handoff
+### Task 10: Full pipeline dry run and handoff
 
 **Files:**
 - None modified — this task only verifies the whole system end-to-end and documents the owner's real-world workflow.
 
 **Interfaces:**
-- Consumes: every module and script from Tasks A-I.
+- Consumes: every module and script from Tasks 1-9.
 - Produces: confidence the shipped pipeline works end-to-end; final task in the plan.
 
 - [ ] **Step 1: Run the full automated test suite one more time**
@@ -1577,7 +1577,7 @@ git commit -m "Add gallery.php page and wire up nav links"
 cd gallery-pipeline && npm test
 ```
 
-Expected: all tests pass (confirms nothing in Tasks F-I's manual smoke testing accidentally broke the unit-tested modules).
+Expected: all tests pass (confirms nothing in Tasks 6-9's manual smoke testing accidentally broke the unit-tested modules).
 
 - [ ] **Step 2: Full dry run with `GALLERY_SKIP_GIT`, using the real `tags.json` vocabulary**
 
@@ -1609,7 +1609,7 @@ rm -f gallery-pipeline/.env gallery-pipeline/.state.json gallery-pipeline/.appro
 git status --short
 ```
 
-Expected: `git status --short` shows nothing outstanding beyond what's already committed in Tasks A-I (the manifest is back to `[]`, matching Task A's commit).
+Expected: `git status --short` shows nothing outstanding beyond what's already committed in Tasks 1-9 (the manifest is back to `[]`, matching Task 1's commit).
 
 - [ ] **Step 4: Note the real-world setup step for the owner**
 
