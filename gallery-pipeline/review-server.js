@@ -52,8 +52,24 @@ app.get('/api/photos', (req, res) => {
   res.json(photos);
 });
 
+// Express matches routes on the ENCODED path and decodes params afterwards, so
+// `:filename` can arrive as a literal traversal string (e.g. '../../includes/
+// mailer_config.php' via %2F). path.basename() strips any directory component,
+// pinning every filesystem operation below to INCOMING_DIR itself.
+//
+// basename() alone is not enough: basename('..') is still '..', and
+// path.join(INCOMING_DIR, '..') escapes one level up to gallery-pipeline/ - so
+// '' , '.' and '..' are rejected outright. Everything that survives both checks
+// is a plain name that cannot resolve outside INCOMING_DIR.
+function safeFilename(rawName) {
+  const filename = path.basename(String(rawName ?? ''));
+  if (!filename || filename === '.' || filename === '..') return null;
+  return filename;
+}
+
 app.post('/api/photos/:filename/reject', (req, res) => {
-  const { filename } = req.params;
+  const filename = safeFilename(req.params.filename);
+  if (!filename) return res.status(404).json({ error: 'not found' });
   const source = path.join(INCOMING_DIR, filename);
   if (!fs.existsSync(source)) return res.status(404).json({ error: 'not found' });
   fs.renameSync(source, path.join(REJECTED_DIR, filename));
@@ -62,7 +78,8 @@ app.post('/api/photos/:filename/reject', (req, res) => {
 });
 
 app.post('/api/photos/:filename/suggest', async (req, res) => {
-  const { filename } = req.params;
+  const filename = safeFilename(req.params.filename);
+  if (!filename) return res.status(404).json({ error: 'not found' });
   const source = path.join(INCOMING_DIR, filename);
   if (!fs.existsSync(source)) return res.status(404).json({ error: 'not found' });
   const validTags = loadTags(TAGS_PATH);
@@ -72,16 +89,20 @@ app.post('/api/photos/:filename/suggest', async (req, res) => {
 });
 
 app.post('/api/photos/:filename/approve', (req, res) => {
-  const { filename } = req.params;
+  const filename = safeFilename(req.params.filename);
+  if (!filename) return res.status(404).json({ error: 'not found' });
   const { title, tags } = req.body;
   if (!fs.existsSync(path.join(INCOMING_DIR, filename))) {
     return res.status(404).json({ error: 'not found' });
   }
-  if (!title || !Array.isArray(tags) || tags.length === 0) {
-    return res.status(400).json({ error: 'title and at least one tag are required' });
-  }
+  // Validate the FILTERED tags, not the raw request body: a body full of tags
+  // that aren't in tags.json would otherwise pass the emptiness check and get
+  // queued with cleanTags: [], publishing a photo no filter pill can reach.
   const validTags = loadTags(TAGS_PATH);
-  const cleanTags = filterValidTags(tags, validTags);
+  const cleanTags = Array.isArray(tags) ? filterValidTags(tags, validTags) : [];
+  if (!title || cleanTags.length === 0) {
+    return res.status(400).json({ error: 'title and at least one valid tag are required' });
+  }
   const queue = readQueue().filter((item) => item.filename !== filename);
   queue.push({ filename, title, tags: cleanTags });
   writeQueue(queue);
@@ -98,4 +119,6 @@ app.post('/api/publish', (req, res) => {
 });
 
 const PORT = process.env.REVIEW_PORT || 4000;
-app.listen(PORT, () => console.log(`Review server running at http://localhost:${PORT}`));
+// Bind to loopback only. This server is unauthenticated and /api/publish shells
+// out (and can git-push), so it must not be reachable from the local network.
+app.listen(PORT, '127.0.0.1', () => console.log(`Review server running at http://localhost:${PORT}`));

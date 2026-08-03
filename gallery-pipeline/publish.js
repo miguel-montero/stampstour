@@ -27,43 +27,66 @@ async function publish() {
   const queue = readQueue();
   let manifest = readManifest(MANIFEST_PATH);
   let publishedCount = 0;
+  // Items whose processing threw. They stay in the queue (so the owner's
+  // title/tags aren't lost) and their source file stays in incoming/, so the
+  // next run retries them naturally.
+  const failed = [];
 
   for (const item of queue) {
-    const sourcePath = path.join(INCOMING_DIR, item.filename);
-    const existing = findBySourceFile(manifest, item.filename);
-    if (existing) {
-      if (fs.existsSync(sourcePath)) {
-        fs.renameSync(sourcePath, path.join(PUBLISHED_DIR, item.filename));
+    try {
+      const sourcePath = path.join(INCOMING_DIR, item.filename);
+      const existing = findBySourceFile(manifest, item.filename);
+      if (existing) {
+        if (fs.existsSync(sourcePath)) {
+          fs.renameSync(sourcePath, path.join(PUBLISHED_DIR, item.filename));
+        }
+        continue;
       }
-      continue;
+      if (!fs.existsSync(sourcePath)) {
+        console.warn(`Skipping ${item.filename}: no longer in incoming/`);
+        continue;
+      }
+
+      // A title with no ASCII alphanumerics (all emoji, all non-Latin script)
+      // slugifies to '', which would produce id:'' and files named '-thumb.webp'.
+      const baseSlug = slugify(item.title) || 'photo';
+      const id = uniqueSlug(manifest, baseSlug);
+      await generateVariants(sourcePath, GALLERY_IMG_DIR, id);
+
+      manifest = [
+        ...manifest,
+        {
+          id,
+          title: item.title,
+          tags: item.tags,
+          thumb: `img/Gallery/${id}-thumb.webp`,
+          large: `img/Gallery/${id}-large.webp`,
+          sourceFile: item.filename,
+          dateAdded: new Date().toISOString().slice(0, 10),
+        },
+      ];
+
+      // Persist this item's manifest entry BEFORE moving its source file out of
+      // incoming/. If the process dies between these two lines, the photo is
+      // already recorded and the source is still in incoming/, so the next run
+      // takes the `existing` branch above and simply files it away. Persisting
+      // per item also means one later item's failure can never discard the
+      // entries of items that already succeeded in this batch.
+      writeManifest(MANIFEST_PATH, manifest);
+
+      fs.renameSync(sourcePath, path.join(PUBLISHED_DIR, item.filename));
+      publishedCount += 1;
+    } catch (err) {
+      // Leave the source file in incoming/ and keep the queue entry, so nothing
+      // is lost and a retry picks this item back up.
+      console.error(`Failed to publish ${item.filename} - left in incoming/ for retry:`);
+      console.error(err);
+      failed.push(item);
     }
-    if (!fs.existsSync(sourcePath)) {
-      console.warn(`Skipping ${item.filename}: no longer in incoming/`);
-      continue;
-    }
-
-    const id = uniqueSlug(manifest, slugify(item.title));
-    await generateVariants(sourcePath, GALLERY_IMG_DIR, id);
-
-    manifest = [
-      ...manifest,
-      {
-        id,
-        title: item.title,
-        tags: item.tags,
-        thumb: `img/Gallery/${id}-thumb.webp`,
-        large: `img/Gallery/${id}-large.webp`,
-        sourceFile: item.filename,
-        dateAdded: new Date().toISOString().slice(0, 10),
-      },
-    ];
-
-    fs.renameSync(sourcePath, path.join(PUBLISHED_DIR, item.filename));
-    publishedCount += 1;
   }
 
   writeManifest(MANIFEST_PATH, manifest);
-  writeQueue([]);
+  writeQueue(failed);
 
   if (publishedCount === 0) {
     console.log('No new approved photos to publish.');
@@ -75,10 +98,15 @@ async function publish() {
     return;
   }
 
-  execFileSync('git', ['add', 'gallery-pipeline/gallery-data.json', 'img/Gallery'], { cwd: REPO_ROOT });
+  const gitPaths = ['gallery-pipeline/gallery-data.json', 'img/Gallery'];
+  execFileSync('git', ['add', ...gitPaths], { cwd: REPO_ROOT });
+  // Scope the commit to the same paths we staged. `git add` only stages these
+  // two, but `git commit` without a pathspec commits the WHOLE index - so any
+  // unrelated files the owner happened to have staged would be swept into the
+  // gallery commit. The trailing pathspec keeps those staged and untouched.
   execFileSync(
     'git',
-    ['commit', '-m', `Add ${publishedCount} gallery photo${publishedCount === 1 ? '' : 's'}`],
+    ['commit', '-m', `Add ${publishedCount} gallery photo${publishedCount === 1 ? '' : 's'}`, '--', ...gitPaths],
     { cwd: REPO_ROOT }
   );
   execFileSync('git', ['push', 'origin', 'main'], { cwd: REPO_ROOT });
