@@ -57,13 +57,13 @@ $page_canonical   = 'https://stampstour.com/gallery.php';
 
         <div class="gallery-grid">
           <?php foreach ($photos as $photo): ?>
-            <a href="/<?= htmlspecialchars($photo['large'], ENT_QUOTES, 'UTF-8') ?>"
+            <a href="/<?= htmlspecialchars($photo['large'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                data-lightbox="gallery"
-               data-title="<?= htmlspecialchars($photo['title'], ENT_QUOTES, 'UTF-8') ?>"
+               data-title="<?= htmlspecialchars($photo['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                class="gallery-item"
                data-tags="<?= htmlspecialchars(implode('|', $photo['tags'] ?? []), ENT_QUOTES, 'UTF-8') ?>">
-              <img src="/<?= htmlspecialchars($photo['thumb'], ENT_QUOTES, 'UTF-8') ?>"
-                   alt="<?= htmlspecialchars($photo['title'], ENT_QUOTES, 'UTF-8') ?>"
+              <img src="/<?= htmlspecialchars($photo['thumb'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                   alt="<?= htmlspecialchars($photo['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                    loading="lazy">
             </a>
           <?php endforeach; ?>
@@ -76,7 +76,7 @@ $page_canonical   = 'https://stampstour.com/gallery.php';
     <?php include __DIR__ . '/includes/footer.php'; ?>
   </footer>
 
-  <script src="/js/jquery-3.7.1.min.js"></script>
+  <?php include __DIR__ . '/includes/content-scripts.php'; ?>
   <script src="/js/lightbox2.js"></script>
   <script src="/js/gallery.js"></script>
 </body>
