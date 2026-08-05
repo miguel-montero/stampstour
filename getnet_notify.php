@@ -130,7 +130,7 @@ try {
   $stmt = $conn->prepare("
     UPDATE reservas
     SET estado = CASE
-                   WHEN estado = 'realizado' AND ? <> 'refund' THEN estado
+                   WHEN estado IN ('realizado', 'refund') AND ? <> 'refund' THEN estado
                    ELSE ?
                  END,
         updated_at = NOW()
@@ -143,20 +143,6 @@ try {
     error_log("DB error: " . $stmt->error . " ref=$reference status=$confirmedStatus");
   }
   $stmt->close();
-
-  // (Opcional) Si añadiste columnas en 'reservas' para trazabilidad, puedes usar este update en su lugar:
-  /*
-  $stmt = $conn->prepare("
-    UPDATE reservas
-    SET estado = ?, request_id = ?, last_webhook_status = ?, last_webhook_at = NOW(), updated_at = NOW()
-    WHERE reference_id = ?
-    LIMIT 1
-  ");
-  $rid = (int)$requestId;
-  $stmt->bind_param("siss", $nuevoEstado, $rid, $confirmedStatus, $reference);
-  $stmt->execute();
-  $stmt->close();
-  */
 
 } catch (Throwable $e) {
   error_log("DB exception: " . $e->getMessage());
