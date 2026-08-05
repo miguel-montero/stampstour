@@ -64,16 +64,27 @@ $page_canonical   = 'https://stampstour.com/gallery.php';
         </div>
 
         <div class="gallery-grid">
-          <?php foreach ($photos as $photo): ?>
-            <a href="/<?= htmlspecialchars($photo['large'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-               data-lightbox="gallery"
-               data-title="<?= htmlspecialchars($photo['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-               class="gallery-item"
-               data-tags="<?= htmlspecialchars(implode('|', $photo['tags'] ?? []), ENT_QUOTES, 'UTF-8') ?>">
-              <img src="/<?= htmlspecialchars($photo['thumb'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                   alt="<?= htmlspecialchars($photo['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                   loading="lazy">
-            </a>
+          <?php foreach ($photos as $photo):
+            $uploadDateFormatted = '';
+            if (!empty($photo['dateAdded'])) {
+                $ts = strtotime($photo['dateAdded']);
+                if ($ts !== false) $uploadDateFormatted = date('M j, Y', $ts);
+            }
+            $lightboxCaption = trim(($photo['title'] ?? '') . ($uploadDateFormatted !== '' ? ' — Upload date: ' . $uploadDateFormatted : ''));
+          ?>
+            <div class="gallery-item" data-tags="<?= htmlspecialchars(implode('|', $photo['tags'] ?? []), ENT_QUOTES, 'UTF-8') ?>">
+              <a href="/<?= htmlspecialchars($photo['large'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                 data-lightbox="gallery"
+                 data-title="<?= htmlspecialchars($lightboxCaption, ENT_QUOTES, 'UTF-8') ?>"
+                 class="gallery-item-link">
+                <img src="/<?= htmlspecialchars($photo['thumb'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                     alt="<?= htmlspecialchars($photo['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                     loading="lazy">
+              </a>
+              <?php if ($uploadDateFormatted !== ''): ?>
+                <p class="gallery-item-date">Upload date: <?= htmlspecialchars($uploadDateFormatted, ENT_QUOTES, 'UTF-8') ?></p>
+              <?php endif; ?>
+            </div>
           <?php endforeach; ?>
         </div>
       <?php endif; ?>

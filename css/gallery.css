@@ -25,25 +25,31 @@
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: 1rem 1rem;
 }
 
-.gallery-item {
+.gallery-item-link {
   display: block;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 6px;
 }
 
-.gallery-item img {
+.gallery-item-link img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.2s;
 }
 
-.gallery-item:hover img {
+.gallery-item-link:hover img {
   transform: scale(1.05);
+}
+
+.gallery-item-date {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  color: #666;
 }
 
 .gallery-item.gallery-hidden {
