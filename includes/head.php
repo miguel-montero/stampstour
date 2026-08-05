@@ -112,7 +112,9 @@
      tags. In Chrome/Blink, fetchpriority="low" on a preloaded stylesheet only
      demotes it from the VeryHigh bucket (which render-blocking-style
      preloads get) down to High - it does NOT reach Blink's Low tier. Before
-     this fix, these 7 stylesheets sat at VeryHigh while the LCP image (with
+     this fix, these stylesheets (6 on pages using the full vendors.css, or
+     7 on pages using the split vendors-core + vendors-home/tour variants)
+     sat at VeryHigh while the LCP image (with
      fetchpriority="high") sat at High, so the image was strictly outranked
      by every stylesheet - a real priority inversion, not mere "same tier"
      contention. This fix brings the stylesheets down to High, tying them
