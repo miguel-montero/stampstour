@@ -70,7 +70,7 @@ function stamp_gallery_date_from_filename(string $filename): string
 // when this GD build supports it, falls back to JPEG otherwise - production's
 // exact GD/WebP support was unconfirmed when this was built, so it degrades
 // gracefully instead of assuming.
-function stamp_gallery_generate_variant(string $sourcePath, string $outDir, string $baseName, int $maxWidth): ?array
+function stamp_gallery_generate_variant(string $sourcePath, string $outDir, string $baseName, int $maxWidth, int $webpQuality): ?array
 {
     $info = @getimagesize($sourcePath);
     if ($info === false) return null;
@@ -95,7 +95,7 @@ function stamp_gallery_generate_variant(string $sourcePath, string $outDir, stri
     $useWebp = function_exists('imagewebp');
     $ext = $useWebp ? 'webp' : 'jpg';
     $outPath = "$outDir/{$baseName}.{$ext}";
-    $ok = $useWebp ? imagewebp($image, $outPath, 80) : imagejpeg($image, $outPath, 82);
+    $ok = $useWebp ? imagewebp($image, $outPath, $webpQuality) : imagejpeg($image, $outPath, 82);
     imagedestroy($image);
 
     return $ok ? ['path' => $outPath, 'ext' => $ext] : null;
@@ -137,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['photos'])) {
         $baseSlug = stamp_gallery_slugify($title) ?: 'photo';
         $id = stamp_gallery_unique_slug($allEntries, $baseSlug);
 
-        $thumb = stamp_gallery_generate_variant($tmpPaths[$i], $GALLERY_IMG_DIR, "{$id}-thumb", 500);
-        $large = stamp_gallery_generate_variant($tmpPaths[$i], $GALLERY_IMG_DIR, "{$id}-large", 1600);
+        $thumb = stamp_gallery_generate_variant($tmpPaths[$i], $GALLERY_IMG_DIR, "{$id}-thumb", 350, 72);
+        $large = stamp_gallery_generate_variant($tmpPaths[$i], $GALLERY_IMG_DIR, "{$id}-large", 1600, 80);
 
         if ($thumb === null || $large === null) {
             $results[] = "✗ {$originalName}: could not process image (unsupported or corrupt file?)";
