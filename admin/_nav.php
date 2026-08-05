@@ -10,6 +10,7 @@ function stamp_admin_nav(string $active = ''): void {
         'preferentials' => ['label' => 'Preferentials', 'href' => '/admin/preferentials.php'],
         'private-booking' => ['label' => 'Private Booking', 'href' => '/admin/private-booking.php'],
         'blog' => ['label' => 'Blog', 'href' => '/admin/blog.php'],
+        'gallery' => ['label' => 'Gallery Upload', 'href' => '/admin/gallery-upload.php'],
     ];
     ?>
     <nav class="navbar navbar-expand navbar-dark bg-dark px-3 mb-3">

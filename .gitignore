@@ -49,3 +49,8 @@
 /gallery-pipeline/.approved-queue.json
 /gallery-pipeline/.env
 /gallery-pipeline/node_modules/
+
+# Admin-panel photo uploads (admin/gallery-upload.php) - server-local only,
+# not git-tracked, so it never conflicts with the local Node pipeline's
+# git-tracked gallery-data.json. gallery.php merges both at render time.
+/gallery-pipeline/gallery-data-admin.json

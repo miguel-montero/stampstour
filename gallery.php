@@ -1,10 +1,18 @@
 <?php
-$manifestPath = __DIR__ . '/gallery-pipeline/gallery-data.json';
+// Two manifest sources: gallery-data.json is git-tracked (populated by the
+// local Node pipeline and pulled onto this server); gallery-data-admin.json
+// is server-local only, gitignored, populated by admin/gallery-upload.php.
+// Kept separate deliberately - the admin panel has no git credentials, so
+// merging into the git-tracked file here would make its content diverge
+// from what's actually committed and get lost on the next deploy.
 $photos = [];
-if (file_exists($manifestPath)) {
-    $decoded = json_decode(file_get_contents($manifestPath), true);
-    if (is_array($decoded)) {
-        $photos = $decoded;
+foreach (['gallery-data.json', 'gallery-data-admin.json'] as $manifestFile) {
+    $manifestPath = __DIR__ . '/gallery-pipeline/' . $manifestFile;
+    if (file_exists($manifestPath)) {
+        $decoded = json_decode(file_get_contents($manifestPath), true);
+        if (is_array($decoded)) {
+            $photos = array_merge($photos, $decoded);
+        }
     }
 }
 usort($photos, function ($a, $b) {
