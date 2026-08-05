@@ -15,6 +15,13 @@
  *                        When set and the file exists, it's preloaded with
  *                        fetchpriority="high" so it isn't starved by the deferred
  *                        stylesheet preloads above.
+ *   $vendor_css_variant (optional) - 'home' or 'tour'. When set, loads
+ *                        css/vendors-core.css + css/vendors-{variant}.css
+ *                        instead of the full css/vendors.css (see
+ *                        docs/superpowers/specs/2026-08-03-homepage-tour-bundle-split-design.md).
+ *                        Unset (the default) preserves today's behavior
+ *                        exactly, so every page that doesn't opt in is
+ *                        untouched.
  */
 ?>
 <!-- Google Consent Mode v2: default-deny until the visitor chooses via the
@@ -124,8 +131,15 @@
 <noscript><link href="/css/bootstrap.min.css" rel="stylesheet"></noscript>
 <link rel="preload" href="/css/style.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/style.css" rel="stylesheet"></noscript>
+<?php if (!empty($vendor_css_variant) && in_array($vendor_css_variant, ['home', 'tour'], true)): ?>
+<link rel="preload" href="/css/vendors-core.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="/css/vendors-core.css" rel="stylesheet"></noscript>
+<link rel="preload" href="/css/vendors-<?= $vendor_css_variant ?>.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="/css/vendors-<?= $vendor_css_variant ?>.css" rel="stylesheet"></noscript>
+<?php else: ?>
 <link rel="preload" href="/css/vendors.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/vendors.css" rel="stylesheet"></noscript>
+<?php endif; ?>
 <link rel="preload" href="/css/bs-icon-font/bootstrap-icons.min.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/bs-icon-font/bootstrap-icons.min.css" rel="stylesheet"></noscript>
 <!-- CUSTOM CSS -->
@@ -136,7 +150,12 @@
 <!-- COMMON CSS -->
 <link href="/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="/css/style.css" rel="stylesheet"/>
+<?php if (!empty($vendor_css_variant) && in_array($vendor_css_variant, ['home', 'tour'], true)): ?>
+<link href="/css/vendors-core.css" rel="stylesheet"/>
+<link href="/css/vendors-<?= $vendor_css_variant ?>.css" rel="stylesheet"/>
+<?php else: ?>
 <link href="/css/vendors.css" rel="stylesheet"/>
+<?php endif; ?>
 <link href="/css/bs-icon-font/bootstrap-icons.min.css" rel="stylesheet"/>
 <!-- CUSTOM CSS -->
 <link href="/css/custom.css" rel="stylesheet"/>

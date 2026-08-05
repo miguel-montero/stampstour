@@ -4,6 +4,7 @@ $page_description = 'Small-group or private Maipo Valley wine tour from Santiago
 $page_canonical   = 'https://stampstour.com/maipo-valley-wine-tour-santiago';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Maipo/big.jpg';
+$vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -8,10 +8,13 @@
 <!-- jQuery FIRST -->
 <script src="js/jquery-3.7.1.min.js"></script>
 
-<!-- Common bundle (includes moment + daterangepicker + other core stuff) -->
-<script src="js/common_scripts_min.js"></script>
+<!-- Core bundle (Bootstrap) + tour-only extras (Parallax, Magnific Popup,
+     daterangepicker + moment). See
+     docs/superpowers/specs/2026-08-03-homepage-tour-bundle-split-design.md -->
+<script src="js/vendors-core.min.js"></script>
+<script src="js/vendors-tour.min.js"></script>
 
-<!-- Site functions (ok after common) -->
+<!-- Site functions (ok after core+extras) -->
 <script src="js/functions.js"></script>
 
 <!-- Gallery Plugin -->

@@ -4,6 +4,7 @@ $page_description = 'Half-day guided city tour of Santiago with an English-speak
 $page_canonical   = 'https://stampstour.com/discover-santiago-city-tour';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Stgo/big.jpg';
+$vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>
 <html lang="en">

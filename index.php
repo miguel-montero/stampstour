@@ -10,6 +10,7 @@ $page_og = [
 ];
 $critical_css_file = __DIR__ . '/includes/critical/home.css';
 $lcp_preload_image = 'img/Tours/portada.webp';
+$vendor_css_variant = 'home';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -263,7 +264,8 @@ $lcp_preload_image = 'img/Tours/portada.webp';
 
     <!-- Common scripts -->
     <script src="js/jquery-3.7.1.min.js"></script>
-    <script src="js/common_scripts_min.js"></script>
+    <script src="js/vendors-core.min.js"></script>
+    <script src="js/vendors-home.min.js"></script>
     <script src="js/functions.js"></script>
 
     <script>

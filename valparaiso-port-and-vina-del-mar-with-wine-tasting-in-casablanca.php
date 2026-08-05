@@ -4,6 +4,7 @@ $page_description = 'Full-day Valparaíso & Viña del Mar tour from Santiago wit
 $page_canonical   = 'https://stampstour.com/valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Valpo/big.jpg';
+$vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>
 <html lang="en">

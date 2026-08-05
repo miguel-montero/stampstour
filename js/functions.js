@@ -102,39 +102,45 @@ $(".btn_map").on('click', function () {
 });
 
 /* Animation on scroll */
-new WOW().init();
+if (typeof WOW !== 'undefined') {
+	new WOW().init();
+}
 
 /* Video modal dialog + Parallax + Scroll to top + Incrementer */
 $(function () {
 	
-	$('.parallax-window').parallax({zIndex:1}); /* Parallax modal*/
-	
-	$('.video').magnificPopup({
-		type: 'iframe',
-		closeMarkup: '<button title="%title%" type="button" class="mfp-close" style="font-size:21px">&#215;</button>'
-	}); /* video modal*/
-	
-	/*  Image popups */
-	$('.magnific-gallery').each(function () {
-		$(this).magnificPopup({
-			delegate: 'a',
-			type: 'image',
-            preloader: true,
-			gallery: {
-				enabled: true
-			},
-			removalDelay: 500, //delay removal by X to allow out-animation
-			callbacks: {
-				beforeOpen: function () {
-					// just a hack that adds mfp-anim class to markup 
-					this.st.image.markup = this.st.image.markup.replace('mfp-figure', 'mfp-figure mfp-with-anim');
-					this.st.mainClass = this.st.el.attr('data-effect');
-				}
-			},
-			closeOnContentClick: true,
-			midClick: true // allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source.
+	if ($.fn.parallax) {
+		$('.parallax-window').parallax({zIndex:1}); /* Parallax modal*/
+	}
+
+	if ($.fn.magnificPopup) {
+		$('.video').magnificPopup({
+			type: 'iframe',
+			closeMarkup: '<button title="%title%" type="button" class="mfp-close" style="font-size:21px">&#215;</button>'
+		}); /* video modal*/
+
+		/*  Image popups */
+		$('.magnific-gallery').each(function () {
+			$(this).magnificPopup({
+				delegate: 'a',
+				type: 'image',
+	            preloader: true,
+				gallery: {
+					enabled: true
+				},
+				removalDelay: 500, //delay removal by X to allow out-animation
+				callbacks: {
+					beforeOpen: function () {
+						// just a hack that adds mfp-anim class to markup
+						this.st.image.markup = this.st.image.markup.replace('mfp-figure', 'mfp-figure mfp-with-anim');
+						this.st.mainClass = this.st.el.attr('data-effect');
+					}
+				},
+				closeOnContentClick: true,
+				midClick: true // allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source.
+			});
 		});
-	});
+	}
 	
 	/* Cart header drop down */
 	$('.dropdown-menu').on('click', function (e) {
@@ -243,24 +249,28 @@ $(".search-overlay-menu, .search-overlay-menu .search-overlay-close").on("click 
 
 
 /* Modal Sign In */
-$('#access_link').magnificPopup({
-	type: 'inline',
-	fixedContentPos: true,
-	fixedBgPos: true,
-	overflowY: 'auto',
-	closeBtnInside: true,
-	preloader: false,
-	midClick: true,
-	removalDelay: 300,
-	mainClass: 'my-mfp-zoom-in'
-});
+if ($.fn.magnificPopup) {
+	$('#access_link').magnificPopup({
+		type: 'inline',
+		fixedContentPos: true,
+		fixedBgPos: true,
+		overflowY: 'auto',
+		closeBtnInside: true,
+		preloader: false,
+		midClick: true,
+		removalDelay: 300,
+		mainClass: 'my-mfp-zoom-in'
+	});
+}
 
 /* Show Password */
-$('#password').hidePassword('focus', {
-	toggle: {
-		className: 'my-toggle'
-	}
-});
+if ($.fn.hidePassword) {
+	$('#password').hidePassword('focus', {
+		toggle: {
+			className: 'my-toggle'
+		}
+	});
+}
 
 /* Forgot Password */
 $("#forgot").on('click', function () {
