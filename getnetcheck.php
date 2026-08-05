@@ -47,7 +47,7 @@ function httpPostJson(string $url, array $payload, int $timeout = 20): array {
 }
 
 // ✅ Caso específico
-$processId = '11506423';
+$processId = '1487683';
 
 $auth = makeAuth(GETNET_LOGIN, GETNET_SECRET_KEY);
 $url = rtrim(GETNET_BASE_URL, '/') . '/api/session/' . $processId;
