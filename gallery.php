@@ -70,7 +70,7 @@ $page_canonical   = 'https://stampstour.com/gallery.php';
                 $ts = strtotime($photo['dateAdded']);
                 if ($ts !== false) $uploadDateFormatted = date('M j, Y', $ts);
             }
-            $lightboxCaption = trim(($photo['title'] ?? '') . ($uploadDateFormatted !== '' ? ' — Upload date: ' . $uploadDateFormatted : ''));
+            $lightboxCaption = $uploadDateFormatted !== '' ? 'Upload date: ' . $uploadDateFormatted : ($photo['title'] ?? '');
           ?>
             <div class="gallery-item" data-tags="<?= htmlspecialchars(implode('|', $photo['tags'] ?? []), ENT_QUOTES, 'UTF-8') ?>">
               <a href="/<?= htmlspecialchars($photo['large'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
