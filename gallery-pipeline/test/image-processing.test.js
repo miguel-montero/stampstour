@@ -17,7 +17,7 @@ test('generates thumb and large webp variants narrower than the requested caps',
 
   assert.equal(thumbMeta.format, 'webp');
   assert.equal(largeMeta.format, 'webp');
-  assert.ok(thumbMeta.width <= 500);
+  assert.ok(thumbMeta.width <= 350);
   assert.ok(largeMeta.width <= 1600);
   assert.ok(largeMeta.width > thumbMeta.width);
 

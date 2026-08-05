@@ -8,8 +8,8 @@ async function generateVariants(sourcePath, outDir, slug) {
   const largePath = path.join(outDir, `${slug}-large.webp`);
 
   await sharp(sourcePath)
-    .resize({ width: 500, withoutEnlargement: true })
-    .webp({ quality: 80 })
+    .resize({ width: 350, withoutEnlargement: true })
+    .webp({ quality: 72 })
     .toFile(thumbPath);
 
   await sharp(sourcePath)
