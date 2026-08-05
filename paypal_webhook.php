@@ -315,7 +315,10 @@ try {
       $referenceId = $r['custom_id'] ?? ($r['invoice_id'] ?? null);
       if (!$referenceId && $orderId) { $referenceId = findReferenceByOrderId($conn, $orderId); }
       if ($referenceId) {
-        $stmt = $conn->prepare("UPDATE reservas SET estado='pendiente' WHERE TRIM(reference_id)=TRIM(?) LIMIT 1");
+        // Guard: no bajar una reserva ya 'realizado' a 'pendiente' por un
+        // evento tardío/duplicado. Ver
+        // docs/superpowers/specs/2026-08-05-payment-status-downgrade-guard-design.md
+        $stmt = $conn->prepare("UPDATE reservas SET estado = CASE WHEN estado = 'realizado' THEN estado ELSE 'pendiente' END WHERE TRIM(reference_id)=TRIM(?) LIMIT 1");
         $stmt->bind_param('s', $referenceId);
         $stmt->execute(); $stmt->close();
       }
@@ -329,7 +332,10 @@ try {
       $referenceId = $r['custom_id'] ?? ($r['invoice_id'] ?? null);
       if (!$referenceId && $orderId) { $referenceId = findReferenceByOrderId($conn, $orderId); }
       if ($referenceId) {
-        $stmt = $conn->prepare("UPDATE reservas SET estado='fallido' WHERE TRIM(reference_id)=TRIM(?) LIMIT 1");
+        // Guard: no bajar una reserva ya 'realizado' a 'fallido' por un
+        // evento tardío/duplicado. Ver
+        // docs/superpowers/specs/2026-08-05-payment-status-downgrade-guard-design.md
+        $stmt = $conn->prepare("UPDATE reservas SET estado = CASE WHEN estado = 'realizado' THEN estado ELSE 'fallido' END WHERE TRIM(reference_id)=TRIM(?) LIMIT 1");
         $stmt->bind_param('s', $referenceId);
         $stmt->execute(); $stmt->close();
       }

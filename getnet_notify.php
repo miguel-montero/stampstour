@@ -124,14 +124,21 @@ try {
   $nuevoEstado = $statusMap[$normalizedStatus];
 
   // Update mínimo: exige que el webhook corresponda al process_id vigente.
+  // Guard: nunca permitir que un webhook (posiblemente tardío, de una sesión
+  // abandonada) baje una reserva ya 'realizado' a otro estado, salvo un
+  // 'refund' genuino. Ver docs/superpowers/specs/2026-08-05-payment-status-downgrade-guard-design.md
   $stmt = $conn->prepare("
     UPDATE reservas
-    SET estado = ?, updated_at = NOW()
+    SET estado = CASE
+                   WHEN estado = 'realizado' AND ? <> 'refund' THEN estado
+                   ELSE ?
+                 END,
+        updated_at = NOW()
     WHERE reference_id = ?
       AND process_id = ?
     LIMIT 1
   ");
-  $stmt->bind_param("sss", $nuevoEstado, $reference, $requestId);
+  $stmt->bind_param("ssss", $nuevoEstado, $nuevoEstado, $reference, $requestId);
   if (!$stmt->execute()) {
     error_log("DB error: " . $stmt->error . " ref=$reference status=$confirmedStatus");
   }
