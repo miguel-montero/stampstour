@@ -20,9 +20,15 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 // WhatsApp's exported filenames look like "PHOTO-2026-06-29-11-46-52.jpg" or
 // "PHOTO-2026-06-29-11-46-52 (1).jpg" for duplicates. Turn those into a
 // readable title; anything else just gets its filename cleaned up.
-function titleFromFilename(filename) {
+function parsedTimestamp(filename) {
   const stem = filename.replace(IMAGE_EXT, '');
   const match = stem.match(/^PHOTO-(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})(?:\s*\((\d+)\))?$/i);
+  return match ? match : null;
+}
+
+function titleFromFilename(filename) {
+  const stem = filename.replace(IMAGE_EXT, '');
+  const match = parsedTimestamp(filename);
   if (match) {
     const [, year, month, day, hour, minute] = match;
     const monthName = MONTHS[Number(month) - 1] || month;
@@ -30,6 +36,18 @@ function titleFromFilename(filename) {
     return `Photo from ${monthName} ${Number(day)}, ${year} ${hour}:${minute}${dup}`;
   }
   return stem.replace(/[-_]+/g, ' ').trim() || 'Photo';
+}
+
+// The actual date the photo was taken/sent, parsed from WhatsApp's export
+// filename (PHOTO-YYYY-MM-DD-HH-MM-SS...). Falls back to today (the publish
+// date) when a filename doesn't match that pattern - e.g. photos added some
+// other way. This is what "newest first" on the gallery page should sort by,
+// not the date the publish script happened to run.
+function dateFromFilename(filename) {
+  const match = parsedTimestamp(filename);
+  if (!match) return new Date().toISOString().slice(0, 10);
+  const [, year, month, day] = match;
+  return `${year}-${month}-${day}`;
 }
 
 function listIncomingFiles() {
@@ -70,7 +88,7 @@ async function bulkPublish() {
           thumb: `img/Gallery/${id}-thumb.webp`,
           large: `img/Gallery/${id}-large.webp`,
           sourceFile: filename,
-          dateAdded: new Date().toISOString().slice(0, 10),
+          dateAdded: dateFromFilename(filename),
         },
       ];
 
