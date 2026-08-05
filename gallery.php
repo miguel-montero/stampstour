@@ -63,30 +63,27 @@ $page_canonical   = 'https://stampstour.com/gallery.php';
           <?php endforeach; ?>
         </div>
 
-        <div class="gallery-grid">
-          <?php foreach ($photos as $photo):
-            $uploadDateFormatted = '';
-            if (!empty($photo['dateAdded'])) {
-                $ts = strtotime($photo['dateAdded']);
-                if ($ts !== false) $uploadDateFormatted = date('M j, Y', $ts);
-            }
-            $lightboxCaption = $uploadDateFormatted !== '' ? 'Upload date: ' . $uploadDateFormatted : ($photo['title'] ?? '');
-          ?>
-            <div class="gallery-item" data-tags="<?= htmlspecialchars(implode('|', $photo['tags'] ?? []), ENT_QUOTES, 'UTF-8') ?>">
-              <a href="/<?= htmlspecialchars($photo['large'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                 data-lightbox="gallery"
-                 data-title="<?= htmlspecialchars($lightboxCaption, ENT_QUOTES, 'UTF-8') ?>"
-                 class="gallery-item-link">
-                <img src="/<?= htmlspecialchars($photo['thumb'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                     alt="<?= htmlspecialchars($photo['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                     loading="lazy">
-              </a>
-              <?php if ($uploadDateFormatted !== ''): ?>
-                <p class="gallery-item-date">Upload date: <?= htmlspecialchars($uploadDateFormatted, ENT_QUOTES, 'UTF-8') ?></p>
-              <?php endif; ?>
-            </div>
-          <?php endforeach; ?>
-        </div>
+        <?php
+          $photosForJs = array_map(function ($photo) {
+              $dateLabel = '';
+              if (!empty($photo['dateAdded'])) {
+                  $ts = strtotime($photo['dateAdded']);
+                  if ($ts !== false) $dateLabel = date('M j, Y', $ts);
+              }
+              return [
+                  'id' => $photo['id'] ?? '',
+                  'thumb' => $photo['thumb'] ?? '',
+                  'large' => $photo['large'] ?? '',
+                  'tags' => $photo['tags'] ?? [],
+                  'dateLabel' => $dateLabel,
+              ];
+          }, $photos);
+        ?>
+        <div class="gallery-grid"></div>
+        <noscript>
+          <p class="gallery-noscript">Enable JavaScript to view the gallery.</p>
+        </noscript>
+        <script type="application/json" id="gallery-photos-data"><?= json_encode($photosForJs, JSON_UNESCAPED_UNICODE) ?></script>
       <?php endif; ?>
     </div>
   </main>

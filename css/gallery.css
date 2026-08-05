@@ -55,3 +55,9 @@
 .gallery-item.gallery-hidden {
   display: none;
 }
+
+.gallery-noscript {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+}
