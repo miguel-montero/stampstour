@@ -136,6 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       &middot; <a href="blog.php">Back to list</a>
       <?php if ($post['status'] === 'published'): ?>
         &middot; <a href="/blog/<?= htmlspecialchars(rawurlencode($post['slug']), ENT_QUOTES, 'UTF-8') ?>" target="_blank">View live</a>
+      <?php else: ?>
+        &middot; <a href="/blog/<?= htmlspecialchars(rawurlencode($post['slug']), ENT_QUOTES, 'UTF-8') ?>?preview=1" target="_blank">Preview (looks exactly like the live page, but not public yet)</a>
       <?php endif; ?>
     </div>
   <?php endif; ?>
@@ -163,16 +165,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Content</label>
+      <label class="form-label">Content <small class="text-muted">(click any image already in the text to swap it from the gallery)</small></label>
       <div id="content-editor" style="background: #fff;"><?= $post['content'] ?></div>
       <textarea name="content" id="content-input" style="display: none;"></textarea>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Featured image path <small class="text-muted">(e.g. img/blog/my-post-cover.jpg &mdash; upload the file via your host first, or pick one from the gallery)</small></label>
-      <div style="display:flex; gap:8px;">
-        <input type="text" name="featured_image" id="featured-image-input" class="form-control" value="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>">
-        <button type="button" class="btn btn-outline-secondary" style="white-space:nowrap;" onclick="stampOpenGalleryPicker('featured')">Choose from Gallery</button>
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <img id="featured-image-preview" src="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>" alt="" style="width:70px; height:70px; object-fit:cover; border-radius:4px; border:1px solid #ddd; <?= $post['featured_image'] === '' ? 'display:none;' : '' ?>" onerror="this.style.display='none';" onload="this.style.display='block';">
+        <div style="flex:1;">
+          <div style="display:flex; gap:8px;">
+            <input type="text" name="featured_image" id="featured-image-input" class="form-control" value="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>">
+            <button type="button" class="btn btn-outline-secondary" style="white-space:nowrap;" onclick="stampOpenGalleryPicker('featured')">Choose from Gallery</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -202,6 +209,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-success" onclick="document.querySelector('select[name=status]').value='published';">Save &amp; Publish</button>
+    <?php if ($id > 0 && $post['slug'] !== ''): ?>
+      <a href="/blog/<?= htmlspecialchars(rawurlencode($post['slug']), ENT_QUOTES, 'UTF-8') ?>?preview=1" target="_blank" class="btn btn-outline-secondary">Preview last saved version</a>
+    <?php endif; ?>
     <a href="blog.php" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
@@ -227,6 +238,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 </div>
+
+<!-- Brief confirmation after picking a photo - which image changed isn't
+     always obvious on a long post, so this pairs with the green flash
+     highlight on the actual image/preview that changed. -->
+<div id="gallery-picker-toast" style="display:none; position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#212529; color:#fff; padding:10px 20px; border-radius:6px; z-index:1060; transition:opacity 0.3s;"></div>
+
+<style>
+  /* Hover cue so it's discoverable that inline content images are clickable */
+  /* Matches .blog_post_content img in css/blog.css, so the editor never
+     shows an image wider/differently-scaled than the live page will. */
+  #content-editor img { max-width: 100%; height: auto; cursor: pointer; transition: outline 0.15s; outline: 2px solid transparent; outline-offset: 2px; }
+  #content-editor img:hover { outline: 2px solid #0d6efd; }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script>
@@ -255,11 +279,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     document.getElementById('content-input').value = quill.root.innerHTML;
   });
 
-  var stampGalleryPhotos = null;
-  var stampGalleryPickerTarget = null; // 'featured' or 'content'
+  // Click an existing image already in the post body to swap it, instead of
+  // only being able to insert new ones via the toolbar. The hover outline
+  // (see <style> below) is what makes this discoverable.
+  quill.root.addEventListener('click', function (e) {
+    if (e.target.tagName === 'IMG') {
+      stampOpenGalleryPicker('content-replace', e.target);
+    }
+  });
 
-  function stampOpenGalleryPicker(target) {
+  // Live preview + visual confirmation: update the thumbnail as the field
+  // changes, whether typed by hand or set by the picker.
+  document.getElementById('featured-image-input').addEventListener('input', stampUpdateFeaturedPreview);
+  function stampUpdateFeaturedPreview() {
+    var input = document.getElementById('featured-image-input');
+    var preview = document.getElementById('featured-image-preview');
+    preview.src = input.value;
+  }
+
+  function stampFlashElement(el) {
+    el.style.transition = 'none';
+    el.style.boxShadow = '0 0 0 3px #28a745';
+    // Force reflow so the transition below actually animates from this state.
+    void el.offsetWidth;
+    el.style.transition = 'box-shadow 1s ease-out';
+    el.style.boxShadow = '0 0 0 3px rgba(40,167,69,0)';
+  }
+
+  function stampShowToast(message) {
+    var toast = document.getElementById('gallery-picker-toast');
+    toast.textContent = message;
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+    clearTimeout(stampShowToast._t);
+    stampShowToast._t = setTimeout(function () {
+      toast.style.opacity = '0';
+      setTimeout(function () { toast.style.display = 'none'; }, 300);
+    }, 1800);
+  }
+
+  var stampGalleryPhotos = null;
+  var stampGalleryPickerTarget = null; // 'featured', 'content', or 'content-replace'
+  var stampGalleryReplaceImg = null; // the clicked <img> element, when target is 'content-replace'
+
+  function stampOpenGalleryPicker(target, replaceImg) {
     stampGalleryPickerTarget = target;
+    stampGalleryReplaceImg = replaceImg || null;
     document.getElementById('gallery-picker-backdrop').style.display = 'block';
     if (stampGalleryPhotos === null) {
       fetch('gallery-picker-data.php')
@@ -330,9 +395,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   function stampSelectGalleryPhoto(photo) {
     if (stampGalleryPickerTarget === 'featured') {
       document.getElementById('featured-image-input').value = photo.large;
+      stampUpdateFeaturedPreview();
+      stampFlashElement(document.getElementById('featured-image-preview'));
+      stampShowToast('Featured image updated.');
     } else if (stampGalleryPickerTarget === 'content') {
       var range = quill.getSelection(true);
-      quill.insertEmbed(range ? range.index : quill.getLength(), 'image', photo.large, 'user');
+      var index = range ? range.index : quill.getLength();
+      quill.insertEmbed(index, 'image', photo.large, 'user');
+      stampShowToast('Image inserted.');
+      setTimeout(function () {
+        var inserted = quill.root.querySelector('img[src="' + CSS.escape(photo.large) + '"]');
+        if (inserted) stampFlashElement(inserted);
+      }, 50);
+    } else if (stampGalleryPickerTarget === 'content-replace' && stampGalleryReplaceImg) {
+      stampGalleryReplaceImg.src = photo.large;
+      stampFlashElement(stampGalleryReplaceImg);
+      stampShowToast('Image replaced.');
     }
     stampCloseGalleryPicker();
   }
