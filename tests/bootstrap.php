@@ -11,6 +11,18 @@ if (!file_exists($testDbConfig)) {
 }
 require $testDbConfig; // defines $conn (mysqli), connected to the TEST database
 
+// Safety check: refuse to run if $conn isn't pointed at a database whose
+// name ends in "_test". Every test's setUp()/tearDown() runs an
+// unconditional DELETE FROM reservas, so a misconfigured
+// tests/test_db_config.php (e.g. a typo pointing at the real local dev
+// database) would otherwise silently wipe real data on the next test run.
+$dbNameRow = $conn->query('SELECT DATABASE()')->fetch_row();
+$currentDbName = $dbNameRow[0] ?? '';
+if (!str_ends_with($currentDbName, '_test')) {
+    fwrite(STDERR, "Refusing to run: tests are connected to '$currentDbName', which doesn't look like a test database (expected a name ending in '_test'). Check tests/test_db_config.php.\n");
+    exit(1);
+}
+
 // PHPUnit loads this bootstrap file from within a method scope, so a plain
 // top-level $conn here does not land in PHP's actual global scope (where
 // `global $conn;` in test classes looks for it). Register it explicitly.

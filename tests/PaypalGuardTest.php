@@ -7,6 +7,12 @@ final class PaypalGuardTest extends TestCase
 {
     private mysqli $conn;
 
+    /** Exact copy of paypal_webhook.php:321's PAYMENT.CAPTURE.PENDING guard, verbatim. */
+    private const LIVE_PENDING_GUARD_SQL = "UPDATE reservas SET estado = CASE WHEN estado IN ('realizado', 'refund') THEN estado ELSE 'pendiente' END WHERE TRIM(reference_id)=TRIM(?) LIMIT 1";
+
+    /** Exact copy of paypal_webhook.php:338's PAYMENT.CAPTURE.DENIED/DECLINED guard, verbatim. */
+    private const LIVE_DENIED_GUARD_SQL = "UPDATE reservas SET estado = CASE WHEN estado IN ('realizado', 'refund') THEN estado ELSE 'fallido' END WHERE TRIM(reference_id)=TRIM(?) LIMIT 1";
+
     protected function setUp(): void
     {
         global $conn;
@@ -103,14 +109,15 @@ final class PaypalGuardTest extends TestCase
     {
         $source = file_get_contents(__DIR__ . '/../paypal_webhook.php');
         $this->assertNotFalse($source);
+        $norm = fn(string $s): string => trim(preg_replace('/\s+/', ' ', $s));
         $this->assertStringContainsString(
-            "UPDATE reservas SET estado = CASE WHEN estado IN ('realizado', 'refund') THEN estado ELSE 'pendiente' END",
-            $source,
+            $norm(self::LIVE_PENDING_GUARD_SQL),
+            $norm($source),
             "paypal_webhook.php's PENDING guard SQL has changed - update this test's copy in runPendingGuard() to match, then update this assertion."
         );
         $this->assertStringContainsString(
-            "UPDATE reservas SET estado = CASE WHEN estado IN ('realizado', 'refund') THEN estado ELSE 'fallido' END",
-            $source,
+            $norm(self::LIVE_DENIED_GUARD_SQL),
+            $norm($source),
             "paypal_webhook.php's DENIED/DECLINED guard SQL has changed - update this test's copy in runDeniedGuard() to match, then update this assertion."
         );
     }

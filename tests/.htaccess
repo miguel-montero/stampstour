@@ -1,0 +1,23 @@
+# =========================
+# tests/ is a LOCAL-ONLY PHPUnit test suite (schema.sql, fixtures, and test
+# cases that exercise the payment webhook guards), but it lives inside the
+# site's document root, and the root .htaccess passes real files straight
+# through - so without this, tests/schema.sql (which fully describes the
+# reservas/titulares/paypal_webhook_events/etc. table structure) and every
+# other file here would be publicly reachable over HTTP.
+#
+# Deny everything in this directory. Nothing here needs to be web-reachable.
+#
+# Both syntaxes are IfModule-guarded so this works whether the host runs
+# Apache 2.4 (mod_authz_core) or 2.2 (mod_authz_host).
+
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+  <IfModule mod_authz_host.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</IfModule>

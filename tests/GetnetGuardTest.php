@@ -7,6 +7,23 @@ final class GetnetGuardTest extends TestCase
 {
     private mysqli $conn;
 
+    /**
+     * The exact guarded UPDATE from getnet_notify.php, verbatim. Kept as a
+     * constant so testSqlMatchesLiveFile() can assert the *whole* statement
+     * (not just a fragment) is still present in the live file.
+     */
+    private const LIVE_GUARD_SQL = "
+    UPDATE reservas
+    SET estado = CASE
+                   WHEN estado IN ('realizado', 'refund') AND ? <> 'refund' THEN estado
+                   ELSE ?
+                 END,
+        updated_at = NOW()
+    WHERE reference_id = ?
+      AND process_id = ?
+    LIMIT 1
+  ";
+
     protected function setUp(): void
     {
         global $conn;
@@ -120,9 +137,10 @@ final class GetnetGuardTest extends TestCase
     {
         $source = file_get_contents(__DIR__ . '/../getnet_notify.php');
         $this->assertNotFalse($source);
+        $norm = fn(string $s): string => trim(preg_replace('/\s+/', ' ', $s));
         $this->assertStringContainsString(
-            "WHEN estado IN ('realizado', 'refund') AND ? <> 'refund' THEN estado",
-            $source,
+            $norm(self::LIVE_GUARD_SQL),
+            $norm($source),
             "getnet_notify.php's guard SQL has changed - update this test's copy in runGuardedUpdate() to match, then update this assertion."
         );
     }
