@@ -86,6 +86,15 @@ ul.recent_post li:last-child{
 	margin-bottom:10px;
 }
 
+/* Inline images inserted via the blog editor (admin/blog-edit.php's Quill
+   content field) are raw <img> tags with no size constraint of their own -
+   gallery photos can be up to 1600px wide, so without this they'd overflow
+   the text column instead of scaling down to fit it. */
+.blog_post_content img {
+	max-width: 100%;
+	height: auto;
+}
+
 .post_info {
 	padding: 0 0 10px 0;
 	border-bottom:1px #ccc dashed;
