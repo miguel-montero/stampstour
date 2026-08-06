@@ -136,6 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       &middot; <a href="blog.php">Back to list</a>
       <?php if ($post['status'] === 'published'): ?>
         &middot; <a href="/blog/<?= htmlspecialchars(rawurlencode($post['slug']), ENT_QUOTES, 'UTF-8') ?>" target="_blank">View live</a>
+      <?php else: ?>
+        &middot; <a href="/blog/<?= htmlspecialchars(rawurlencode($post['slug']), ENT_QUOTES, 'UTF-8') ?>?preview=1" target="_blank">Preview (looks exactly like the live page, but not public yet)</a>
       <?php endif; ?>
     </div>
   <?php endif; ?>
@@ -207,6 +209,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-success" onclick="document.querySelector('select[name=status]').value='published';">Save &amp; Publish</button>
+    <?php if ($id > 0 && $post['slug'] !== ''): ?>
+      <a href="/blog/<?= htmlspecialchars(rawurlencode($post['slug']), ENT_QUOTES, 'UTF-8') ?>?preview=1" target="_blank" class="btn btn-outline-secondary">Preview last saved version</a>
+    <?php endif; ?>
     <a href="blog.php" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
