@@ -17,37 +17,52 @@ const IMAGE_EXT = /\.(jpe?g|png|heic|heif)$/i;
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-// WhatsApp's exported filenames look like "PHOTO-2026-06-29-11-46-52.jpg" or
-// "PHOTO-2026-06-29-11-46-52 (1).jpg" for duplicates. Turn those into a
-// readable title; anything else just gets its filename cleaned up.
+// WhatsApp exports filenames in (at least) two conventions depending on how
+// the photo left the app - individually shared photos look like
+// "PHOTO-2026-06-29-11-46-52.jpg" (or " (1).jpg" for duplicates), while a
+// full "Export Chat" with media looks like
+// "WhatsApp Image 2026-08-06 at 00.03.43.jpeg" (or " (1).jpeg"). Both are
+// normalized to the same {year, month, day, hour, minute, dup} shape so
+// titleFromFilename/dateFromFilename don't care which one produced a file.
 function parsedTimestamp(filename) {
   const stem = filename.replace(IMAGE_EXT, '');
-  const match = stem.match(/^PHOTO-(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})(?:\s*\((\d+)\))?$/i);
-  return match ? match : null;
+
+  const photoMatch = stem.match(/^PHOTO-(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})(?:\s*\((\d+)\))?$/i);
+  if (photoMatch) {
+    const [, year, month, day, hour, minute, , dup] = photoMatch;
+    return { year, month, day, hour, minute, dup };
+  }
+
+  const exportMatch = stem.match(/^WhatsApp (?:Image|Video) (\d{4})-(\d{2})-(\d{2}) at (\d{2})\.(\d{2})\.(\d{2})(?:\s*\((\d+)\))?$/i);
+  if (exportMatch) {
+    const [, year, month, day, hour, minute, , dup] = exportMatch;
+    return { year, month, day, hour, minute, dup };
+  }
+
+  return null;
 }
 
 function titleFromFilename(filename) {
   const stem = filename.replace(IMAGE_EXT, '');
   const match = parsedTimestamp(filename);
   if (match) {
-    const [, year, month, day, hour, minute] = match;
+    const { year, month, day, hour, minute, dup } = match;
     const monthName = MONTHS[Number(month) - 1] || month;
-    const dup = match[7] ? ` (${match[7]})` : '';
-    return `Photo from ${monthName} ${Number(day)}, ${year} ${hour}:${minute}${dup}`;
+    const dupSuffix = dup ? ` (${dup})` : '';
+    return `Photo from ${monthName} ${Number(day)}, ${year} ${hour}:${minute}${dupSuffix}`;
   }
   return stem.replace(/[-_]+/g, ' ').trim() || 'Photo';
 }
 
-// The actual date the photo was taken/sent, parsed from WhatsApp's export
-// filename (PHOTO-YYYY-MM-DD-HH-MM-SS...). Falls back to today (the publish
-// date) when a filename doesn't match that pattern - e.g. photos added some
-// other way. This is what "newest first" on the gallery page should sort by,
-// not the date the publish script happened to run.
+// The actual date the photo was taken/sent, parsed from the filename.
+// Falls back to today (the publish date) when a filename doesn't match
+// either known WhatsApp export pattern - e.g. photos added some other way.
+// This is what "newest first" on the gallery page should sort by, not the
+// date the publish script happened to run.
 function dateFromFilename(filename) {
   const match = parsedTimestamp(filename);
   if (!match) return new Date().toISOString().slice(0, 10);
-  const [, year, month, day] = match;
-  return `${year}-${month}-${day}`;
+  return `${match.year}-${match.month}-${match.day}`;
 }
 
 function listIncomingFiles() {
