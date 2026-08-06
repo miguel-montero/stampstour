@@ -25,10 +25,16 @@ require_once __DIR__ . '/../helpers.php';
  * actually approved. Properly closing this gap would require a
  * session-attempt-history table and is out of scope for this feature.
  *
+ * @param callable|null $sessionLookup Getnet session lookup; if null,
+ *                  defaults to the real getSessionInfo() (helpers.php).
+ *                  Injectable for testing - see
+ *                  docs/superpowers/specs/2026-08-06-payment-test-infrastructure-design.md
  * @return array{checked:int, corrected:int, failed:int, corrections:array<int,array{reference:string,from:string,to:string}>}
  */
-function reconcile_getnet_pending(mysqli $conn, int $limit = 50): array
+function reconcile_getnet_pending(mysqli $conn, int $limit = 50, ?callable $sessionLookup = null): array
 {
+    $sessionLookup = $sessionLookup ?? 'getSessionInfo';
+
     @mkdir(__DIR__ . '/../../logs', 0775, true);
     ini_set('error_log', __DIR__ . '/../../logs/getnet_reconcile.log');
 
@@ -70,7 +76,7 @@ function reconcile_getnet_pending(mysqli $conn, int $limit = 50): array
         $processId = (string)$row['process_id'];
 
         try {
-            $session = getSessionInfo((int)$processId);
+            $session = $sessionLookup((int)$processId);
         } catch (Throwable $e) {
             $failed++;
             error_log("reconcile_getnet: getSessionInfo threw for ref=$reference process_id=$processId: " . $e->getMessage());
