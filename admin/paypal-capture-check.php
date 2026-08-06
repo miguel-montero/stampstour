@@ -63,6 +63,7 @@ function paypal_capture_check_fetch(string $base, string $token, string $capture
         'status' => $data['status'] ?? null,
         'amount' => $data['amount']['value'] ?? null,
         'currency' => $data['amount']['currency_code'] ?? null,
+        'create_time' => $data['create_time'] ?? null,
     ];
 }
 
@@ -86,7 +87,7 @@ if (!empty($_GET['capture_id'])) {
 
 // ---- Batch HTML mode ----
 $stmt = $conn->prepare("
-    SELECT reference_id, estado, capture_id, order_id, total_venta, moneda, fecha_actividad, updated_at
+    SELECT reference_id, estado, capture_id, order_id, total_venta, moneda, fecha_reserva, fecha_actividad, updated_at
     FROM reservas
     WHERE capture_id IS NOT NULL
       AND estado IN ('realizado', 'refund')
@@ -109,15 +110,19 @@ if (!empty($rows)) {
             $statusMatches = ($row['estado'] === 'realizado' && $check['status'] === 'COMPLETED')
                            || ($row['estado'] === 'refund' && $check['status'] === 'REFUNDED');
             $amountMatches = ($paypalAmount !== null && $ourAmount === $paypalAmount);
+            $tourDatePassed = strtotime((string)$row['fecha_actividad']) < strtotime('today');
             $results[] = [
                 'reference_id' => $row['reference_id'],
                 'our_estado' => $row['estado'],
                 'our_amount' => $ourAmount,
                 'moneda' => $row['moneda'],
+                'fecha_reserva' => $row['fecha_reserva'],
                 'fecha_actividad' => $row['fecha_actividad'],
+                'tour_date_passed' => $tourDatePassed,
                 'capture_id' => $row['capture_id'],
                 'paypal_status' => $check['status'],
                 'paypal_amount' => $paypalAmount,
+                'paypal_create_time' => $check['create_time'] ?? null,
                 'http_code' => $check['http_code'],
                 'status_matches' => $statusMatches,
                 'amount_matches' => $amountMatches,
@@ -153,33 +158,40 @@ $mismatchCount = count(array_filter($results, fn($r) => !$r['status_matches'] ||
   <?php elseif (empty($results)): ?>
     <p class="text-muted">No reservations updated to realizado/refund with a capture_id in the last 24 hours.</p>
   <?php else: ?>
+    <?php $pastTourCount = count(array_filter($results, fn($r) => $r['tour_date_passed'])); ?>
     <p>
       <strong>Checked:</strong> <?= count($results) ?> &nbsp;
       <strong>Mismatches:</strong>
-      <span class="<?= $mismatchCount > 0 ? 'text-danger fw-bold' : 'text-success' ?>"><?= $mismatchCount ?></span>
+      <span class="<?= $mismatchCount > 0 ? 'text-danger fw-bold' : 'text-success' ?>"><?= $mismatchCount ?></span> &nbsp;
+      <strong>Tour date already passed:</strong>
+      <span class="<?= $pastTourCount > 0 ? 'text-warning fw-bold' : '' ?>"><?= $pastTourCount ?></span>
     </p>
     <div class="table-responsive">
       <table class="table table-striped table-sm">
         <thead>
           <tr>
             <th>Reference</th>
+            <th>Purchased</th>
             <th>Tour Date</th>
             <th>Our Status</th>
             <th>Our Amount</th>
             <th>PayPal Status</th>
             <th>PayPal Amount</th>
+            <th>PayPal Paid At</th>
             <th>Match</th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($results as $r): ?>
-            <tr class="<?= (!$r['status_matches'] || !$r['amount_matches']) ? 'table-danger' : '' ?>">
+            <tr class="<?= (!$r['status_matches'] || !$r['amount_matches']) ? 'table-danger' : ($r['tour_date_passed'] ? 'table-warning' : '') ?>">
               <td><?= htmlspecialchars($r['reference_id'], ENT_QUOTES, 'UTF-8') ?></td>
-              <td><?= htmlspecialchars($r['fecha_actividad'], ENT_QUOTES, 'UTF-8') ?></td>
+              <td><?= htmlspecialchars($r['fecha_reserva'], ENT_QUOTES, 'UTF-8') ?></td>
+              <td><?= htmlspecialchars($r['fecha_actividad'], ENT_QUOTES, 'UTF-8') ?><?= $r['tour_date_passed'] ? ' ⚠️ past' : '' ?></td>
               <td><?= htmlspecialchars($r['our_estado'], ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars($r['our_amount'], ENT_QUOTES, 'UTF-8') ?> <?= htmlspecialchars((string)$r['moneda'], ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars((string)$r['paypal_status'], ENT_QUOTES, 'UTF-8') ?> (HTTP <?= (int)$r['http_code'] ?>)</td>
               <td><?= htmlspecialchars((string)$r['paypal_amount'], ENT_QUOTES, 'UTF-8') ?></td>
+              <td><?= htmlspecialchars((string)($r['paypal_create_time'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= ($r['status_matches'] && $r['amount_matches']) ? '✅' : '❌' ?></td>
             </tr>
           <?php endforeach; ?>
