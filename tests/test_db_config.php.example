@@ -4,8 +4,8 @@
 // locally. Defines $conn, a mysqli connection to the local TEST database -
 // never the real production database.
 $host = "localhost";
-$user = "stampst1_user";
-$password = "D4t";
+$user = "your_local_mysql_user";
+$password = "your_local_mysql_password";
 $dbname = "stampst1_stamptour_test";
 
 $conn = new mysqli($host, $user, $password, $dbname);
