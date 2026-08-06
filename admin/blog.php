@@ -28,7 +28,10 @@ if ($conn) {
 <div class="container" style="padding: 24px 0;">
   <div style="display:flex; justify-content:space-between; align-items:center;">
     <h2>Blog Posts</h2>
-    <a href="blog-edit.php" class="btn btn-primary">+ New Post</a>
+    <div>
+      <a href="blog-import.php" class="btn btn-outline-primary">Import Draft</a>
+      <a href="blog-edit.php" class="btn btn-primary">+ New Post</a>
+    </div>
   </div>
 
   <?php if (isset($_GET['deleted'])): ?>
