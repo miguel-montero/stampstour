@@ -28,7 +28,7 @@
     <div class="row">
      <div class="col-md-4">
       <h3>Need help?</h3>
-     <a href="https://api.whatsapp.com/send?phone=56953474421" id="phone">+56 9 5347 4421</a>
+     <a href="https://api.whatsapp.com/send?phone=56923993146" id="phone">+56 9 2399 3146</a>
       <a href="mailto:reservations@stampstour.com" id="email_footer">reservations@stampstour.com</a>
      </div>
      <div class="col-md-3">
@@ -74,7 +74,7 @@
          </a>
         </li>
         <li>
-         <a href="https://api.whatsapp.com/send?phone=56953474421">
+         <a href="https://api.whatsapp.com/send?phone=56923993146">
           <i class="bi bi-whatsapp"></i>
          </a>
         </li>

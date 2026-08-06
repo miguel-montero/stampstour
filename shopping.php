@@ -361,7 +361,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
                     <div class="box_style_4">
                         <i class="icon_set_1_icon-89"></i>
                         <h4>Have <span>questions?</span></h4>
-                        <a href="tel://004542344599" class="phone">+56 9 2399 3146</a>
+                        <a href="tel://56923993146" class="phone">+56 9 2399 3146</a>
                         <a href="https://api.whatsapp.com/send?phone=56923993146"><i class="bi bi-whatsapp"></i></a>
                         <p><small>Monday to Sunday 6.00am - 11.59pm</small></p>
                     </div>

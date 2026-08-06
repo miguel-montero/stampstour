@@ -36,9 +36,9 @@ $page_canonical   = 'https://stampstour.com/contact-us.php';
           <div class="box_style_4 text-center">
             <i class="icon_set_1_icon-89"></i>
             <h4>Have <span>questions?</span></h4>
-            <a href="tel:+56953474421" class="phone">+56 9 5347 4421</a>
+            <a href="tel:+56923993146" class="phone">+56 9 2399 3146</a>
             <div style="margin-top:8px">
-              <a href="https://api.whatsapp.com/send?phone=56953474421" aria-label="Chat on WhatsApp">
+              <a href="https://api.whatsapp.com/send?phone=56923993146" aria-label="Chat on WhatsApp">
                 <i class="bi bi-whatsapp" style="font-size:1.4rem; vertical-align:middle;"></i>
               </a>
             </div>

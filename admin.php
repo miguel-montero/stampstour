@@ -518,7 +518,7 @@ if (!isset($_SESSION['username'])) {
             <div class="row">
                 <div class="col-md-4">
                     <h3>Need help?</h3>
-                    <a href="tel://004542344599" id="phone">+56 923993146</a>
+                    <a href="tel://56923993146" id="phone">+56 923993146</a>
                     <a href="mailto:help@citytours.com" id="email_footer">reservations@stamptour.com</a>
                 </div>
                 <div class="col-md-3">
