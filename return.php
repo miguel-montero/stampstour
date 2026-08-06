@@ -428,8 +428,8 @@ $_SESSION['last_status'][$reference] = $status;
           <div class="box_style_4">
             <i class="icon_set_1_icon-89"></i>
             <h4>Have <span>questions?</span></h4>
-            <a href="tel://56953474421" class="phone">+56 9 5347 4421 </a>
-            <a href="https://api.whatsapp.com/send?phone=56953474421"><i class="bi bi-whatsapp"></i></a>
+            <a href="tel://56923993146" class="phone">+56 9 2399 3146</a>
+            <a href="https://api.whatsapp.com/send?phone=56923993146"><i class="bi bi-whatsapp"></i></a>
             <p><small>Monday to Sunday 6.00am - 11.59pm</small></p>
           </div>
         </aside>

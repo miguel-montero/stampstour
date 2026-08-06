@@ -11,7 +11,7 @@
         <div id="top_line">
             <div class="container">
                 <div class="row">
-                    <div class="col-6"><i class="icon-phone"></i><strong>56 953474421</strong></div>
+                    <div class="col-6"><i class="icon-phone"></i><strong>56 923993146</strong></div>
                     <div class="col-6">
                         <ul id="top_links">
                             <!-- li><a href="#sign-in-dialog" id="access_link">Sign in</a></li>
@@ -19,7 +19,7 @@
                             template</a></li> -->
                             <li><a href="https://www.instagram.com/stampstour/"><i class="bi bi-instagram"></i></a></li>
                             <li><a href="https://www.facebook.com/stampstour"><i class="bi bi-facebook"></i></a></li>
-                            <li><a href="https://api.whatsapp.com/send?phone=56953474421"><i class="bi bi-whatsapp"></i></a></li>
+                            <li><a href="https://api.whatsapp.com/send?phone=56923993146"><i class="bi bi-whatsapp"></i></a></li>
                         </ul>
                     </div>
                 </div><!-- End row -->
