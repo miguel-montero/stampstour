@@ -11,6 +11,15 @@ if (!file_exists($testDbConfig)) {
 }
 require $testDbConfig; // defines $conn (mysqli), connected to the TEST database
 
+// Align the MySQL session clock with PHP's clock. php.ini pins PHP to
+// date.timezone=UTC, but the DB server's NOW()/CURRENT_TIMESTAMP follow the
+// OS timezone, which can differ (e.g. this host is America/Santiago). Tests
+// that compare PHP-computed timestamps (e.g. `received_at`) against
+// MySQL's NOW() - INTERVAL ... need both clocks to agree, so pin this
+// session to UTC too. Doesn't affect production (db_config.php is separate
+// and untouched).
+$conn->query("SET time_zone = '+00:00'");
+
 // Safety check: refuse to run if $conn isn't pointed at a database whose
 // name ends in "_test". Every test's setUp()/tearDown() runs an
 // unconditional DELETE FROM reservas, so a misconfigured
@@ -29,3 +38,4 @@ if (!str_ends_with($currentDbName, '_test')) {
 $GLOBALS['conn'] = $conn;
 
 require_once __DIR__ . '/../includes/reconcile_getnet.php';
+require_once __DIR__ . '/../includes/reprocess_paypal_events.php';
