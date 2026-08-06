@@ -74,6 +74,26 @@ final class GetnetReconciliationTest extends TestCase
         $this->assertSame('pendiente', $this->currentEstado('TEST_RC_B'));
     }
 
+    public function testRejectedGetnetSessionMakesNoWrite(): void
+    {
+        // Unlike the PENDING case above, REJECTED maps to 'fallido' - a
+        // value genuinely different from the row's starting 'pendiente'.
+        // This makes the skip-guard's effect observable: if
+        // reconcile_getnet_pending() ever stopped skipping non-realizado/
+        // non-refund results, this row's estado would visibly flip to
+        // 'fallido' and 'corrected' would visibly increment, unlike the
+        // PENDING case where the "corrected" write (if it happened) would
+        // be a same-value no-op indistinguishable from no write at all.
+        $this->insertReserva('TEST_RC_B2', '2012', 'pendiente');
+        $fakeLookup = fn(int $id) => ['status' => ['status' => 'REJECTED']];
+
+        $result = reconcile_getnet_pending($this->conn, 50, $fakeLookup);
+
+        $this->assertSame(1, $result['checked']);
+        $this->assertSame(0, $result['corrected']);
+        $this->assertSame('pendiente', $this->currentEstado('TEST_RC_B2'));
+    }
+
     public function testFailedGetnetLookupIncrementsFailedNotCorrected(): void
     {
         $this->insertReserva('TEST_RC_C', '2003', 'pendiente');
