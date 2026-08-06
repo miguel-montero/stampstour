@@ -15,6 +15,7 @@ function stamp_admin_nav(string $active = ''): void {
     // under an "Admin Tools" dropdown instead of the flat top-level list.
     $toolsLinks = [
         'gallery' => ['label' => 'Gallery Upload', 'href' => '/admin/gallery-upload.php'],
+        'getnet-reconcile' => ['label' => 'Getnet Reconciliation', 'href' => '/admin/getnet-reconcile.php'],
     ];
     $toolsActive = array_key_exists($active, $toolsLinks);
     ?>
