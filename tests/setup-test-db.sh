@@ -20,8 +20,20 @@ fi
 
 # Extract $host/$user/$password/$dbname from the gitignored config without
 # ever printing or hardcoding the password in this (committed) script.
+# The config file's own code attempts a live mysqli connection after
+# defining these variables - on a fresh setup the test database doesn't
+# exist yet (that's this script's job to create), so that connection
+# throws. The four variables are already assigned by the time the `new
+# mysqli(...)` call runs, so catching the exception here still lets the
+# printf below see them.
 eval "$(php -r '
-    require $argv[1];
+    try {
+        require $argv[1];
+    } catch (\Throwable $e) {
+        // Expected on a fresh setup - the test database does not exist
+        // yet. $host/$user/$password/$dbname are already assigned above
+        // this point in test_db_config.php, so we can proceed.
+    }
     printf("DB_HOST=%s\nDB_USER=%s\nDB_PASS=%s\nDB_NAME=%s\n",
         escapeshellarg($host), escapeshellarg($user), escapeshellarg($password), escapeshellarg($dbname));
 ' "$CONFIG_FILE")"
