@@ -54,3 +54,8 @@
 # not git-tracked, so it never conflicts with the local Node pipeline's
 # git-tracked gallery-data.json. gallery.php merges both at render time.
 /gallery-pipeline/gallery-data-admin.json
+
+# Local test infrastructure - real credentials/tooling stay out of git,
+# only the test code itself (tests/*.php, schema.sql, setup scripts) ships
+/tests/test_db_config.php
+/tests/tools/

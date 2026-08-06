@@ -1,0 +1,14 @@
+<?php
+// tests/test_db_config.php.example
+// Copy this file to tests/test_db_config.php (gitignored) to run tests
+// locally. Defines $conn, a mysqli connection to the local TEST database -
+// never the real production database.
+$host = "localhost";
+$user = "stampst1_user";
+$password = "D4t";
+$dbname = "stampst1_stamptour_test";
+
+$conn = new mysqli($host, $user, $password, $dbname);
+if ($conn->connect_error) {
+    die("Error de conexión (test DB): " . $conn->connect_error);
+}
