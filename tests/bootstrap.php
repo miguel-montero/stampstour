@@ -11,4 +11,9 @@ if (!file_exists($testDbConfig)) {
 }
 require $testDbConfig; // defines $conn (mysqli), connected to the TEST database
 
+// PHPUnit loads this bootstrap file from within a method scope, so a plain
+// top-level $conn here does not land in PHP's actual global scope (where
+// `global $conn;` in test classes looks for it). Register it explicitly.
+$GLOBALS['conn'] = $conn;
+
 require_once __DIR__ . '/../includes/reconcile_getnet.php';

@@ -59,3 +59,4 @@
 # only the test code itself (tests/*.php, schema.sql, setup scripts) ships
 /tests/test_db_config.php
 /tests/tools/
+/.phpunit.result.cache
