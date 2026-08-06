@@ -19,6 +19,7 @@
         min-width: 150px;     /* don't go smaller than ~150px */
         max-width: 100%;      /* responsive on mobile */
         height: auto;         /* preserve aspect ratio */
+        aspect-ratio: 319 / 110; /* real image dimensions - reserves layout space before it loads, avoiding a CLS jump in the footer */
         padding: 12px;        /* whitespace/clear space around logo */
         background: #fff;     /* light background per guidelines */
         border: 0;
