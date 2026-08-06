@@ -43,7 +43,8 @@ $page_canonical   = 'https://stampstour.com/gallery.php';
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
 
-  <section id="hero_2" class="background-image" data-background="url(/img/Tours/Stgo/big.jpg)">
+  <section id="hero_2">
+    <img src="/img/Tours/Stgo/big.webp" width="1400" height="1050" fetchpriority="high" alt="" class="hero-bg-img">
     <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.45)">
       <div class="intro_title">
         <h1>Gallery</h1>
