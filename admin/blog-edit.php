@@ -169,8 +169,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Featured image path <small class="text-muted">(e.g. img/blog/my-post-cover.jpg &mdash; upload the file via your host first)</small></label>
-      <input type="text" name="featured_image" class="form-control" value="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>">
+      <label class="form-label">Featured image path <small class="text-muted">(e.g. img/blog/my-post-cover.jpg &mdash; upload the file via your host first, or pick one from the gallery)</small></label>
+      <div style="display:flex; gap:8px;">
+        <input type="text" name="featured_image" id="featured-image-input" class="form-control" value="<?= htmlspecialchars($post['featured_image'], ENT_QUOTES, 'UTF-8') ?>">
+        <button type="button" class="btn btn-outline-secondary" style="white-space:nowrap;" onclick="stampOpenGalleryPicker('featured')">Choose from Gallery</button>
+      </div>
     </div>
 
     <div class="row">
@@ -203,24 +206,136 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </form>
 </div>
 
+<!-- Gallery photo picker modal - shared by the "Choose from Gallery" button
+     (sets the featured_image field) and Quill's image toolbar button
+     (inserts an <img> at the cursor). Backed by admin/gallery-picker-data.php,
+     which merges the same two manifests gallery.php renders publicly. -->
+<div id="gallery-picker-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1050;">
+  <div style="background:#fff; max-width:900px; margin:40px auto; max-height:85vh; display:flex; flex-direction:column; border-radius:6px; overflow:hidden;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid #ddd;">
+      <strong>Choose a photo from the gallery</strong>
+      <button type="button" class="btn-close" onclick="stampCloseGalleryPicker()"></button>
+    </div>
+    <div style="padding:10px 16px; border-bottom:1px solid #eee; display:flex; gap:8px;">
+      <select id="gallery-picker-tag-filter" class="form-select form-select-sm" style="max-width:250px;">
+        <option value="">All tags</option>
+      </select>
+      <input type="text" id="gallery-picker-search" class="form-control form-control-sm" placeholder="Search by title/date&hellip;" style="max-width:250px;">
+    </div>
+    <div id="gallery-picker-grid" style="padding:16px; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:10px;">
+      <p class="text-muted">Loading&hellip;</p>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script>
   var quill = new Quill('#content-editor', {
     theme: 'snow',
     modules: {
-      toolbar: [
-        [{ header: [2, 3, false] }],
-        ['bold', 'italic', 'underline', 'link'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['blockquote', 'image'],
-        ['clean']
-      ]
+      toolbar: {
+        container: [
+          [{ header: [2, 3, false] }],
+          ['bold', 'italic', 'underline', 'link'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['blockquote', 'image'],
+          ['clean']
+        ],
+        handlers: {
+          // Default Quill image handler just prompts for a raw URL - point
+          // it at the same gallery picker instead so post content can
+          // reference real gallery photos without typing/remembering paths.
+          image: function () { stampOpenGalleryPicker('content'); }
+        }
+      }
     }
   });
 
   document.querySelector('form').addEventListener('submit', function () {
     document.getElementById('content-input').value = quill.root.innerHTML;
   });
+
+  var stampGalleryPhotos = null;
+  var stampGalleryPickerTarget = null; // 'featured' or 'content'
+
+  function stampOpenGalleryPicker(target) {
+    stampGalleryPickerTarget = target;
+    document.getElementById('gallery-picker-backdrop').style.display = 'block';
+    if (stampGalleryPhotos === null) {
+      fetch('gallery-picker-data.php')
+        .then(function (r) { return r.json(); })
+        .then(function (photos) {
+          stampGalleryPhotos = photos;
+          stampRenderGalleryTagFilter(photos);
+          stampRenderGalleryGrid(photos);
+        })
+        .catch(function () {
+          document.getElementById('gallery-picker-grid').innerHTML =
+            '<p class="text-danger">Could not load the gallery. Try again later.</p>';
+        });
+    }
+  }
+
+  function stampCloseGalleryPicker() {
+    document.getElementById('gallery-picker-backdrop').style.display = 'none';
+  }
+
+  function stampRenderGalleryTagFilter(photos) {
+    var tags = {};
+    photos.forEach(function (p) { (p.tags || []).forEach(function (t) { tags[t] = true; }); });
+    var select = document.getElementById('gallery-picker-tag-filter');
+    Object.keys(tags).sort().forEach(function (tag) {
+      var opt = document.createElement('option');
+      opt.value = tag;
+      opt.textContent = tag;
+      select.appendChild(opt);
+    });
+    select.onchange = stampApplyGalleryFilters;
+    document.getElementById('gallery-picker-search').oninput = stampApplyGalleryFilters;
+  }
+
+  function stampApplyGalleryFilters() {
+    var tag = document.getElementById('gallery-picker-tag-filter').value;
+    var search = document.getElementById('gallery-picker-search').value.trim().toLowerCase();
+    var filtered = stampGalleryPhotos.filter(function (p) {
+      if (tag && (p.tags || []).indexOf(tag) === -1) return false;
+      if (search && (p.title || '').toLowerCase().indexOf(search) === -1) return false;
+      return true;
+    });
+    stampRenderGalleryGrid(filtered);
+  }
+
+  function stampRenderGalleryGrid(photos) {
+    var grid = document.getElementById('gallery-picker-grid');
+    if (!photos.length) {
+      grid.innerHTML = '<p class="text-muted">No photos match that tag.</p>';
+      return;
+    }
+    grid.innerHTML = '';
+    photos.forEach(function (p) {
+      var el = document.createElement('div');
+      el.style.cursor = 'pointer';
+      el.title = p.title;
+      var img = document.createElement('img');
+      img.src = p.thumb;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.style.cssText = 'width:100%; height:100px; object-fit:cover; border-radius:4px;';
+      el.appendChild(img);
+      el.addEventListener('click', function () { stampSelectGalleryPhoto(p); });
+      grid.appendChild(el);
+    });
+  }
+
+  function stampSelectGalleryPhoto(photo) {
+    if (stampGalleryPickerTarget === 'featured') {
+      document.getElementById('featured-image-input').value = photo.large;
+    } else if (stampGalleryPickerTarget === 'content') {
+      var range = quill.getSelection(true);
+      quill.insertEmbed(range ? range.index : quill.getLength(), 'image', photo.large, 'user');
+    }
+    stampCloseGalleryPicker();
+  }
 </script>
 </body>
 </html>
