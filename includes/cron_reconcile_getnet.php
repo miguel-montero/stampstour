@@ -4,6 +4,9 @@ declare(strict_types=1);
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 
+@mkdir(__DIR__ . '/../../logs', 0775, true);
+ini_set('error_log', __DIR__ . '/../../logs/getnet_reconcile.log');
+
 $LOCK = sys_get_temp_dir() . '/cron_reconcile_getnet.lock';
 $fh = fopen($LOCK, 'c');
 if (!$fh || !flock($fh, LOCK_EX | LOCK_NB)) { exit; } // avoid overlap

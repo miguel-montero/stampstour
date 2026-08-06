@@ -4,6 +4,8 @@ require __DIR__ . '/_auth.php';
 require __DIR__ . '/../../db_config.php';
 require __DIR__ . '/../includes/reconcile_getnet.php';
 
+set_time_limit(0);
+
 $result = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_check'])) {
     $result = reconcile_getnet_pending($conn, 50);
@@ -35,7 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_check'])) {
   <?php if ($result !== null): ?>
     <div class="mt-4">
       <p><strong>Checked:</strong> <?= (int)$result['checked'] ?> &nbsp;
-         <strong>Corrected:</strong> <?= (int)$result['corrected'] ?></p>
+         <strong>Corrected:</strong> <?= (int)$result['corrected'] ?> &nbsp;
+         <strong>Failed:</strong> <?= (int)$result['failed'] ?></p>
 
       <?php if (!empty($result['corrections'])): ?>
         <table class="table table-striped table-sm">
