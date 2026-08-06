@@ -292,7 +292,7 @@ $_SESSION['last_status'][$reference] = $status;
 
   <!-- Hero -->
   <section id="hero_2">
-    <img src="/img/Tours/Stgo/big.webp" width="1400" height="1050" fetchpriority="high" alt="" class="hero-bg-img">
+    <img src="/img/Tours/Stgo/big.webp" width="1400" height="1050" loading="lazy" alt="" class="hero-bg-img">
     <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.4)">
       <div class="intro_title">
         <h1>Booking Successful!</h1>

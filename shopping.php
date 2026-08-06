@@ -251,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
 
     <!-- Hide hero on mobile -->
     <section id="hero_2" class="d-none d-md-block">
-        <img src="/img/Tours/Stgo/big.webp" width="1400" height="1050" fetchpriority="high" alt="" class="hero-bg-img">
+        <img src="/img/Tours/Stgo/big.webp" width="1400" height="1050" loading="lazy" alt="" class="hero-bg-img">
         <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.4)">
             <div class="intro_title">
                 <h1>Place your order</h1>
