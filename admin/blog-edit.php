@@ -246,7 +246,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <style>
   /* Hover cue so it's discoverable that inline content images are clickable */
-  #content-editor img { cursor: pointer; transition: outline 0.15s; outline: 2px solid transparent; outline-offset: 2px; }
+  /* Matches .blog_post_content img in css/blog.css, so the editor never
+     shows an image wider/differently-scaled than the live page will. */
+  #content-editor img { max-width: 100%; height: auto; cursor: pointer; transition: outline 0.15s; outline: 2px solid transparent; outline-offset: 2px; }
   #content-editor img:hover { outline: 2px solid #0d6efd; }
 </style>
 
