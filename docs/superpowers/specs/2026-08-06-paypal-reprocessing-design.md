@@ -47,6 +47,7 @@ FROM paypal_webhook_events
 WHERE status NOT IN ('handled', 'mailed')
   AND received_at <= NOW() - INTERVAL 5 MINUTE
   AND received_at >= NOW() - INTERVAL 30 DAY
+  AND NOT (verified = 'FAILURE' AND received_at < NOW() - INTERVAL 1 DAY)
 ORDER BY received_at ASC
 LIMIT ?
 ```
@@ -54,6 +55,7 @@ LIMIT ?
 - **5-minute minimum age** avoids racing a concurrent live webhook request still processing the same event — the live path normally completes in well under a second, so 5 minutes is a large, safe margin, not a tight one.
 - **30-day window**: unlike Getnet reconciliation (which polls a live API that may not retain very old sessions), this works entirely from our own stored `payload`/`headers` — there's no external retention concern. 30 days is generous but still bounded, so an ancient, permanently-broken row (bad payload shape from a long-fixed bug, say) doesn't get re-attempted forever.
 - `('handled', 'mailed')` are the two terminal statuses in the schema — `mailed` is a vestigial status from the now-disabled webhook-email path (`$ENABLE_WEBHOOK_EMAIL = false` in `paypal_webhook.php`) that's very unlikely to appear on new rows, excluded for completeness.
+- **Retry backoff (added in the final review pass)**: a row whose most recent verification attempt failed (`verified='FAILURE'`) and whose `received_at` is more than 24 hours old is excluded from further attempts. Without this, an hourly cron run retries a permanently-broken row (unparseable payload, a transmission whose PayPal cert has since rotated) up to ~720 times over the full 30-day window, each costing 2 PayPal API calls for nothing, and because rows are processed oldest-first, those stuck failing rows could crowd out newer stuck events once the batch `LIMIT` is reached (head-of-line blocking). 24 hours still allows several retry attempts within the first day, enough to recover from a transient issue, before giving up automatically. Schema-change-free: implemented purely as an added `WHERE` condition.
 
 For each row:
 1. Decode `payload` (raw JSON) → `$event`; decode `headers` (JSON) → `$H`.

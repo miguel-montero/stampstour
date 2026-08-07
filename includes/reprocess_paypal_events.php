@@ -53,10 +53,22 @@ function _reprocess_paypal_apply_event(mysqli $conn, string $eventType, array $e
             }
 
             if ($referenceId && $orderId) {
+                // Intentionally MORE protective than paypal_webhook.php's own
+                // CHECKOUT.ORDER.APPROVED handler (which only guards
+                // 'realizado'): this reprocessing script can replay a stuck
+                // ORDER.APPROVED event up to 30 days after it was originally
+                // received, by which time a reservation could plausibly have
+                // been refunded. The live webhook doesn't need this guard -
+                // ORDER.APPROVED always arrives before any capture/refund
+                // could exist there. This is a deliberate, user-approved
+                // deviation from this file's "exact duplicate" principle,
+                // scoped to this one file only - paypal_webhook.php is not
+                // touched. See
+                // docs/superpowers/specs/2026-08-06-paypal-reprocessing-design.md
                 $stmt = $conn->prepare("
                     UPDATE reservas
                        SET order_id = IFNULL(order_id, ?),
-                           estado   = IF(estado='realizado', estado, 'pendiente')
+                           estado   = CASE WHEN estado IN ('realizado', 'refund') THEN estado ELSE 'pendiente' END
                      WHERE TRIM(reference_id)=TRIM(?) LIMIT 1
                 ");
                 $stmt->bind_param('ss', $orderId, $referenceId);
@@ -251,6 +263,16 @@ function _reprocess_paypal_real_signature_verifier(array $paypalConfig, string $
  * re-verified against PayPal's real endpoint (or the injected fake in
  * tests) before any reservas write is attempted.
  *
+ * Rows that failed verification more than once (specifically: whose most
+ * recent verification attempt failed AND are more than 24 hours old) stop
+ * being retried automatically. This bounds retries to several attempts
+ * within the first day - enough to recover from a transient issue (bad
+ * OAuth token, network blip) - without retrying a permanently-broken row
+ * (unparseable payload, a transmission whose PayPal cert has since
+ * rotated) roughly 720 times over the full 30-day window, which would
+ * waste API calls and, since rows are processed oldest-first, could crowd
+ * out newer stuck events once the batch limit is reached.
+ *
  * @param callable $tokenFetcher Defaults to a real PayPal OAuth token
  *                  fetch. Injectable for testing.
  * @param callable $signatureVerifier Defaults to a real call to PayPal's
@@ -281,6 +303,7 @@ function reprocess_paypal_stuck_events(
         WHERE status NOT IN ('handled', 'mailed')
           AND received_at <= NOW() - INTERVAL 5 MINUTE
           AND received_at >= NOW() - INTERVAL 30 DAY
+          AND NOT (verified = 'FAILURE' AND received_at < NOW() - INTERVAL 1 DAY)
         ORDER BY received_at ASC
         LIMIT ?
     ");

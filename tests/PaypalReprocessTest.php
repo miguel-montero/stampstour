@@ -12,6 +12,60 @@ final class PaypalReprocessTest extends TestCase
         'sandbox' => ['client_id' => 'fake_id', 'client_secret' => 'fake_secret', 'webhook_id' => 'fake_webhook_id'],
     ];
 
+    /*
+     * --- Drift-guard constants for testReprocessSqlMatchesLiveFileForSharedStatements() ---
+     * Exact copies of every SQL statement that includes/reprocess_paypal_events.php
+     * duplicates from paypal_webhook.php. CHECKOUT.ORDER.APPROVED is handled
+     * separately below (LIVE_ORDER_APPROVED_SQL / REPROCESS_ORDER_APPROVED_SQL)
+     * because, per Fix 1, that one statement is now deliberately different
+     * between the two files.
+     */
+    private const LIVE_FIND_REFERENCE_SQL = "SELECT reference_id FROM reservas WHERE order_id=? LIMIT 1";
+
+    private const LIVE_UPDATE_AMOUNTS_SQL = "UPDATE reservas SET monto_pagado=IFNULL(monto_pagado, ?), moneda=IFNULL(moneda, ?) WHERE TRIM(reference_id)=TRIM(?) LIMIT 1";
+
+    private const LIVE_CAPTURE_COMPLETED_PRIMARY_SQL = "
+          UPDATE reservas
+             SET estado='realizado',
+                 capture_id=?,
+                 order_id=IFNULL(order_id, ?)
+           WHERE TRIM(reference_id)=TRIM(?)
+           LIMIT 1
+        ";
+
+    private const LIVE_CAPTURE_COMPLETED_FALLBACK_SQL = "
+            UPDATE reservas
+               SET estado='realizado',
+                   capture_id=?,
+                   order_id=IFNULL(order_id, ?)
+             WHERE order_id=?
+             LIMIT 1
+          ";
+
+    private const LIVE_PENDING_GUARD_SQL = "UPDATE reservas SET estado = CASE WHEN estado IN ('realizado', 'refund') THEN estado ELSE 'pendiente' END WHERE TRIM(reference_id)=TRIM(?) LIMIT 1";
+
+    private const LIVE_DENIED_GUARD_SQL = "UPDATE reservas SET estado = CASE WHEN estado IN ('realizado', 'refund') THEN estado ELSE 'fallido' END WHERE TRIM(reference_id)=TRIM(?) LIMIT 1";
+
+    private const LIVE_REFUND_SET_SQL = "UPDATE reservas SET estado='refund' WHERE TRIM(reference_id)=TRIM(?) LIMIT 1";
+
+    private const LIVE_REFUND_FIELDS_SQL = "UPDATE reservas SET refund_id = IFNULL(refund_id, ?), refund_monto = IFNULL(refund_monto, ?), moneda = IFNULL(moneda, ?) WHERE TRIM(reference_id)=TRIM(?) LIMIT 1";
+
+    /** paypal_webhook.php's CHECKOUT.ORDER.APPROVED guard - deliberately does NOT protect 'refund'. */
+    private const LIVE_ORDER_APPROVED_SQL = "
+          UPDATE reservas
+             SET order_id = IFNULL(order_id, ?),
+                 estado   = IF(estado='realizado', estado, 'pendiente')
+           WHERE TRIM(reference_id)=TRIM(?) LIMIT 1
+        ";
+
+    /** includes/reprocess_paypal_events.php's CHECKOUT.ORDER.APPROVED guard - deliberately DOES protect 'refund' (Fix 1). */
+    private const REPROCESS_ORDER_APPROVED_SQL = "
+                    UPDATE reservas
+                       SET order_id = IFNULL(order_id, ?),
+                           estado   = CASE WHEN estado IN ('realizado', 'refund') THEN estado ELSE 'pendiente' END
+                     WHERE TRIM(reference_id)=TRIM(?) LIMIT 1
+                ";
+
     protected function setUp(): void
     {
         global $conn;
@@ -295,5 +349,148 @@ final class PaypalReprocessTest extends TestCase
         $this->assertSame(2, $result['reprocessed']);
         $this->assertSame('realizado', $this->currentEstado('TEST_PR_M1'));
         $this->assertSame('realizado', $this->currentEstado('TEST_PR_M2'));
+    }
+
+    /**
+     * Fix 1 (final review): unlike the PENDING/DENIED guards, the
+     * CHECKOUT.ORDER.APPROVED guard historically only protected 'realizado'.
+     * Because this script can replay a stuck ORDER.APPROVED event up to 30
+     * days later, a reservation refunded in the meantime must not be
+     * silently reverted to 'pendiente'.
+     */
+    public function testCheckoutOrderApprovedGuardProtectsRefund(): void
+    {
+        $this->insertReserva('TEST_PR_N', 'refund');
+        $id = $this->insertEvent('evt_n', 'CHECKOUT.ORDER.APPROVED', [
+            'resource' => ['id' => 'ORDER_N', 'purchase_units' => [['custom_id' => 'TEST_PR_N']]],
+        ], 'stored', 'SUCCESS');
+
+        $result = reprocess_paypal_stuck_events($this->conn, $this->fakePaypalConfig, 50);
+
+        $this->assertSame(1, $result['reprocessed']);
+        $this->assertSame(
+            'refund',
+            $this->currentEstado('TEST_PR_N'),
+            'A replayed ORDER.APPROVED event up to 30 days late must not revert an already-refunded reservation back to pendiente.'
+        );
+        $this->assertSame('handled', $this->eventStatus($id)['status']);
+    }
+
+    /**
+     * Fix 2 (final review): a row whose most recent verification attempt
+     * failed and whose received_at is more than 24 hours old must be
+     * excluded from selection entirely (retry backoff), to avoid retrying a
+     * permanently-broken row for the full 30-day window.
+     */
+    public function testOldFailedVerificationRowIsNotRetried(): void
+    {
+        $this->insertReserva('TEST_PR_O', 'pendiente');
+        $this->insertEvent('evt_o', 'PAYMENT.CAPTURE.COMPLETED', [
+            'resource' => ['id' => 'CAP_O', 'custom_id' => 'TEST_PR_O'],
+        ], 'stored', 'FAILURE', '-2 days');
+
+        $tripwire = function (...$args): bool {
+            throw new RuntimeException('should never be called - row failed verification more than 24h ago and must not be retried');
+        };
+        $result = reprocess_paypal_stuck_events($this->conn, $this->fakePaypalConfig, 50, null, $tripwire);
+
+        $this->assertSame(0, $result['checked'], 'A row that failed verification more than 24h ago must be excluded from selection entirely (retry backoff).');
+        $this->assertSame('pendiente', $this->currentEstado('TEST_PR_O'));
+    }
+
+    /**
+     * Fix 2 (final review): a row that failed verification less than 24
+     * hours ago must still be retried - the backoff only kicks in after a
+     * full day, giving several retry attempts for a possibly-transient
+     * failure.
+     */
+    public function testRecentFailedVerificationRowIsStillRetried(): void
+    {
+        $this->insertReserva('TEST_PR_P', 'pendiente');
+        $id = $this->insertEvent('evt_p', 'PAYMENT.CAPTURE.COMPLETED', [
+            'resource' => ['id' => 'CAP_P', 'custom_id' => 'TEST_PR_P'],
+        ], 'stored', 'FAILURE', '-2 hours');
+
+        $fakeToken = fn(...$args) => 'fake_token';
+        $fakeVerifier = fn(...$args) => true;
+
+        $result = reprocess_paypal_stuck_events($this->conn, $this->fakePaypalConfig, 50, $fakeToken, $fakeVerifier);
+
+        $this->assertSame(1, $result['checked'], 'A row that failed verification less than 24h ago must still be eligible for retry.');
+        $this->assertSame(1, $result['reprocessed']);
+        $this->assertSame('realizado', $this->currentEstado('TEST_PR_P'));
+        $status = $this->eventStatus($id);
+        $this->assertSame('handled', $status['status']);
+        $this->assertSame('SUCCESS', $status['verified']);
+    }
+
+    /**
+     * Fix 3 (final review): PaypalGuardTest's testSqlMatchesLiveFile() only
+     * checks that paypal_webhook.php still contains 2 guard strings - it
+     * never checks that includes/reprocess_paypal_events.php's copy still
+     * matches paypal_webhook.php. This test compares both files directly
+     * for every SQL statement that is supposed to be an exact duplicate
+     * between them, so a future edit to either file's SQL, without
+     * updating the other, fails a test instead of silently drifting.
+     *
+     * CHECKOUT.ORDER.APPROVED is excluded from the must-match set: per
+     * Fix 1, the reprocessing copy is intentionally MORE protective than
+     * the live webhook's version, so it is asserted to *differ* instead.
+     */
+    public function testReprocessSqlMatchesLiveFileForSharedStatements(): void
+    {
+        $liveSource = file_get_contents(__DIR__ . '/../paypal_webhook.php');
+        $reprocessSource = file_get_contents(__DIR__ . '/../includes/reprocess_paypal_events.php');
+        $this->assertNotFalse($liveSource);
+        $this->assertNotFalse($reprocessSource);
+
+        $norm = fn(string $s): string => trim(preg_replace('/\s+/', ' ', $s));
+
+        $mustMatch = [
+            'find-reference-by-order-id lookup' => self::LIVE_FIND_REFERENCE_SQL,
+            'monto_pagado/moneda update' => self::LIVE_UPDATE_AMOUNTS_SQL,
+            'CAPTURE.COMPLETED primary update' => self::LIVE_CAPTURE_COMPLETED_PRIMARY_SQL,
+            'CAPTURE.COMPLETED order_id fallback update' => self::LIVE_CAPTURE_COMPLETED_FALLBACK_SQL,
+            'PAYMENT.CAPTURE.PENDING guard' => self::LIVE_PENDING_GUARD_SQL,
+            'PAYMENT.CAPTURE.DENIED/DECLINED guard' => self::LIVE_DENIED_GUARD_SQL,
+            'PAYMENT.CAPTURE.REFUNDED estado update' => self::LIVE_REFUND_SET_SQL,
+            'PAYMENT.CAPTURE.REFUNDED refund_id/refund_monto update' => self::LIVE_REFUND_FIELDS_SQL,
+        ];
+
+        foreach ($mustMatch as $label => $sql) {
+            $needle = $norm($sql);
+            $this->assertStringContainsString(
+                $needle,
+                $norm($liveSource),
+                "paypal_webhook.php no longer contains the expected $label SQL - update this test's constant to match, then re-check includes/reprocess_paypal_events.php."
+            );
+            $this->assertStringContainsString(
+                $needle,
+                $norm($reprocessSource),
+                "includes/reprocess_paypal_events.php's $label SQL has drifted from paypal_webhook.php's - these two files' copies of this statement must stay identical."
+            );
+        }
+
+        // CHECKOUT.ORDER.APPROVED: the one deliberate exception (Fix 1).
+        $this->assertStringContainsString(
+            $norm(self::LIVE_ORDER_APPROVED_SQL),
+            $norm($liveSource),
+            "paypal_webhook.php's CHECKOUT.ORDER.APPROVED SQL has changed - update this test's LIVE_ORDER_APPROVED_SQL constant."
+        );
+        $this->assertStringContainsString(
+            $norm(self::REPROCESS_ORDER_APPROVED_SQL),
+            $norm($reprocessSource),
+            "includes/reprocess_paypal_events.php's CHECKOUT.ORDER.APPROVED SQL has changed - update this test's REPROCESS_ORDER_APPROVED_SQL constant."
+        );
+        $this->assertStringNotContainsString(
+            'refund',
+            self::LIVE_ORDER_APPROVED_SQL,
+            "paypal_webhook.php's CHECKOUT.ORDER.APPROVED guard must not reference 'refund' - see docs/superpowers/specs/2026-08-06-paypal-reprocessing-design.md for why only the reprocessing copy needs this guard."
+        );
+        $this->assertStringContainsString(
+            'refund',
+            self::REPROCESS_ORDER_APPROVED_SQL,
+            "includes/reprocess_paypal_events.php's CHECKOUT.ORDER.APPROVED guard should reference 'refund' - this is the deliberate Fix 1 divergence from paypal_webhook.php."
+        );
     }
 }

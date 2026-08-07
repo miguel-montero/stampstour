@@ -14,13 +14,16 @@
 - **`paypal_webhook.php` is never modified by this plan.** Its logic is duplicated (not shared) into a new file, per the user's explicit choice.
 - Every duplicated helper function gets a `_reprocess_paypal_` prefix (`_reprocess_paypal_find_reference_by_order_id`, `_reprocess_paypal_try_prepare`, `_reprocess_paypal_try_update_amounts`, `_reprocess_paypal_apply_event`, `_reprocess_paypal_real_token_fetcher`, `_reprocess_paypal_real_signature_verifier`) so there is no possibility of a PHP "cannot redeclare function" fatal error if `paypal_webhook.php` and this new file were ever `require`d in the same process (they currently never are, but the prefix makes that guarantee unconditional rather than incidental).
 - Function signature: `reprocess_paypal_stuck_events(mysqli $conn, array $paypalConfig, int $limit = 50, ?callable $tokenFetcher = null, ?callable $signatureVerifier = null): array`, returning `['checked' => int, 'reprocessed' => int, 'failed' => int, 'details' => array]`.
-- Eligibility query (exact):
+- Eligibility query (exact; refined during the final review pass to add a
+  retry-backoff condition — see
+  `docs/superpowers/specs/2026-08-06-paypal-reprocessing-design.md`):
   ```sql
   SELECT id, event_id, event_type, status, verified, payload, headers
   FROM paypal_webhook_events
   WHERE status NOT IN ('handled', 'mailed')
     AND received_at <= NOW() - INTERVAL 5 MINUTE
     AND received_at >= NOW() - INTERVAL 30 DAY
+    AND NOT (verified = 'FAILURE' AND received_at < NOW() - INTERVAL 1 DAY)
   ORDER BY received_at ASC
   LIMIT ?
   ```
