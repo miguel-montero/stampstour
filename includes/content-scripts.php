@@ -9,10 +9,18 @@
  * .theiaStickySidebar(, or jQuery-UI widget method call site exists on
  * any of them) - those libraries were pure dead weight here. See
  * docs/superpowers/specs/2026-08-08-content-pages-script-trim-design.md
+ *
+ * common_scripts_min.js (208KB) removed 2026-08-08 after confirming it
+ * bundles only moment.js, daterangepicker, Magnific Popup, WOW.js, and a
+ * duplicate copy of Bootstrap - none of which any of these 6 pages use.
+ * js/functions.js's calls into WOW/Magnific Popup are both guarded
+ * (`if (typeof WOW !== 'undefined')`, `if ($.fn.magnificPopup)`) so they
+ * safely no-op without this file. Bootstrap itself is already covered by
+ * bootstrap.bundle.min.js below. See
+ * docs/superpowers/plans/2026-08-08-content-pages-remove-common-scripts.md
  */
 ?>
 <!-- Scripts (jQuery, Bootstrap, plugins) -->
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
-<script src="/js/common_scripts_min.js"></script>
 <script src="/js/functions.js"></script>
