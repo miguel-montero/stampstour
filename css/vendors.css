@@ -57,3 +57,27 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+/* Visibility safety net (2026-08-08): hide the whole gallery until
+   Slider Pro's JS finishes initializing and explicitly reveals it (see
+   js/tours.js and cruise-transfer.php's inline init - both chain
+   .css('visibility','visible') onto the .sliderPro() call). Elements
+   with visibility:hidden occupy their normal layout space but are never
+   painted, so the Layout Instability API records zero shift for
+   whatever the raw pre-JS markup does internally while hidden, however
+   unstable. Combined with the aspect-ratio/min-height/max-height
+   reservations above (which keep the *page's* layout stable throughout,
+   pre- and post-reveal), this makes the gallery immune to CLS
+   regardless of how long script loading ends up taking. The animation
+   is a pure-CSS fallback: if JS never runs at all (blocked/failed
+   script), force-reveal after 10s rather than staying invisible
+   forever - accepts a possible late shift in that rare failure case
+   over a gallery that never appears. See
+   docs/superpowers/specs/2026-08-08-tour-gallery-defer-scripts-design.md */
+#Img_carousel {
+  visibility: hidden;
+  animation: sp-force-reveal 0s 10s forwards;
+}
+@keyframes sp-force-reveal {
+  to { visibility: visible; }
+}

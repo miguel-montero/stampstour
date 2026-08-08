@@ -16734,6 +16734,17 @@ a.sp-video:after {
 	white-space: nowrap;
 }
 
+/* Visibility safety net (2026-08-08): see css/vendors-tour.css and
+   css/vendors.css for the full rationale comment (kept in sync with
+   this source file). */
+#Img_carousel {
+	visibility: hidden;
+	animation: sp-force-reveal 0s 10s forwards;
+}
+@keyframes sp-force-reveal {
+	to { visibility: visible; }
+}
+
 /* 11. Bootstrap Date range picker */
 /*============================================================================================*/
 .daterangepicker {
