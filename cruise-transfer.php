@@ -389,10 +389,7 @@ $lcp_preload_image = 'img/Tours/Cruise/big.jpg';
     mediumSize: 1000,
     largeSize: 3000,
     thumbnailArrows: true,
-    autoplay: false,
-    init: function () {
-      $('#Img_carousel').css('visibility', 'visible');
-    }
+    autoplay: false
   });
 </script>
 

@@ -57,17 +57,3 @@
   overflow: hidden;
   white-space: nowrap;
 }
-
-/* --- CLS fix (2026-08-08): the reservations above (aspect-ratio,
-   min-height) already match the plugin's final settled dimensions, but
-   jquery.sliderPro.js's own init-time DOM restructuring (detaching and
-   re-wrapping .sp-slides/.sp-thumbnails into new container elements)
-   still triggers layout-shift events during the transition itself. Hide
-   the carousel (not display:none - visibility:hidden still reserves this
-   element's layout space, so nothing else shifts) until the plugin's
-   own 'init' event fires (see tours.js), confirming the restructuring
-   is done. Content that isn't visible when a shift happens isn't
-   counted toward CLS. */
-#Img_carousel {
-  visibility: hidden;
-}
