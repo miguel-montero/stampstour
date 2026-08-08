@@ -79,7 +79,13 @@
    script), force-reveal after 10s rather than staying invisible
    forever - accepts a possible late shift in that rare failure case
    over a gallery that never appears. See
-   docs/superpowers/specs/2026-08-08-tour-gallery-defer-scripts-design.md */
+   docs/superpowers/specs/2026-08-08-tour-gallery-defer-scripts-design.md
+   A fourth copy of this exact rule also lives in
+   includes/critical/tour.css - that's the one that actually wins the
+   load race (it's inlined synchronously, before this stylesheet has
+   even started loading), so treat it as load-bearing, not redundant;
+   this copy here is the post-swap backstop once this stylesheet
+   finishes loading. */
 #Img_carousel {
   visibility: hidden;
   animation: sp-force-reveal 0s 10s forwards;

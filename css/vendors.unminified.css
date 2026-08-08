@@ -16739,7 +16739,11 @@ a.sp-video:after {
 }
 /* Visibility safety net (2026-08-08): see css/vendors-tour.css and
    css/vendors.css for the full rationale comment (kept in sync with
-   this source file). */
+   this source file). A fourth copy of this exact rule also lives in
+   includes/critical/tour.css (synchronously-inlined critical CSS, not
+   built from this source file) - that's the one that actually wins the
+   load race; see css/vendors-tour.css and css/vendors.css for the full
+   explanation. */
 #Img_carousel {
 	visibility: hidden;
 	animation: sp-force-reveal 0s 10s forwards;
