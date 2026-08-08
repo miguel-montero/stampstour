@@ -118,48 +118,45 @@
 <link rel="preconnect" href="https://cdn.openwidget.com">
 <?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
 <!-- Pages with matching critical CSS above already have everything needed
-     for first paint inlined, so these stylesheets are preloaded with
-     fetchpriority="low" instead of render-blocking <link rel="stylesheet">
-     tags. In Chrome/Blink, fetchpriority="low" on a preloaded stylesheet only
-     demotes it from the VeryHigh bucket (which render-blocking-style
-     preloads get) down to High - it does NOT reach Blink's Low tier. Before
-     this fix, these stylesheets (6 on pages using the full vendors.css, or
-     7 on pages using the split vendors-core + vendors-home/tour variants)
-     sat at VeryHigh while the LCP image (with
-     fetchpriority="high") sat at High, so the image was strictly outranked
-     by every stylesheet - a real priority inversion, not mere "same tier"
-     contention. This fix brings the stylesheets down to High, tying them
-     with the image's own explicit preload below (also fetchpriority="high"),
-     which removes the inversion so the image gets a fair share of bandwidth
-     instead of being starved below the sheets entirely. It does not achieve
-     true separation (image outright beating the sheets); that would require
-     a different technique, e.g. the media="print" onload-swap idiom, which
-     does reach Blink's Low tier, if ever pursued as a follow-up. Measured via
-     CDP against actual Chrome priority buckets. See
-     docs/superpowers/specs/2026-08-02-tour-pages-lcp-priority-fix-design.md. -->
-<link rel="preload" href="/fonts/fonts.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+     for first paint inlined, so these stylesheets load via the
+     media="print" onload-swap idiom instead of render-blocking
+     <link rel="stylesheet"> tags. An earlier fix (2026-08-02) tried
+     rel="preload" + fetchpriority="low", but that only demotes Chrome/
+     Blink's scheduling from the VeryHigh bucket down to High - it never
+     reaches the real Low tier, so these stylesheets stayed tied with the
+     LCP image's own fetchpriority="high" preload below, splitting
+     bandwidth between them under a throttled connection instead of the
+     image getting the share it needs. media="print" does reach Blink's
+     genuine Low tier (the browser doesn't need it for the current
+     screen-rendering context), so the image can now win outright. Once
+     the file loads, onload flips media to 'all' and the browser applies
+     it immediately, same as before. See
+     docs/superpowers/specs/2026-08-08-stylesheet-priority-media-print-design.md
+     and docs/superpowers/specs/2026-08-02-tour-pages-lcp-priority-fix-design.md
+     for the full history. -->
+<link rel="stylesheet" href="/fonts/fonts.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/fonts/fonts.css" rel="stylesheet"></noscript>
 <!-- COMMON CSS -->
-<link rel="preload" href="/css/bootstrap.min.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="/css/bootstrap.min.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/css/bootstrap.min.css" rel="stylesheet"></noscript>
-<link rel="preload" href="/css/style.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="/css/style.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/css/style.css" rel="stylesheet"></noscript>
 <?php if (!empty($vendor_css_variant) && in_array($vendor_css_variant, ['home', 'tour'], true)): ?>
-<link rel="preload" href="/css/vendors-core.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="/css/vendors-core.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/css/vendors-core.css" rel="stylesheet"></noscript>
-<link rel="preload" href="/css/vendors-<?= $vendor_css_variant ?>.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="/css/vendors-<?= $vendor_css_variant ?>.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/css/vendors-<?= $vendor_css_variant ?>.css" rel="stylesheet"></noscript>
 <?php elseif (!empty($vendor_css_variant) && $vendor_css_variant === 'core'): ?>
-<link rel="preload" href="/css/vendors-core.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="/css/vendors-core.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/css/vendors-core.css" rel="stylesheet"></noscript>
 <?php else: ?>
-<link rel="preload" href="/css/vendors.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="/css/vendors.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/css/vendors.css" rel="stylesheet"></noscript>
 <?php endif; ?>
-<link rel="preload" href="/css/bs-icon-font/bootstrap-icons.min.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="/css/bs-icon-font/bootstrap-icons.min.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/css/bs-icon-font/bootstrap-icons.min.css" rel="stylesheet"></noscript>
 <!-- CUSTOM CSS -->
-<link rel="preload" href="/css/custom.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="/css/custom.css" media="print" onload="this.media='all';this.onload=null;">
 <noscript><link href="/css/custom.css" rel="stylesheet"></noscript>
 <?php else: ?>
 <link href="/fonts/fonts.css" rel="stylesheet"/>
