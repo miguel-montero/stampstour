@@ -25,10 +25,29 @@
    meaningfully better for CLS than reserving 80px, at the cost of
    ~100px of empty space under the thumbnail strip after Slider Pro
    finishes initializing. Confirmed as an intentional tradeoff during
-   final review - see docs/superpowers/plans/2026-08-07-tour-gallery-cls-fix.md */
+   final review - see docs/superpowers/plans/2026-08-07-tour-gallery-cls-fix.md
+
+   Follow-up fix (2026-08-08): min-height alone was not enough under real
+   throttled mobile network conditions. jQuery + this site's plugin
+   scripts load as render-blocking <script> tags with no defer/async, so
+   on a slow connection Slider Pro's JS can take 5-6s to run. Until then,
+   the raw <img class="sp-thumbnail"> elements are plain inline content
+   with no float/nowrap applied (Slider Pro adds that via JS-created
+   .sp-thumbnail-container wrappers that don't exist yet) - they wrap
+   like text across many lines as each one loads, and the strip's real
+   height was measured growing past 3900px on cruise-transfer (22
+   thumbnails) before collapsing to 180px once JS finally applies its
+   real layout. max-height+overflow:hidden caps that pre-JS growth at
+   180px instead of letting it balloon, and white-space:nowrap stops the
+   thumbnails from wrapping into new lines in the first place (matching
+   the single-row layout Slider Pro ends up using anyway) - between the
+   two, the strip never exceeds ~180px at any point, pre- or post-JS. */
 #Img_carousel .sp-slides {
   aspect-ratio: 960 / 500;
 }
 #Img_carousel .sp-thumbnails {
   min-height: 180px;
+  max-height: 180px;
+  overflow: hidden;
+  white-space: nowrap;
 }

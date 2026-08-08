@@ -16718,16 +16718,20 @@ a.sp-video:after {
 	border: none;
 }
 
-/* CLS fix (2026-08-07): reserve space for the Slider Pro gallery before
-   its JS runs and computes real dimensions. See css/vendors-tour.css and
-   css/vendors.css for the full rationale comment (kept in sync with this
-   source file) - this same block must exist in this source file so a
-   future regeneration via clean-css-cli doesn't silently drop it. */
+/* CLS fix (2026-08-07, follow-up 2026-08-08): reserve space for the
+   Slider Pro gallery before its JS runs and computes real dimensions.
+   See css/vendors-tour.css and css/vendors.css for the full rationale
+   comment (kept in sync with this source file) - this same block must
+   exist in this source file so a future regeneration via clean-css-cli
+   doesn't silently drop it. */
 #Img_carousel .sp-slides {
 	aspect-ratio: 960 / 500;
 }
 #Img_carousel .sp-thumbnails {
 	min-height: 180px;
+	max-height: 180px;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 /* 11. Bootstrap Date range picker */
