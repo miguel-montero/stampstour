@@ -4,6 +4,8 @@ $page_description = 'Half-day guided city tour of Santiago with an English-speak
 $page_canonical   = 'https://stampstour.com/discover-santiago-city-tour';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Stgo/big.jpg';
+$lcp_preload_image_mobile = 'img/Tours/Stgo/big-mobile.webp';
+$lcp_preload_image_width = 1400;
 $vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>
@@ -31,7 +33,10 @@ $vendor_css_variant = 'tour';
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <!-- End Header -->
   <section class="tour-banner">
-   <img src="img/Tours/Stgo/big.jpg" width="1400" height="1050" fetchpriority="high" alt="Santiago banner" class="tour-banner-bg">
+   <picture>
+      <source media="(max-width: 767px)" srcset="img/Tours/Stgo/big-mobile.webp">
+      <img src="img/Tours/Stgo/big.jpg" width="1400" height="1050" fetchpriority="high" alt="Santiago banner" class="tour-banner-bg">
+   </picture>
    <div class="parallax-content-2">
     <div class="container">
      <div class="row">

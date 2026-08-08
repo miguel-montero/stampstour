@@ -4,6 +4,8 @@ $page_description = 'See the Andes and the turquoise Inca Lagoon at Portillo, pl
 $page_canonical   = 'https://stampstour.com/portillo-inca-lagoon-andes-mountains-vineyard';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Andes/big.jpg';
+$lcp_preload_image_mobile = 'img/Tours/Andes/big-mobile.webp';
+$lcp_preload_image_width = 1920;
 $vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>
@@ -31,7 +33,10 @@ $vendor_css_variant = 'tour';
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <!-- End Header -->
   <section class="tour-banner">
-   <img src="img/Tours/Andes/big.jpg" width="1920" height="1440" fetchpriority="high" alt="Andes banner" class="tour-banner-bg">
+   <picture>
+      <source media="(max-width: 767px)" srcset="img/Tours/Andes/big-mobile.webp">
+      <img src="img/Tours/Andes/big.jpg" width="1920" height="1440" fetchpriority="high" alt="Andes banner" class="tour-banner-bg">
+   </picture>
    <div class="parallax-content-2">
     <div class="container">
      <div class="row">
