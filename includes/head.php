@@ -149,7 +149,7 @@
 <noscript><link href="/css/vendors-core.css" rel="stylesheet"></noscript>
 <link rel="preload" href="/css/vendors-<?= $vendor_css_variant ?>.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/vendors-<?= $vendor_css_variant ?>.css" rel="stylesheet"></noscript>
-<?php elseif ($vendor_css_variant === 'core'): ?>
+<?php elseif (!empty($vendor_css_variant) && $vendor_css_variant === 'core'): ?>
 <link rel="preload" href="/css/vendors-core.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/vendors-core.css" rel="stylesheet"></noscript>
 <?php else: ?>
@@ -169,7 +169,7 @@
 <?php if (!empty($vendor_css_variant) && in_array($vendor_css_variant, ['home', 'tour'], true)): ?>
 <link href="/css/vendors-core.css" rel="stylesheet"/>
 <link href="/css/vendors-<?= $vendor_css_variant ?>.css" rel="stylesheet"/>
-<?php elseif ($vendor_css_variant === 'core'): ?>
+<?php elseif (!empty($vendor_css_variant) && $vendor_css_variant === 'core'): ?>
 <link href="/css/vendors-core.css" rel="stylesheet"/>
 <?php else: ?>
 <link href="/css/vendors.css" rel="stylesheet"/>
