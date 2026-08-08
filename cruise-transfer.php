@@ -34,6 +34,8 @@ $page_og = [
 ];
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Cruise/big.jpg';
+$lcp_preload_image_mobile = 'img/Tours/Cruise/big-mobile.webp';
+$lcp_preload_image_width = 2000;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +52,10 @@ $lcp_preload_image = 'img/Tours/Cruise/big.jpg';
 
 <!-- Parallax Hero Section -->
 <section class="tour-banner">
+<picture>
+<source media="(max-width: 767px)" srcset="img/Tours/Cruise/big-mobile.webp">
 <img src="img/Tours/Cruise/big.jpg" width="2000" height="1269" fetchpriority="high" alt="Cruise transfer banner" class="tour-banner-bg">
+</picture>
   <div class="parallax-content-2">
     <div class="container">
       <div class="row">

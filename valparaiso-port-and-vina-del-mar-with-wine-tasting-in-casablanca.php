@@ -4,6 +4,8 @@ $page_description = 'Full-day Valparaíso & Viña del Mar tour from Santiago wit
 $page_canonical   = 'https://stampstour.com/valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Valpo/big.jpg';
+$lcp_preload_image_mobile = 'img/Tours/Valpo/big-mobile.webp';
+$lcp_preload_image_width = 1920;
 $vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>
@@ -33,7 +35,10 @@ $vendor_css_variant = 'tour';
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <!-- End Header -->
   <section class="tour-banner">
-   <img src="img/Tours/Valpo/big.jpg" width="1920" height="716" fetchpriority="high" alt="Valparaíso banner" class="tour-banner-bg">
+   <picture>
+      <source media="(max-width: 767px)" srcset="img/Tours/Valpo/big-mobile.webp">
+      <img src="img/Tours/Valpo/big.jpg" width="1920" height="716" fetchpriority="high" alt="Valparaíso banner" class="tour-banner-bg">
+   </picture>
    <div class="badge_tripadvisor_circle">
      <picture>
        <source srcset="img/badges/tripadvisor-circle-2026.webp" type="image/webp">
