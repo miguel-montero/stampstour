@@ -91,5 +91,15 @@ document.addEventListener('DOMContentLoaded', function () {
   }, { rootMargin: '200px' });
   observer.observe(sentinel);
 
-  resetAndRenderFirstBatch();
+  // The first batch is server-rendered in gallery.php (real HTML at
+  // first paint, avoiding the CLS jump from building it here). Detect
+  // it and just track how many are already on the page, rather than
+  // wiping and rebuilding them.
+  var preRendered = grid.querySelectorAll('.gallery-item').length;
+  if (preRendered > 0) {
+    revealedCount = preRendered;
+    sentinel.style.display = currentMatching().length > revealedCount ? 'block' : 'none';
+  } else {
+    appendNextBatch();
+  }
 });

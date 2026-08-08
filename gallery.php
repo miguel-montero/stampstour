@@ -82,7 +82,18 @@ $lcp_preload_image = 'img/Tours/Stgo/big.webp';
               ];
           }, $photos);
         ?>
-        <div class="gallery-grid"></div>
+        <div class="gallery-grid">
+          <?php foreach (array_slice($photosForJs, 0, 16) as $photo): ?>
+            <div class="gallery-item" data-tags="<?= htmlspecialchars(implode('|', $photo['tags']), ENT_QUOTES, 'UTF-8') ?>">
+              <a href="/<?= htmlspecialchars($photo['large'], ENT_QUOTES, 'UTF-8') ?>" data-lightbox="gallery" class="gallery-item-link"<?php if ($photo['dateLabel'] !== ''): ?> data-title="Upload date: <?= htmlspecialchars($photo['dateLabel'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>>
+                <img src="/<?= htmlspecialchars($photo['thumb'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" alt="Stamps Tour gallery photo">
+              </a>
+              <?php if ($photo['dateLabel'] !== ''): ?>
+                <p class="gallery-item-date">Upload date: <?= htmlspecialchars($photo['dateLabel'], ENT_QUOTES, 'UTF-8') ?></p>
+              <?php endif; ?>
+            </div>
+          <?php endforeach; ?>
+        </div>
         <noscript>
           <p class="gallery-noscript">Enable JavaScript to view the gallery.</p>
         </noscript>
