@@ -27,6 +27,7 @@ $page_title       = 'Privacy Policy';
 $page_description = 'Privacy Policy.';
 $page_canonical   = 'https://stampstour.com/privacy.php';
 $critical_css_file = __DIR__ . '/includes/critical/content.css';
+$vendor_css_variant = 'core';
 $lcp_preload_image = 'img/Tours/Stgo/big.webp';
 ?>
 <!DOCTYPE html>

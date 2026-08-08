@@ -32,6 +32,7 @@ $page_title       = 'Gallery | Stamps Tour';
 $page_description = 'Candid photos from Stamps Tour guides across our Santiago, Valparaíso, Maipo Valley, Andes, and cruise transfer tours.';
 $page_canonical   = 'https://stampstour.com/gallery.php';
 $critical_css_file = __DIR__ . '/includes/critical/content.css';
+$vendor_css_variant = 'core';
 $lcp_preload_image = 'img/Tours/Stgo/big.webp';
 ?>
 <!DOCTYPE html>

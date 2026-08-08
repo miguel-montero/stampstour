@@ -40,6 +40,7 @@ if (!$post) {
 $isUnpublishedPreview = $post && $isPreview && $post['status'] !== 'published';
 
 $page_canonical = 'https://stampstour.com/blog/' . rawurlencode($slug);
+$vendor_css_variant = 'core';
 
 if ($post) {
     $page_title       = ($post['meta_title'] ?: $post['title']) . ' | Stamps Tour';
