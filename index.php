@@ -10,6 +10,8 @@ $page_og = [
 ];
 $critical_css_file = __DIR__ . '/includes/critical/home.css';
 $lcp_preload_image = 'img/Tours/portada.webp';
+$lcp_preload_image_mobile = 'img/Tours/portada-mobile-hero.webp';
+$lcp_preload_image_width = 1883;
 $vendor_css_variant = 'home';
 ?>
 <!DOCTYPE html>
@@ -57,13 +59,16 @@ $vendor_css_variant = 'home';
         <!-- Hero background image, sized and animated by pure CSS
              (css/custom.css: .hero-wrap / .hero-bg / .hero-overlay) -->
         <div class="hero-wrap">
-        <img
-            src="img/Tours/portada.webp"
-            width="1883"
-            height="1059"
-            fetchpriority="high"
-            alt="Colorful hillside houses in Valparaíso, Chile"
-            class="hero-bg">
+        <picture>
+            <source media="(max-width: 767px)" srcset="img/Tours/portada-mobile-hero.webp">
+            <img
+                src="img/Tours/portada.webp"
+                width="1883"
+                height="1059"
+                fetchpriority="high"
+                alt="Colorful hillside houses in Valparaíso, Chile"
+                class="hero-bg">
+        </picture>
         <div class="hero-overlay"></div>
 
         <!-- Hero text overlay: plain Bootstrap-friendly markup, positioned

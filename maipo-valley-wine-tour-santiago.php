@@ -3,7 +3,7 @@ $page_title       = 'Maipo Valley Wine Tour with 4 vineyards from Santiago.';
 $page_description = 'Small-group or private Maipo Valley wine tour from Santiago. Multiple tastings, optional winery lunch, hotel pickup, English-speaking guide.';
 $page_canonical   = 'https://stampstour.com/maipo-valley-wine-tour-santiago';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
-$lcp_preload_image = 'img/Tours/Maipo/big.jpg';
+$lcp_preload_image = 'img/Tours/Maipo/big-optimized.webp';
 $vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>
@@ -31,7 +31,7 @@ $vendor_css_variant = 'tour';
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <!-- End Header -->
   <section class="tour-banner">
-   <img src="img/Tours/Maipo/big.jpg" width="720" height="480" fetchpriority="high" alt="Maipo Valley banner" class="tour-banner-bg">
+   <img src="img/Tours/Maipo/big-optimized.webp" width="720" height="480" fetchpriority="high" alt="Maipo Valley banner" class="tour-banner-bg">
    <div class="badge_tripadvisor_circle">
      <picture>
        <source srcset="img/badges/tripadvisor-circle-2026.webp" type="image/webp">
