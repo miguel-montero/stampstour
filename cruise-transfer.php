@@ -367,16 +367,26 @@ $lcp_preload_image = 'img/Tours/Cruise/big.jpg';
 </footer>
 
 <!-- Scripts (jQuery, Bootstrap, plugins) -->
-<script src="js/jquery-3.7.1.min.js"></script>
-<script src="js/vendor/jquery-ui-autocomplete.js"></script>
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/jquery.sliderPro.min.js"></script>
-<script src="js/theia-sticky-sidebar.js"></script>
-<script src="js/common_scripts_min.js"></script>
-<script src="js/functions.js"></script>
+<!-- All deferred: download in parallel instead of one at a time, execute
+     in this exact document order once HTML parsing finishes. See
+     docs/superpowers/specs/2026-08-08-tour-gallery-defer-scripts-design.md -->
+<script defer src="js/jquery-3.7.1.min.js"></script>
+<script defer src="js/vendor/jquery-ui-autocomplete.js"></script>
+<script defer src="js/bootstrap.bundle.min.js"></script>
+<script defer src="js/jquery.sliderPro.min.js"></script>
+<script defer src="js/theia-sticky-sidebar.js"></script>
+<script defer src="js/common_scripts_min.js"></script>
+<script defer src="js/functions.js"></script>
 
-<!-- Initialize gallery slider -->
+<!-- Initialize gallery slider + sticky sidebar. Wrapped in DOMContentLoaded
+     because inline scripts (no src) can't themselves be deferred - they'd
+     otherwise run before the deferred jQuery/plugin scripts above have
+     executed. DOMContentLoaded only fires after every deferred script has
+     finished, so jQuery/$/the plugins are guaranteed ready here. The
+     .css('visibility','visible') reveal is the CSS safety-net pairing -
+     see css/vendors-tour.css's #Img_carousel visibility:hidden rule. -->
 <script>
+document.addEventListener('DOMContentLoaded', function () {
   $('#Img_carousel').sliderPro({
     width: 960,
     height: 500,
@@ -390,12 +400,10 @@ $lcp_preload_image = 'img/Tours/Cruise/big.jpg';
     largeSize: 3000,
     thumbnailArrows: true,
     autoplay: false
-  });
-</script>
+  }).css('visibility', 'visible');
 
-<!-- Activate sticky sidebar -->
-<script>
   jQuery('#sidebar').theiaStickySidebar({ additionalMarginTop: 80 });
+});
 </script>
 
 <!-- Inject prices data into JS -->
