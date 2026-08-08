@@ -16733,6 +16733,14 @@ a.sp-video:after {
 	overflow: hidden;
 	white-space: nowrap;
 }
+/* CLS fix (follow-up 2026-08-08): hide the gallery until Slider Pro's
+   init event fires, so its init-time DOM restructuring isn't counted
+   as a layout shift. See js/tours.js and cruise-transfer.php for the
+   init callback that reveals it, and includes/head.php for a bounded
+   fallback reveal in case that JS never runs. */
+#Img_carousel {
+	visibility: hidden;
+}
 
 /* 11. Bootstrap Date range picker */
 /*============================================================================================*/

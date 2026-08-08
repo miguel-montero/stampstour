@@ -162,3 +162,18 @@
 <!-- CUSTOM CSS -->
 <link href="/css/custom.css" rel="stylesheet"/>
 <?php endif; ?>
+
+<!-- Tour carousel CLS-fix safety net (2026-08-08): #Img_carousel is hidden
+     via CSS (see css/vendors-tour.css / vendors.css / vendors.unminified.css)
+     until Slider Pro's init callback in js/tours.js (or cruise-transfer.php's
+     own inline script) reveals it. If jquery.sliderPro.min.js or tours.js
+     fails to load, or JS is disabled, that reveal never happens and the
+     carousel would stay permanently invisible - a real regression since the
+     thumbnails otherwise render as plain images without JS. This runs
+     unconditionally on every page (harmless where #Img_carousel doesn't
+     exist) rather than being duplicated per tour page, which is what let a
+     related per-page carousel script almost get missed earlier in this
+     fix. 3s is far longer than the normal sub-second reveal, so it only
+     rescues the failure case and never fights the happy path. -->
+<script>setTimeout(function(){var e=document.getElementById('Img_carousel');if(e)e.style.visibility='visible';},3000);</script>
+<noscript><style>#Img_carousel{visibility:visible}</style></noscript>
