@@ -11,12 +11,16 @@
  * docs/superpowers/specs/2026-08-08-content-pages-script-trim-design.md
  *
  * common_scripts_min.js (208KB) removed 2026-08-08 after confirming it
- * bundles only moment.js, daterangepicker, Magnific Popup, WOW.js, and a
- * duplicate copy of Bootstrap - none of which any of these 6 pages use.
- * js/functions.js's calls into WOW/Magnific Popup are both guarded
- * (`if (typeof WOW !== 'undefined')`, `if ($.fn.magnificPopup)`) so they
- * safely no-op without this file. Bootstrap itself is already covered by
- * bootstrap.bundle.min.js below. See
+ * bundles moment.js, daterangepicker, Magnific Popup, WOW.js, jQuery
+ * parallax, hideShowPassword, and a duplicate copy of Bootstrap - none of
+ * which any of these 6 pages use. js/functions.js's calls into
+ * WOW/Magnific Popup/parallax are all guarded (`if (typeof WOW !==
+ * 'undefined')`, `if ($.fn.magnificPopup)`, `if ($.fn.parallax)`) so they
+ * safely no-op without this file; its one hideShowPassword reference
+ * checks the wrong plugin name (`$.fn.hidePassword`, which this bundle
+ * never actually registered) and was already permanently dead before
+ * this change. Bootstrap itself is already covered by
+ * bootstrap.bundle.min.js below (same v5.3.3, confirmed identical). See
  * docs/superpowers/plans/2026-08-08-content-pages-remove-common-scripts.md
  */
 ?>
