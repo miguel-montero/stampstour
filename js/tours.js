@@ -12,7 +12,7 @@
      largeSize: 3000,
      thumbnailArrows: true,
      autoplay: false
-   });
+   }).css('visibility', 'visible');
   
   <!-- Date and time pickers -->
  
