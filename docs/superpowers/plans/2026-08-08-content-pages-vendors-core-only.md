@@ -82,7 +82,7 @@ Replace it with:
 <noscript><link href="/css/vendors-core.css" rel="stylesheet"></noscript>
 <link rel="preload" href="/css/vendors-<?= $vendor_css_variant ?>.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/vendors-<?= $vendor_css_variant ?>.css" rel="stylesheet"></noscript>
-<?php elseif ($vendor_css_variant === 'core'): ?>
+<?php elseif (!empty($vendor_css_variant) && $vendor_css_variant === 'core'): ?>
 <link rel="preload" href="/css/vendors-core.css" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="/css/vendors-core.css" rel="stylesheet"></noscript>
 <?php else: ?>
@@ -90,6 +90,8 @@ Replace it with:
 <noscript><link href="/css/vendors.css" rel="stylesheet"></noscript>
 <?php endif; ?>
 ```
+
+(Note, corrected post-review: guard with `!empty($vendor_css_variant) &&` before the `=== 'core'` check — most pages never set this variable at all, so an unguarded read throws a PHP undefined-variable warning. Every other optional variable in this file follows this same `!empty()`-guard convention.)
 
 - [ ] **Step 3: Update the plain render-blocking-path CSS block**
 
@@ -110,12 +112,14 @@ Replace it with:
 <?php if (!empty($vendor_css_variant) && in_array($vendor_css_variant, ['home', 'tour'], true)): ?>
 <link href="/css/vendors-core.css" rel="stylesheet"/>
 <link href="/css/vendors-<?= $vendor_css_variant ?>.css" rel="stylesheet"/>
-<?php elseif ($vendor_css_variant === 'core'): ?>
+<?php elseif (!empty($vendor_css_variant) && $vendor_css_variant === 'core'): ?>
 <link href="/css/vendors-core.css" rel="stylesheet"/>
 <?php else: ?>
 <link href="/css/vendors.css" rel="stylesheet"/>
 <?php endif; ?>
 ```
+
+(Same correction as Step 2: guard with `!empty($vendor_css_variant) &&` before the `=== 'core'` check.)
 
 - [ ] **Step 4: Verify with `php -l`**
 
