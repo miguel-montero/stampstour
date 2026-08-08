@@ -16733,7 +16733,6 @@ a.sp-video:after {
 	overflow: hidden;
 	white-space: nowrap;
 }
-
 /* Visibility safety net (2026-08-08): see css/vendors-tour.css and
    css/vendors.css for the full rationale comment (kept in sync with
    this source file). */
