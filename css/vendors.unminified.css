@@ -16723,7 +16723,11 @@ a.sp-video:after {
    See css/vendors-tour.css and css/vendors.css for the full rationale
    comment (kept in sync with this source file) - this same block must
    exist in this source file so a future regeneration via clean-css-cli
-   doesn't silently drop it. */
+   doesn't silently drop it. A fourth copy of this exact block also lives
+   in includes/critical/tour.css (synchronously-inlined critical CSS, not
+   built from this source file) - that's the one that actually wins the
+   load race; see css/vendors-tour.css and css/vendors.css for the full
+   explanation. */
 #Img_carousel .sp-slides {
 	aspect-ratio: 960 / 500;
 }

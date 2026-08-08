@@ -47,7 +47,13 @@
    180px instead of letting it balloon, and white-space:nowrap stops the
    thumbnails from wrapping into new lines in the first place (matching
    the single-row layout Slider Pro ends up using anyway) - between the
-   two, the strip never exceeds ~180px at any point, pre- or post-JS. */
+   two, the strip never exceeds ~180px at any point, pre- or post-JS.
+   A fourth copy of this exact block also lives in
+   includes/critical/tour.css - that's the one that actually wins the
+   load race (it's inlined synchronously, before this stylesheet has
+   even started loading), so treat it as load-bearing, not redundant;
+   the copies here are the post-swap backstop once this stylesheet
+   finishes loading. */
 #Img_carousel .sp-slides {
   aspect-ratio: 960 / 500;
 }

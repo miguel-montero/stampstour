@@ -94,7 +94,12 @@
      the header or hero markup changes meaningfully, regenerate with:
        npx critical <homepage-url> --dimensions 390x844 --dimensions 1470x900
      and replace includes/critical/home.css with the output (root-absolute
-     any fonts/css/img url() paths it produces). -->
+     any fonts/css/img url() paths it produces). includes/critical/tour.css
+     additionally carries a small hand-added #Img_carousel block (marked
+     HAND-ADDED in that file) that is NOT part of any `npx critical`
+     extraction - if you ever regenerate tour.css, copy that block back in
+     from the marked section, or the tour-gallery CLS fix silently breaks
+     again. -->
 <?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
 <style><?= file_get_contents($critical_css_file) ?></style>
 <?php endif; ?>
