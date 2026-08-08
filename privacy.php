@@ -34,7 +34,8 @@ $lcp_preload_image = 'img/Tours/Stgo/big.webp';
 <html lang="en">
 <head>
 <?php include __DIR__ . '/includes/head.php'; ?>
-  <link href="css/timeline.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/timeline.css" media="print" onload="this.media='all';this.onload=null;">
+  <noscript><link href="css/timeline.css" rel="stylesheet"></noscript>
 </head>
 <body>
   <!-- Header================================================== -->
