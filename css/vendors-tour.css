@@ -12,8 +12,20 @@
    at init, but by then this CSS has already prevented the initial-paint
    collapse to 0 height. The aspect-ratio matches the plugin's own sizing
    formula exactly (width:960/height:500 init config -> aspectRatio 1.92,
-   see js/jquery.sliderPro.js). The thumbnail min-height matches every
-   real thumbnail asset's actual height (180px) across all 5 tours. */
+   see js/jquery.sliderPro.js).
+
+   The thumbnail min-height (180px) is a deliberate choice, not the
+   plugin's final rendered height: Slider Pro's actual thumbnailHeight
+   default is 80px (js/jquery.sliderPro.js:2118, applied post-init at
+   :1777 and :1783), but the raw <img class="sp-thumbnail"> elements
+   briefly render at their real asset height (~180px, confirmed via
+   `identify` on the source files) before the plugin's JS resizes them
+   down to 80px. Reserving 180px absorbs that initial 0->180 growth
+   without a second 180->80 shrink once JS runs - measured as
+   meaningfully better for CLS than reserving 80px, at the cost of
+   ~100px of empty space under the thumbnail strip after Slider Pro
+   finishes initializing. Confirmed as an intentional tradeoff during
+   final review - see docs/superpowers/plans/2026-08-07-tour-gallery-cls-fix.md */
 #Img_carousel .sp-slides {
   aspect-ratio: 960 / 500;
 }
