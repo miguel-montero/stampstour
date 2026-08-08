@@ -301,10 +301,6 @@ $vendor_css_variant = 'home';
         });
     </script>
 
-    <!-- Pop up script -->
-    <script type="text/javascript" src="js/pop_up.min.js"></script>
-    <script type="text/javascript" src="js/pop_up_func.js"></script>
-
     <!-- Start of OpenWidget code (gated behind cookie consent - see includes/cookie-banner.php) -->
     <script>
         window.__initOpenWidget = function () {
