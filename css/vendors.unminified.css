@@ -25,11 +25,17 @@ rather than renumbering.)
    2026-08-03 - keeping it in sync now so future minification doesn't
    reintroduce the blocking @import. */
 
-/* Fontello */
+/* Fontello - 2026-08-09: subsetted to the 36 glyphs actually used sitewide
+   (313KB -> ~7.6KB). This is the regeneration source for css/vendors.css
+   via clean-css-cli - if you add a new fontello icon usage anywhere, you
+   MUST regenerate css/fontello/font/fontello-subset.woff2 (see
+   docs/superpowers/specs/2026-08-09-icon-font-subsetting-design.md for the
+   exact fonttools command) before re-minifying this file, or the new icon
+   will silently render blank and any regeneration will keep pointing at
+   the (still-present, untouched) full 1929-glyph original by accident. */
 @font-face {
 	font-family: 'fontello';
-	src: url(fontello/font/fontello.eot?32974303);
-	src: url(fontello/font/fontello.eot?32974303#iefix) format("embedded-opentype"), url(fontello/font/fontello.woff?32974303) format("woff"), url(fontello/font/fontello.ttf?32974303) format("truetype"), url(fontello/font/fontello.svg?32974303#fontello) format("svg");
+	src: url(fontello/font/fontello-subset.woff2) format("woff2");
 	font-weight: 400;
 	font-style: normal
 }
@@ -7855,12 +7861,13 @@ rather than renumbering.)
 }
 
 
-/* Icon_set_1 */
+/* Icon_set_1 - 2026-08-09: subsetted to the 18 glyphs actually used
+   sitewide (41.8KB -> ~10.6KB). Same regeneration-source hazard as the
+   Fontello block above - see that comment. */
 
 @font-face {
 	font-family: 'icon_set_1';
-	src: url(fontello/font/icon_set_1.eot?55361665);
-	src: url(fontello/font/icon_set_1.eot?55361665#iefix) format("embedded-opentype"), url(fontello/font/icon_set_1.woff?55361665) format("woff"), url(fontello/font/icon_set_1.ttf?55361665) format("truetype"), url(fontello/font/icon_set_1.svg?55361665#icon_set_1) format("svg");
+	src: url(fontello/font/icon_set_1-subset.woff2) format("woff2");
 	font-weight: 400;
 	font-style: normal
 }
