@@ -18,3 +18,21 @@
   src: url('montserrat-v31-latin-variable.woff2') format('woff2-variations'), url('montserrat-v31-latin-variable.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
+/* Metric-matched fallback for the Montserrat swap window (font-display:swap
+   above always shows a fallback font first). Registering it here, in the
+   one stylesheet loaded unconditionally on every page (both branches of
+   includes/head.php), closes a gap found by the 2026-08-09 CLS-fix plan's
+   final review: pages that don't set $critical_css_file (blog-post.php,
+   404.html) never got the fallback face registered when it lived only in
+   the critical CSS files, so body/style.css/custom.css's font stacks
+   referenced a name the browser had never actually loaded. See
+   docs/superpowers/specs/2026-08-09-montserrat-font-swap-cls-design.md */
+@font-face {
+  font-family: 'Montserrat-fallback';
+  src: local('Arial');
+  size-adjust: 112.8307%;
+  ascent-override: 85.7923%;
+  descent-override: 22.2457%;
+  line-gap-override: 0%;
+}
