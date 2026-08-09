@@ -126,6 +126,8 @@ The `max-width: 767px` breakpoint matches this codebase's own established conven
 
 ### 3. Make `includes/head.php`'s `$lcp_preload_image` responsive
 
+> **Amendment (post-implementation, commit `0a8c2358`):** the `imagesrcset`/`imagesizes` design described below shipped, but the final whole-branch review found it was a real bug: `imagesrcset`/`imagesizes` resource selection is DPR-aware, while the `<picture><source media="...">` element (Design section 2) it's meant to mirror is a pure media-query match with no DPR sensitivity. The `imagesizes` value here (`780px`, the mobile file's own width) never matched the image's actual rendered CSS width (`100vw`), so on any real phone with DPR >= 2 the two mechanisms disagreed — the preload fetched the desktop file while `<picture>` rendered the mobile one, downloading both. The shipped fix (`includes/head.php`, current code) replaces this with two separate `media`-gated `<link rel="preload">` tags, mirroring the `<picture>` breakpoint exactly instead of using width descriptors — not DPR-sensitive by construction, so preload and render always agree. **Do not reimplement the `imagesrcset`/`imagesizes` version below** — it's left in place only as a historical record of what shipped first and why it was wrong; see `includes/head.php`'s doc comment for the current, correct design.
+
 Currently:
 ```php
 <?php if (!empty($lcp_preload_image) && is_file(__DIR__ . '/../' . $lcp_preload_image)): ?>
