@@ -403,4 +403,33 @@ if ($.fn.owlCarousel) {
 		$(this).css('background-image', $(this).attr('data-background'));
 	});
 
+/* Lazy-load homepage tour cards with a fixed, connection-independent margin.
+   Native loading="lazy" was replaced here because Chrome's adaptive prefetch
+   distance grows on slow connections, which was causing these cards to fetch
+   within ~24ms of the hero image and contend for bandwidth during the LCP
+   window. See docs/superpowers/specs/2026-08-08-homepage-tour-card-lazy-load-design.md */
+if ('IntersectionObserver' in window) {
+    var lazyCards = document.querySelectorAll('.lazy-tour-card');
+    if (lazyCards.length) {
+        var lazyObserver = new IntersectionObserver(function (entries, observer) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                var picture = entry.target;
+                var source = picture.querySelector('source[data-srcset]');
+                if (source) {
+                    source.setAttribute('srcset', source.getAttribute('data-srcset'));
+                    source.removeAttribute('data-srcset');
+                }
+                var img = picture.querySelector('img[data-src]');
+                if (img) {
+                    img.setAttribute('src', img.getAttribute('data-src'));
+                    img.removeAttribute('data-src');
+                }
+                observer.unobserve(picture);
+            });
+        }, { rootMargin: '200px' });
+        lazyCards.forEach(function (picture) { lazyObserver.observe(picture); });
+    }
+}
+
 })(window.jQuery); 
