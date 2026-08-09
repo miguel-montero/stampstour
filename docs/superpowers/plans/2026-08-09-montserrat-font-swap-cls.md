@@ -176,14 +176,220 @@ Using a headless Puppeteer session (available at `/Users/miguelmontero/.npm/_npx
 
 If Steps 1-2 pass, proceed to Task 4. If a real defect is found (e.g., `Montserrat-fallback` not registering, broken CSS parse, grossly mismatched fallback sizing), fix it in the relevant file from Task 1/2 and re-run the failing check before proceeding.
 
+**Amendment (post-Task-3 finding):** Task 3 found that `css/style.css` and `css/custom.css` — both deferred stylesheets that load via the `media="print"` swap-to-`all` pattern *after* the critical CSS is already applied — redeclare `font-family` on `body` (style.css) and on `.hero-title`/`.hero-subtitle` (custom.css) without the new `"Montserrat-fallback"` name. Since these load later and target the same or a more specific selector, they silently override Tasks 1-2's fix once they apply (confirmed directly: the tour page's H1 changes from a 2-line to a 3-line wrap once Montserrat loads, when Task 1-2's fix alone should have prevented that reflow). `.hero-subtitle` is confirmed to be one of the two actual measured shift sources from this plan's own baseline investigation (0.0635 CLS on the homepage). Tasks 4-5 below close this gap before deploying; the original Task 4 (deploy) is renumbered to Task 7.
+
 ---
 
-### Task 4: Deploy and confirm production
+### Task 4: Add fallback font to `css/style.css`
+
+**Files:**
+- Modify: `css/style.css`
+
+**Interfaces:**
+- Consumes: nothing new — the `"Montserrat-fallback"` `@font-face` is already registered document-wide by Tasks 1-2 (inlined in the critical CSS, which loads before this deferred stylesheet); this task only needs to *reference* the font-family name, not redeclare the `@font-face`.
+- Produces: nothing consumed by later tasks.
+
+Unlike the critical CSS files, `css/style.css` is NOT minified — it uses normal formatting with real newlines, tabs, and varying indentation per rule. Match each occurrence's exact existing whitespace style; do not reformat the file.
+
+- [ ] **Step 1: Update the main `body` rule (line 81)**
+
+Current:
+
+```css
+body {background:#f9f9f9; font-size:14px; line-height:1.5; font-family:"Montserrat", Arial, sans-serif; color:#2a2a2a;}
+```
+
+Change to:
+
+```css
+body {background:#f9f9f9; font-size:14px; line-height:1.5; font-family:"Montserrat", "Montserrat-fallback", Arial, sans-serif; color:#2a2a2a;}
+```
+
+- [ ] **Step 2: Update the 4 narrower component occurrences**
+
+These are lower-visibility UI components (a modal-like overlay appearing twice, a card-style widget, and the date-range picker) — still update them for consistency, since each is a place where `font-family` is redeclared away from the (now-fixed) inherited `body` value, defeating the fix for that specific element whenever it's visible during the font-load window.
+
+Occurrence at line 1511 (inside a rule with `z-index: 9999999`):
+
+```css
+	font-family: "Montserrat", Arial, sans-serif;
+```
+
+Change to:
+
+```css
+	font-family: "Montserrat", "Montserrat-fallback", Arial, sans-serif;
+```
+
+Occurrence at line 2748 (inside a different rule, also `z-index: 9999999`):
+
+```css
+	font-family: "Montserrat", Arial, sans-serif;
+```
+
+Change to:
+
+```css
+	font-family: "Montserrat", "Montserrat-fallback", Arial, sans-serif;
+```
+
+Occurrence at line 6966 (inside a rule with `color: #444` immediately after):
+
+```css
+  font-family: "Montserrat", Arial, sans-serif;
+```
+
+Change to:
+
+```css
+  font-family: "Montserrat", "Montserrat-fallback", Arial, sans-serif;
+```
+
+Occurrence at line 7275 (`.daterangepicker`, uses `Helvetica` not `Arial`, and `!important`):
+
+```css
+.daterangepicker {
+  font-family: "Montserrat", Helvetica, sans-serif !important;
+}
+```
+
+Change to:
+
+```css
+.daterangepicker {
+  font-family: "Montserrat", "Montserrat-fallback", Helvetica, sans-serif !important;
+}
+```
+
+(Reuse the same `"Montserrat-fallback"` face here even though the rest of this specific rule's stack says `Helvetica` rather than `Arial` — Helvetica and Arial are historically near-metric-compatible, and this is a low-visibility, typically off-screen-on-load widget; a second, Helvetica-specific metric-matched face is not warranted for this one occurrence.)
+
+Since line numbers 1511/2748/6966/7275 may drift slightly if the file has changed, verify each occurrence via `grep -n 'font-family: "Montserrat", Arial, sans-serif;\|font-family: "Montserrat", Helvetica, sans-serif !important;' css/style.css` before editing, and confirm exactly 5 total occurrences of `"Montserrat", Arial` or `"Montserrat", Helvetica` patterns exist (1 in the `body` rule from Step 1 + 4 here) before starting, to catch any drift from what this plan describes.
+
+- [ ] **Step 3: Verify**
+
+```bash
+grep -c 'Montserrat-fallback' /Users/miguelmontero/Documents/superpowers/STAMP/css/style.css
+```
+
+Expected: `5` (one per occurrence updated in Steps 1-2).
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add css/style.css
+git commit -m "fix: reference Montserrat-fallback in style.css's font-family overrides
+
+style.css loads after the critical CSS via the media=print swap and
+redeclares font-family on body and 4 narrower components without the
+fallback name added earlier, silently undoing that fix once it applies."
+```
+
+---
+
+### Task 5: Add fallback font to `css/custom.css`
+
+**Files:**
+- Modify: `css/custom.css`
+
+**Interfaces:**
+- Consumes: nothing new (same reasoning as Task 4 — the `@font-face` is already registered document-wide).
+- Produces: nothing consumed by later tasks.
+
+- [ ] **Step 1: Update `.hero-title` (around line 80)**
+
+Current:
+
+```css
+.hero-title {
+	font-family: Montserrat, sans-serif;
+	font-weight: 700;
+	font-size: 70px;
+	line-height: 1;
+	color: #fff;
+	margin: 0 0 18px;
+}
+```
+
+Change to (only the `font-family` line changes):
+
+```css
+.hero-title {
+	font-family: Montserrat, "Montserrat-fallback", sans-serif;
+	font-weight: 700;
+	font-size: 70px;
+	line-height: 1;
+	color: #fff;
+	margin: 0 0 18px;
+}
+```
+
+- [ ] **Step 2: Update `.hero-subtitle` (around line 88)**
+
+Current:
+
+```css
+.hero-subtitle {
+	font-family: Montserrat, sans-serif;
+	font-weight: 400;
+	font-size: 13px;
+```
+
+Change to (only the `font-family` line changes; the rest of this rule continues below what's shown here — do not truncate it, only replace the `font-family` line itself):
+
+```css
+.hero-subtitle {
+	font-family: Montserrat, "Montserrat-fallback", sans-serif;
+	font-weight: 400;
+	font-size: 13px;
+```
+
+Note: unlike `style.css`'s occurrences, neither of these two rules had `Arial` in the stack to begin with (just `Montserrat, sans-serif`) — this task adds the fallback face but does not add `Arial` as well, since that would be a larger change than this fix requires; `"Montserrat-fallback"` already resolves to a real, locally-available face (Arial under the hood, via `src:local("Arial")` in its `@font-face` definition), so the plain `sans-serif` generic-family keyword remains a sufficient final fallback.
+
+- [ ] **Step 3: Verify**
+
+```bash
+grep -c 'Montserrat-fallback' /Users/miguelmontero/Documents/superpowers/STAMP/css/custom.css
+```
+
+Expected: `2`.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add css/custom.css
+git commit -m "fix: reference Montserrat-fallback in hero-title/hero-subtitle
+
+.hero-subtitle was confirmed as one of the two directly-measured CLS
+shift sources in this plan's baseline investigation - custom.css loads
+after the critical CSS and was overriding the fallback fix for both
+hero text elements."
+```
+
+---
+
+### Task 6: Re-run local functional and visual verification
+
+**Files:** none modified — verification only, unless a real defect is found, in which case fix it in the relevant file before marking this task done.
+
+**Interfaces:**
+- Consumes: Tasks 1, 2, 4, and 5 together (all five modified CSS files).
+
+- [ ] **Step 1: Re-run Task 3's exact checks**
+
+Repeat Task 3's Step 1 (functional check) and Step 2 (visual comparison — block Montserrat via CDP, screenshot, compare against the Montserrat-loaded state) on the same three representative pages. This time, specifically re-check the tour page's H1, which is what failed Task 3's original run (2-line wrap in the fallback state vs. 3-line wrap once Montserrat loaded) — confirm it now stays at the same line count in both states.
+
+- [ ] **Step 2: Record findings**
+
+If the tour-page H1 issue (and the general visual comparison across all 3 pages) now passes, proceed to Task 7. If it still fails, or a new defect appears, fix it in the relevant file (Task 1/2/4/5's files) and re-run the failing check before proceeding — do not proceed to deployment with a known-still-broken check.
+
+---
+
+### Task 7: Deploy and confirm production
 
 **Files:** none modified — deployment/verification only.
 
 **Interfaces:**
-- Consumes: all commits from Tasks 1-3.
+- Consumes: all commits from Tasks 1-6.
 
 - [ ] **Step 1: Push to `main`**
 
