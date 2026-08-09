@@ -56,8 +56,8 @@
          <img alt="City tours" height="34" src="/img/logo_sticky.png" width="160"/>
         </picture>
        </div>
-       <a class="open_close" href="#" id="close_in">
-        <i class="icon_set_1_icon-77">
+       <a class="open_close" href="#" id="close_in" aria-label="Close menu">
+        <i class="icon_set_1_icon-77" aria-hidden="true">
         </i>
        </a>
        <ul>

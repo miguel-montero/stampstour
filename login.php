@@ -92,9 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <!-- li><a href="#sign-in-dialog" id="access_link">Sign in</a></li>
                             <li><a href="wishlist.html" id="wishlist_link">Wishlist</a></li>
                             template</a></li> -->
-                            <li><a href="https://www.instagram.com/stampstour/"><i class="bi bi-instagram"></i></a></li>
-                            <li><a href="https://www.facebook.com/stampstour"><i class="bi bi-facebook"></i></a></li>
-                            <li><a href="https://api.whatsapp.com/send?phone=56923993146"><i class="bi bi-whatsapp"></i></a></li>
+                            <li><a href="https://www.instagram.com/stampstour/" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a></li>
+                            <li><a href="https://www.facebook.com/stampstour" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a></li>
+                            <li><a href="https://api.whatsapp.com/send?phone=56923993146" aria-label="WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a></li>
                         </ul>
                     </div>
                 </div><!-- End row -->
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        <a href="/">
         <img alt="City tours" class="logo_normal" height="47" width="132" src="img/logolargo.png"/>
        </a>
-       <a href="/">
+       <a href="/" aria-label="Stamps Tour">
         <img alt="City tours" class="logo_sticky" height="34" width="147" src="img/logo_sticky.png"/>
        </a>
       </div>
@@ -122,8 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        <div id="header_menu">
         <img alt="StampsTour" height="34" src="img/logo_sticky.png" width="160"/>
        </div>
-       <a class="open_close" href="#" id="close_in">
-        <i class="icon_set_1_icon-77">
+       <a class="open_close" href="#" id="close_in" aria-label="Close menu">
+        <i class="icon_set_1_icon-77" aria-hidden="true">
         </i>
        </a>
        <ul>
@@ -244,9 +244,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col-md-12">
                     <div id="social_footer">
                         <ul>
-                            <li><a href="https://www.instagram.com/stampstour/"><i class="bi bi-instagram"></i></a></li>
-                            <li><a href="https://api.whatsapp.com/send?phone=56923993146"><i class="bi bi-whatsapp"></i></a></li>
-                            <li><a href="https://www.facebook.com/stampstour"><i class="bi bi-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/stampstour/" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a></li>
+                            <li><a href="https://api.whatsapp.com/send?phone=56923993146" aria-label="WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a></li>
+                            <li><a href="https://www.facebook.com/stampstour" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a></li>
                         </ul>
                         <p>© Stampstour 2025</p>
                     </div>
