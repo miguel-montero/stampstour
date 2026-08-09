@@ -380,9 +380,7 @@ $vendor_css_variant = 'tour';
    </div>
    <!--End container -->
   </main>
-  <footer class="revealed">
-   <?php include __DIR__ . '/includes/footer.php'; ?>
-  </footer>
+  <?php include __DIR__ . '/includes/footer.php'; ?>
   <!-- End footer -->
   <div id="toTop"></div>
   <!-- JavaScript Files -->

@@ -113,9 +113,7 @@ if ($post) {
     </div>
   </main>
 
-  <footer class="revealed">
-    <?php include __DIR__ . '/includes/footer.php'; ?>
-  </footer>
+  <?php include __DIR__ . '/includes/footer.php'; ?>
 
   <?php include __DIR__ . '/includes/content-scripts.php'; ?>
 </body>

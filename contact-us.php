@@ -56,9 +56,7 @@ $lcp_preload_image = 'img/Tours/Stgo/big.webp';
   </main>
   <!-- End main -->
 
-  <footer>
-    <?php include __DIR__ . '/includes/footer.php'; ?>  <!-- Common footer include -->
-  </footer>
+  <?php include __DIR__ . '/includes/footer.php'; ?>  <!-- Common footer include -->
 
   <?php include __DIR__ . '/includes/content-scripts.php'; ?>
 </body>

@@ -371,9 +371,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet'])) {
         </div>
     </main>
 
-    <footer class="revealed">
-        <?php include __DIR__ . '/includes/footer.php'; ?>
-    </footer>
+    <?php include __DIR__ . '/includes/footer.php'; ?>
 
     <div id="toTop"></div>
 

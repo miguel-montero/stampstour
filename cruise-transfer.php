@@ -366,9 +366,7 @@ $lcp_preload_image_mobile = 'img/Tours/Cruise/big-mobile.webp';
   </div>
 </main>
 
-<footer class="revealed">
-  <?php include __DIR__ . '/includes/footer.php'; ?>  <!-- Common footer include -->
-</footer>
+<?php include __DIR__ . '/includes/footer.php'; ?>  <!-- Common footer include -->
 
 <!-- Scripts (jQuery, Bootstrap, plugins) -->
 <!-- All deferred: download in parallel instead of one at a time, execute

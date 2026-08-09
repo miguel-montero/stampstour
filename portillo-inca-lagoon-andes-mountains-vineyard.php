@@ -438,9 +438,7 @@ $vendor_css_variant = 'tour';
    </div>
    <!--End container -->
   </main>
-  <footer class="revealed">
-   <?php include __DIR__ . '/includes/footer.php'; ?>
-  </footer>
+  <?php include __DIR__ . '/includes/footer.php'; ?>
   <!-- End footer -->
   <div id="toTop"></div>
 <?php $exp_name = 'Andes'; include __DIR__ . '/includes/tour-scripts.php'; ?>

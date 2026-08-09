@@ -103,9 +103,7 @@ $lcp_preload_image = 'img/Tours/Stgo/big.webp';
     </div>
   </main>
 
-  <footer class="revealed">
-    <?php include __DIR__ . '/includes/footer.php'; ?>
-  </footer>
+  <?php include __DIR__ . '/includes/footer.php'; ?>
 
   <?php include __DIR__ . '/includes/content-scripts.php'; ?>
   <script src="/js/lightbox2.js"></script>
