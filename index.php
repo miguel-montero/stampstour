@@ -94,10 +94,19 @@ $vendor_css_variant = 'home';
                     <div class="tour_container">
                         <div class="img_container">
                             <a href="valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca.php">
-                                <picture>
-                                    <source srcset="img/Tours/Valpo/portada-mobile.webp 600w, img/Tours/Valpo/portada.webp 955w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
-                                    <img src="img/Tours/Valpo/portada.jpeg" width="800" height="533" class="img-fluid" alt="Valparaíso tour" loading="lazy">
+                                <div class="lazy-tour-card-wrap">
+                                <picture class="lazy-tour-card">
+                                    <source data-srcset="img/Tours/Valpo/portada-mobile.webp 600w, img/Tours/Valpo/portada.webp 955w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
+                                    <img data-src="img/Tours/Valpo/portada.jpeg" width="800" height="533" class="img-fluid" alt="Valparaíso tour">
                                 </picture>
+                                <noscript>
+                                    <style>.lazy-tour-card-wrap .lazy-tour-card { display: none; }</style>
+                                    <picture>
+                                        <source srcset="img/Tours/Valpo/portada-mobile.webp 600w, img/Tours/Valpo/portada.webp 955w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
+                                        <img src="img/Tours/Valpo/portada.jpeg" width="800" height="533" class="img-fluid" alt="Valparaíso tour" loading="lazy">
+                                    </picture>
+                                </noscript>
+                                </div>
                                 <div class="badge_tripadvisor">
                                     <picture>
                                         <source srcset="img/badges/tripadvisor-2026-white.webp" type="image/webp">
@@ -124,10 +133,19 @@ $vendor_css_variant = 'home';
                     <div class="tour_container">
                         <div class="img_container">
                             <a href="maipo-valley-wine-tour-santiago.php">
-                                <picture>
-                                    <source srcset="img/Tours/Maipo/portada-mobile.webp 600w, img/Tours/Maipo/portada.webp 720w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
-                                    <img src="img/Tours/Maipo/portada.jpg" width="800" height="533" class="img-fluid" alt="Maipo Wine Tour" loading="lazy">
+                                <div class="lazy-tour-card-wrap">
+                                <picture class="lazy-tour-card">
+                                    <source data-srcset="img/Tours/Maipo/portada-mobile.webp 600w, img/Tours/Maipo/portada.webp 720w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
+                                    <img data-src="img/Tours/Maipo/portada.jpg" width="800" height="533" class="img-fluid" alt="Maipo Wine Tour">
                                 </picture>
+                                <noscript>
+                                    <style>.lazy-tour-card-wrap .lazy-tour-card { display: none; }</style>
+                                    <picture>
+                                        <source srcset="img/Tours/Maipo/portada-mobile.webp 600w, img/Tours/Maipo/portada.webp 720w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
+                                        <img src="img/Tours/Maipo/portada.jpg" width="800" height="533" class="img-fluid" alt="Maipo Wine Tour" loading="lazy">
+                                    </picture>
+                                </noscript>
+                                </div>
                                 <div class="badge_tripadvisor">
                                     <picture>
                                         <source srcset="img/badges/tripadvisor-2026.webp" type="image/webp">
@@ -154,10 +172,19 @@ $vendor_css_variant = 'home';
                     <div class="tour_container">
                         <div class="img_container">
                             <a href="portillo-inca-lagoon-andes-mountains-vineyard.php">
-                                <picture>
-                                    <source srcset="img/Tours/Andes/portada-mobile.webp 600w, img/Tours/Andes/portada-medium.webp 1100w, img/Tours/Andes/portada.webp 1400w" sizes="(max-width: 767px) 600px, 60vw" type="image/webp">
-                                    <img src="img/Tours/Andes/portada.jpg" width="800" height="533" class="img-fluid" alt="Andes tour" loading="lazy">
+                                <div class="lazy-tour-card-wrap">
+                                <picture class="lazy-tour-card">
+                                    <source data-srcset="img/Tours/Andes/portada-mobile.webp 600w, img/Tours/Andes/portada-medium.webp 1100w, img/Tours/Andes/portada.webp 1400w" sizes="(max-width: 767px) 600px, 60vw" type="image/webp">
+                                    <img data-src="img/Tours/Andes/portada.jpg" width="800" height="533" class="img-fluid" alt="Andes tour">
                                 </picture>
+                                <noscript>
+                                    <style>.lazy-tour-card-wrap .lazy-tour-card { display: none; }</style>
+                                    <picture>
+                                        <source srcset="img/Tours/Andes/portada-mobile.webp 600w, img/Tours/Andes/portada-medium.webp 1100w, img/Tours/Andes/portada.webp 1400w" sizes="(max-width: 767px) 600px, 60vw" type="image/webp">
+                                        <img src="img/Tours/Andes/portada.jpg" width="800" height="533" class="img-fluid" alt="Andes tour" loading="lazy">
+                                    </picture>
+                                </noscript>
+                                </div>
                                 <div class="badge_save">Save<strong>20%</strong></div>
                                 <div class="short_info">
                                     <i class="icon_set_1_icon-28"></i>
@@ -178,10 +205,19 @@ $vendor_css_variant = 'home';
                     <div class="tour_container">
                         <div class="img_container">
                             <a href="discover-santiago-city-tour.php">
-                                <picture>
-                                    <source srcset="img/Tours/Stgo/portada-mobile.webp 600w, img/Tours/Stgo/portada-medium.webp 1100w, img/Tours/Stgo/portada.webp 1440w" sizes="(max-width: 767px) 600px, 60vw" type="image/webp">
-                                    <img src="img/Tours/Stgo/portada.jpg" width="800" height="533" class="img-fluid" alt="Santiago City Tour" loading="lazy">
+                                <div class="lazy-tour-card-wrap">
+                                <picture class="lazy-tour-card">
+                                    <source data-srcset="img/Tours/Stgo/portada-mobile.webp 600w, img/Tours/Stgo/portada-medium.webp 1100w, img/Tours/Stgo/portada.webp 1440w" sizes="(max-width: 767px) 600px, 60vw" type="image/webp">
+                                    <img data-src="img/Tours/Stgo/portada.jpg" width="800" height="533" class="img-fluid" alt="Santiago City Tour">
                                 </picture>
+                                <noscript>
+                                    <style>.lazy-tour-card-wrap .lazy-tour-card { display: none; }</style>
+                                    <picture>
+                                        <source srcset="img/Tours/Stgo/portada-mobile.webp 600w, img/Tours/Stgo/portada-medium.webp 1100w, img/Tours/Stgo/portada.webp 1440w" sizes="(max-width: 767px) 600px, 60vw" type="image/webp">
+                                        <img src="img/Tours/Stgo/portada.jpg" width="800" height="533" class="img-fluid" alt="Santiago City Tour" loading="lazy">
+                                    </picture>
+                                </noscript>
+                                </div>
                                 <div class="short_info">
                                     <i class="icon_set_1_icon-23"></i>
                                     <span class="price"><sup>$</sup>59</span>
@@ -198,10 +234,19 @@ $vendor_css_variant = 'home';
                     <div class="tour_container">
                         <div class="img_container">
                             <a href="cruise-transfer.php">
-                                <picture>
-                                    <source srcset="img/Tours/Cruise/portada-mobile.webp 600w, img/Tours/Cruise/portada.webp 900w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
-                                    <img src="img/Tours/Cruise/portada.jpeg" width="800" height="533" class="img-fluid" alt="Cruise transfer with Valparaíso tour" loading="lazy">
+                                <div class="lazy-tour-card-wrap">
+                                <picture class="lazy-tour-card">
+                                    <source data-srcset="img/Tours/Cruise/portada-mobile.webp 600w, img/Tours/Cruise/portada.webp 900w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
+                                    <img data-src="img/Tours/Cruise/portada.jpeg" width="800" height="533" class="img-fluid" alt="Cruise transfer with Valparaíso tour">
                                 </picture>
+                                <noscript>
+                                    <style>.lazy-tour-card-wrap .lazy-tour-card { display: none; }</style>
+                                    <picture>
+                                        <source srcset="img/Tours/Cruise/portada-mobile.webp 600w, img/Tours/Cruise/portada.webp 900w" sizes="(max-width: 767px) 600px, 50vw" type="image/webp">
+                                        <img src="img/Tours/Cruise/portada.jpeg" width="800" height="533" class="img-fluid" alt="Cruise transfer with Valparaíso tour" loading="lazy">
+                                    </picture>
+                                </noscript>
+                                </div>
                                 <div class="badge_save">Save<strong>20%</strong></div>
                                 <div class="short_info">
                                     <i class="icon_set_1_icon-28"></i>
