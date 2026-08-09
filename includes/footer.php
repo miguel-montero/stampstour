@@ -70,18 +70,18 @@
       <div id="social_footer">
        <ul>
         <li>
-         <a href="https://www.instagram.com/stampstour/">
-          <i class="bi bi-instagram"></i>
+         <a href="https://www.instagram.com/stampstour/" aria-label="Instagram">
+          <i class="bi bi-instagram" aria-hidden="true"></i>
          </a>
         </li>
         <li>
-         <a href="https://api.whatsapp.com/send?phone=56923993146">
-          <i class="bi bi-whatsapp"></i>
+         <a href="https://api.whatsapp.com/send?phone=56923993146" aria-label="WhatsApp">
+          <i class="bi bi-whatsapp" aria-hidden="true"></i>
          </a>
         </li>
         <li>
-         <a href="https://www.facebook.com/stampstour">
-          <i class="bi bi-facebook"></i>
+         <a href="https://www.facebook.com/stampstour" aria-label="Facebook">
+          <i class="bi bi-facebook" aria-hidden="true"></i>
          </a>
         </li>
        </ul>

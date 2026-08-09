@@ -17,9 +17,9 @@
                             <!-- li><a href="#sign-in-dialog" id="access_link">Sign in</a></li>
                             <li><a href="/wishlist.html" id="wishlist_link">Wishlist</a></li>
                             template</a></li> -->
-                            <li><a href="https://www.instagram.com/stampstour/"><i class="bi bi-instagram"></i></a></li>
-                            <li><a href="https://www.facebook.com/stampstour"><i class="bi bi-facebook"></i></a></li>
-                            <li><a href="https://api.whatsapp.com/send?phone=56923993146"><i class="bi bi-whatsapp"></i></a></li>
+                            <li><a href="https://www.instagram.com/stampstour/" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a></li>
+                            <li><a href="https://www.facebook.com/stampstour" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a></li>
+                            <li><a href="https://api.whatsapp.com/send?phone=56923993146" aria-label="WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a></li>
                         </ul>
                     </div>
                 </div><!-- End row -->
@@ -35,7 +35,7 @@
          <img alt="City tours" class="logo_normal" height="47" width="132" src="/img/logolargo.png"/>
         </picture>
        </a>
-       <a href="/">
+       <a href="/" aria-label="Stamps Tour">
         <picture>
          <source srcset="/img/logo_sticky.webp" type="image/webp">
          <img alt="Stamps Tour" class="logo_sticky" height="34" width="147" src="/img/logo_sticky.png"/>
