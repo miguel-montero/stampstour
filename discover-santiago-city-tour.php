@@ -5,7 +5,6 @@ $page_canonical   = 'https://stampstour.com/discover-santiago-city-tour';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Stgo/big.jpg';
 $lcp_preload_image_mobile = 'img/Tours/Stgo/big-mobile.webp';
-$lcp_preload_image_width = 1400;
 $vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>

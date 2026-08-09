@@ -5,7 +5,6 @@ $page_canonical   = 'https://stampstour.com/valparaiso-port-and-vina-del-mar-wit
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Valpo/big.jpg';
 $lcp_preload_image_mobile = 'img/Tours/Valpo/big-mobile.webp';
-$lcp_preload_image_width = 1920;
 $vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>

@@ -11,7 +11,6 @@ $page_og = [
 $critical_css_file = __DIR__ . '/includes/critical/home.css';
 $lcp_preload_image = 'img/Tours/portada.webp';
 $lcp_preload_image_mobile = 'img/Tours/portada-mobile-hero.webp';
-$lcp_preload_image_width = 1883;
 $vendor_css_variant = 'home';
 ?>
 <!DOCTYPE html>

@@ -5,7 +5,6 @@ $page_canonical   = 'https://stampstour.com/portillo-inca-lagoon-andes-mountains
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Andes/big.jpg';
 $lcp_preload_image_mobile = 'img/Tours/Andes/big-mobile.webp';
-$lcp_preload_image_width = 1920;
 $vendor_css_variant = 'tour';
 ?>
 <!DOCTYPE html>

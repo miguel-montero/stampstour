@@ -35,7 +35,6 @@ $page_og = [
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Cruise/big.jpg';
 $lcp_preload_image_mobile = 'img/Tours/Cruise/big-mobile.webp';
-$lcp_preload_image_width = 2000;
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -17,14 +17,17 @@
  *                        stylesheet preloads above.
  *   $lcp_preload_image_mobile (optional) - root-relative path to a mobile-sized
  *                        (780px wide) variant of $lcp_preload_image. When set
- *                        together with $lcp_preload_image_width and the file
- *                        exists, the preload becomes responsive via
- *                        imagesrcset/imagesizes: viewports <=767px preload this
- *                        file, wider viewports preload $lcp_preload_image.
- *   $lcp_preload_image_width (optional, required if $lcp_preload_image_mobile is
- *                        set) - actual pixel width (int) of $lcp_preload_image,
- *                        e.g. 1920. Must be accurate - it's the w-descriptor the
- *                        browser uses to pick between the two preload candidates.
+ *                        together with $lcp_preload_image and the mobile file
+ *                        exists, TWO preload links are emitted, each gated by
+ *                        a media attribute mirroring the site's
+ *                        (max-width: 767px) mobile breakpoint used by the
+ *                        corresponding <picture> markup, so only the resource
+ *                        matching the visitor's actual viewport is fetched.
+ *                        This deliberately avoids imagesrcset/imagesizes,
+ *                        whose DPR-aware selection algorithm does not agree
+ *                        with a plain media-query-based <picture> element and
+ *                        was found to cause double-downloads on real phones
+ *                        (DPR >= 2).
  *   $vendor_css_variant (optional) - 'home', 'tour', or 'core'. 'home'/'tour'
  *                        load css/vendors-core.css + css/vendors-{variant}.css
  *                        instead of the full css/vendors.css (see
@@ -121,8 +124,9 @@
 <?php endif; ?>
 
 <?php if (!empty($lcp_preload_image) && is_file(__DIR__ . '/../' . $lcp_preload_image)): ?>
-<?php if (!empty($lcp_preload_image_mobile) && !empty($lcp_preload_image_width) && is_file(__DIR__ . '/../' . $lcp_preload_image_mobile)): ?>
-<link rel="preload" as="image" href="/<?= htmlspecialchars($lcp_preload_image, ENT_QUOTES, 'UTF-8') ?>" imagesrcset="/<?= htmlspecialchars($lcp_preload_image_mobile, ENT_QUOTES, 'UTF-8') ?> 780w, /<?= htmlspecialchars($lcp_preload_image, ENT_QUOTES, 'UTF-8') ?> <?= (int) $lcp_preload_image_width ?>w" imagesizes="(max-width: 767px) 780px, 100vw" fetchpriority="high">
+<?php if (!empty($lcp_preload_image_mobile) && is_file(__DIR__ . '/../' . $lcp_preload_image_mobile)): ?>
+<link rel="preload" as="image" href="/<?= htmlspecialchars($lcp_preload_image_mobile, ENT_QUOTES, 'UTF-8') ?>" media="(max-width: 767px)" fetchpriority="high">
+<link rel="preload" as="image" href="/<?= htmlspecialchars($lcp_preload_image, ENT_QUOTES, 'UTF-8') ?>" media="(min-width: 768px)" fetchpriority="high">
 <?php else: ?>
 <link rel="preload" as="image" href="/<?= htmlspecialchars($lcp_preload_image, ENT_QUOTES, 'UTF-8') ?>" fetchpriority="high">
 <?php endif; ?>
