@@ -78,7 +78,7 @@ html, body {
     -o-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-body {background:#f9f9f9; font-size:14px; line-height:1.5; font-family:"Montserrat", Arial, sans-serif; color:#2a2a2a;}
+body {background:#f9f9f9; font-size:14px; line-height:1.5; font-family:"Montserrat", "Montserrat-fallback", Arial, sans-serif; color:#2a2a2a;}
 
 h1, h2, h3, h4, h5, h6 {color:#2a2a2a;}
 h3 {font-size:22px;}
@@ -1508,7 +1508,7 @@ ul#cat_nav i {
 	background-color: white!important;
 	position: relative;
 	z-index: 9999999;
-	font-family: "Montserrat", Arial, sans-serif;
+	font-family: "Montserrat", "Montserrat-fallback", Arial, sans-serif;
 }
 
 .marker_info img {
@@ -2745,7 +2745,7 @@ ul.list_icons li i {
 	background: #FFF;
 	position: relative;
 	z-index: 9999999;
-	font-family: "Montserrat", Arial, sans-serif;
+	font-family: "Montserrat", "Montserrat-fallback", Arial, sans-serif;
 }
 
 .marker_info_2 img {
@@ -6963,7 +6963,7 @@ a.box_news ul li:after {
   -moz-border-radius: 5px !important;
   -ms-border-radius: 5px !important;
   border-radius: 5px !important;
-  font-family: "Montserrat", Arial, sans-serif;
+  font-family: "Montserrat", "Montserrat-fallback", Arial, sans-serif;
   color: #444;
   -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.3);
@@ -7272,7 +7272,7 @@ a.box_news ul li:after {
 
 /*-------- 3.9 Datepicker --------*/
 .daterangepicker {
-  font-family: "Montserrat", Helvetica, sans-serif !important;
+  font-family: "Montserrat", "Montserrat-fallback", Helvetica, sans-serif !important;
 }
 
 /* Fix for scroll issue */
