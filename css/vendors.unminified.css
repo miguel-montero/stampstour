@@ -40,9 +40,17 @@ rather than renumbering.)
 	font-style: normal
 }
 
+@font-face {
+	font-family: 'fontello-fallback';
+	src: local('Arial');
+	ascent-override: 85%;
+	descent-override: 15%;
+	line-gap-override: 9%
+}
+
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
-	font-family: "fontello";
+	font-family: "fontello", "fontello-fallback";
 	font-style: normal;
 	font-weight: 400;
 	speak: none;
@@ -7872,9 +7880,17 @@ rather than renumbering.)
 	font-style: normal
 }
 
+@font-face {
+	font-family: 'icon_set_1-fallback';
+	src: local('Arial');
+	ascent-override: 85%;
+	descent-override: 15%;
+	line-gap-override: 9%
+}
+
 [class^="icon_set_1_"]:before,
 [class*="icon_set_1_"]:before {
-	font-family: "icon_set_1";
+	font-family: "icon_set_1", "icon_set_1-fallback";
 	font-style: normal;
 	font-weight: 400;
 	speak: none;
