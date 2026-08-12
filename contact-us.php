@@ -13,8 +13,6 @@ $lcp_preload_image = 'img/Tours/Stgo/big.webp';
   <link rel="stylesheet" href="css/timeline.css" media="print" onload="this.media='all';this.onload=null;">
   <noscript><link href="css/timeline.css" rel="stylesheet"></noscript>
 
-  <!-- Bootstrap Icons for WhatsApp icon -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 </head>
 <body>
   <!-- Header================================================== -->
