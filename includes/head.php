@@ -132,7 +132,36 @@
      content.css, you must manually reapply the fix afterward: keep only the
      first `.row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x)*.5);padding-left:calc(var(--bs-gutter-x)*.5);margin-top:var(--bs-gutter-y)}`
      occurrence, delete the rest, and keep the hazard comment - or the
-     duplicate-`.row>*` CLS bug silently comes back. -->
+     duplicate-`.row>*` CLS bug silently comes back. ALL THREE of these
+     critical CSS files (home.css, tour.css, content.css) also carry
+     hand-normalized "subset" font URLs for FOUR font families -
+     Montserrat, fontello, icon_set_1, and bootstrap-icons - each
+     @font-face pointing at a *-subset.woff2 file instead of the
+     original, unsubsetted font. Regenerating any of these 3 files via
+     `npx critical` will silently revert ALL FOUR font families back to
+     their original unsubsetted URLs, reintroducing the exact same class
+     of bug that already cost one full deploy-and-measure cycle for
+     bootstrap-icons specifically: a fix shipped believing bootstrap-icons'
+     @font-face lived in only one file, was deployed, re-measured with a
+     real Lighthouse run against production, found to have NO effect on
+     LCP, and root-caused to a duplicated @font-face hiding in these same
+     3 critical CSS files (14 occurrences, 2 of them pointing at a
+     third-party CDN) - see
+     docs/superpowers/specs/2026-08-12-bootstrap-icons-subsetting-lcp-design.md
+     for the full history and its Correction note. After any regeneration
+     of home.css/tour.css/content.css, you must manually re-point all
+     four font families' @font-face `src` values at their subset files
+     again. Separately: css/bs-icon-font/bootstrap-icons.scss and
+     css/bs-icon-font/bootstrap-icons.css (the unminified/source files for
+     bootstrap-icons) are STALE - they still reference the original,
+     unsubsetted font - and must NOT be used as a source to re-minify
+     bootstrap-icons.min.css, or this same bug returns there too. Path
+     convention note: home.css and tour.css use root-absolute url()
+     paths as instructed above, but content.css is the one exception - it
+     uses relative paths throughout (no leading slash, confirmed for all
+     of its url()s, no exceptions) - so any future regeneration or manual
+     edit of content.css should preserve relative paths to match its
+     existing convention rather than converting it to root-absolute. -->
 <?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
 <style><?= file_get_contents($critical_css_file) ?></style>
 <?php endif; ?>
