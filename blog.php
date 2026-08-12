@@ -14,8 +14,8 @@ if ($conn) {
     }
 }
 
-$page_title       = 'Blog | Stamps Tour';
-$page_description = 'Travel tips, guides, and stories about touring Santiago, Valparaíso, Maipo Valley, and the Andes with Stamps Tour.';
+$page_title       = 'Blog | Stamp\'s Tour';
+$page_description = 'Travel tips, guides, and stories about touring Santiago, Valparaíso, Maipo Valley, and the Andes with Stamp\'s Tour.';
 $page_canonical   = 'https://stampstour.com/blog';
 $critical_css_file = __DIR__ . '/includes/critical/content.css';
 $vendor_css_variant = 'core';

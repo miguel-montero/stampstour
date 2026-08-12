@@ -85,7 +85,7 @@
          </a>
         </li>
        </ul>
-       <p>&copy; Stampstour 2025</p>
+       <p>&copy; Stamp's Tour 2025</p>
       </div>
      </div>
     </div>

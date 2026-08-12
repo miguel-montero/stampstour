@@ -1,10 +1,10 @@
 <?php
-$page_title       = 'Stamps Tour | Santiago Day Tours: Valparaíso, Maipo & Andes';
+$page_title       = 'Stamp\'s Tour | Santiago Day Tours: Valparaíso, Maipo & Andes';
 $page_description = 'Daily small-group and private day tours from Santiago: Valparaíso wine tasting, Maipo Valley, the Andes, city tours & cruise transfers. Hotel pickup included.';
 $page_canonical   = 'https://stampstour.com/';
 $page_og = [
-  'title'       => 'Stampstour - Discover Chile',
-  'description' => 'Daily tours to Valparaíso, Maipo Wine Valley, Andes & Santiago. Book your curated experience with Stampstour!',
+  'title'       => 'Stamp\'s Tour - Discover Chile',
+  'description' => 'Daily tours to Valparaíso, Maipo Wine Valley, Andes & Santiago. Book your curated experience with Stamp\'s Tour!',
   'url'         => 'https://stampstour.com/',
   'image'       => 'https://stampstour.com/img/Tours/portada.jpg',
 ];
@@ -53,7 +53,7 @@ $vendor_css_variant = 'home';
 
     <main>
 
-        <h1 class="visually-hidden">Santiago Day Tours: Valparaíso, Maipo Wine Valley, the Andes &amp; More | Stamps Tour</h1>
+        <h1 class="visually-hidden">Santiago Day Tours: Valparaíso, Maipo Wine Valley, the Andes &amp; More | Stamp's Tour</h1>
 
         <!-- Hero background image, sized and animated by pure CSS
              (css/custom.css: .hero-wrap / .hero-bg / .hero-overlay) -->
@@ -85,7 +85,7 @@ $vendor_css_variant = 'home';
 
             <div class="main_title">
                 <h2>Travel <span>with</span> Us</h2>
-                <p>Whether you're sipping wine in Maipo Valley, exploring the vibrant hills of Valparaíso, or reaching the heights of the Andes, StampsTour offers curated experiences designed for curious, adventurous travelers. Our expert guides, comfortable transport, and small group tours ensure an unforgettable day, every day.</p>
+                <p>Whether you're sipping wine in Maipo Valley, exploring the vibrant hills of Valparaíso, or reaching the heights of the Andes, Stamp's Tour offers curated experiences designed for curious, adventurous travelers. Our expert guides, comfortable transport, and small group tours ensure an unforgettable day, every day.</p>
             </div>
 
             <div id="tours" class="row">

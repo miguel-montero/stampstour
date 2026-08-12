@@ -1,6 +1,6 @@
 <?php
-$page_title       = 'Contact Us | Stamps Tour';
-$page_description = 'Get in touch with Stamps Tour - call, WhatsApp, or email us for questions about bookings, tours, or support.';
+$page_title       = 'Contact Us | Stamp\'s Tour';
+$page_description = 'Get in touch with Stamp\'s Tour - call, WhatsApp, or email us for questions about bookings, tours, or support.';
 $page_canonical   = 'https://stampstour.com/contact-us.php';
 $critical_css_file = __DIR__ . '/includes/critical/content.css';
 $vendor_css_variant = 'core';

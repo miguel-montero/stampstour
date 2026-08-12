@@ -24,7 +24,7 @@ $stmt->close();
 ?>
 <?php
 $page_title       = 'Refunds & Cancellations.';
-$page_description = 'Stamps Tour refund and cancellation policy: full refund if cancelled at least 24 hours before your tour, with weather and minimum-traveler protections.';
+$page_description = 'Stamp\'s Tour refund and cancellation policy: full refund if cancelled at least 24 hours before your tour, with weather and minimum-traveler protections.';
 $page_canonical   = 'https://stampstour.com/refunds-cancellations.php';
 $critical_css_file = __DIR__ . '/includes/critical/content.css';
 $vendor_css_variant = 'core';

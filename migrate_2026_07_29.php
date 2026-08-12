@@ -36,7 +36,7 @@ function tableExists(mysqli $conn, string $table): bool {
     return $exists;
 }
 
-echo "Stamps Tour migration -- " . date('Y-m-d H:i:s') . "\n\n";
+echo "Stamp's Tour migration -- " . date('Y-m-d H:i:s') . "\n\n";
 
 $columns = [
     'monto_pagado' => "ALTER TABLE `reservas` ADD COLUMN `monto_pagado` DECIMAL(10,2) DEFAULT NULL AFTER `total_venta`",

@@ -14,9 +14,9 @@ if (!isset($_SESSION['username'])) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<meta name="description" content="Stamps tour - Premium Tour agency based in Chile.">
+	<meta name="description" content="Stamp's tour - Premium Tour agency based in Chile.">
 	<meta name="author" content="Ansonika">
-	<title>Stamps Tour - Admin</title>
+	<title>Stamp's Tour - Admin</title>
 
 	<!-- Favicons-->
 	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -546,7 +546,7 @@ if (!isset($_SESSION['username'])) {
                             <li><a href="https://api.whatsapp.com/send?phone=56923993146"><i class="bi bi-whatsapp"></i></a></li>
                             <li><a href="https://www.facebook.com/stampstour"><i class="bi bi-facebook"></i></a></li>
                         </ul>
-                        <p>© Stampstour 2025</p>
+                        <p>© Stamp's Tour 2025</p>
                     </div>
                 </div>
             </div><!-- End row -->
