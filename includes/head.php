@@ -118,7 +118,21 @@
      HAND-ADDED in that file) that is NOT part of any `npx critical`
      extraction - if you ever regenerate tour.css, copy that block back in
      from the marked section, or the tour-gallery CLS fix silently breaks
-     again. -->
+     again. includes/critical/content.css similarly carries ONE deliberately
+     kept `.row>*{...}` rule that used to be duplicated 10 times (once per
+     page block) - the duplicates were deleted because, at equal CSS
+     specificity, a later copy silently overrode page-specific `.col-*`
+     column widths, causing a real, measured desktop CLS bug (see
+     docs/superpowers/specs/2026-08-12-content-css-row-star-dedup-cls-design.md
+     for the full root-cause writeup). content.css itself carries a hazard
+     comment directly above the surviving rule, but - just like the tour.css
+     block above - that comment is NOT part of any `npx critical` extraction
+     either, so regenerating content.css wipes the dedup AND the comment
+     together with no warning left behind. If you ever regenerate
+     content.css, you must manually reapply the fix afterward: keep only the
+     first `.row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x)*.5);padding-left:calc(var(--bs-gutter-x)*.5);margin-top:var(--bs-gutter-y)}`
+     occurrence, delete the rest, and keep the hazard comment - or the
+     duplicate-`.row>*` CLS bug silently comes back. -->
 <?php if (!empty($critical_css_file) && is_file($critical_css_file)): ?>
 <style><?= file_get_contents($critical_css_file) ?></style>
 <?php endif; ?>

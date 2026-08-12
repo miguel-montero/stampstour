@@ -256,11 +256,20 @@ cat > /tmp/row-star-dedup-verify.js <<'EOF'
 const puppeteer = require('/Users/miguelmontero/.npm/_npx/7d92d9a2d2ccc630/node_modules/puppeteer');
 const DESKTOP_NETWORK = { offline: false, downloadThroughput: 10*1024*1024/8, uploadThroughput: 5*1024*1024/8, latency: 40 };
 
+// Note (2026-08-12, post-hoc correction from final whole-branch review): the
+// original list below incorrectly included shopping.php, which does not set
+// $critical_css_file at all (verified via `grep -n "critical_css_file" *.php`)
+// and never used content.css in the first place. It also omitted gallery.php
+// and blog.php, which do use content.css and were never measured. Corrected
+// list below; see docs/superpowers/specs/2026-08-12-content-css-row-star-dedup-cls-design.md
+// Testing section for the real gallery.php/blog.php measurements taken to
+// close this gap.
 const pages = [
   'https://stampstour.com/contact-us.php',
   'https://stampstour.com/privacy.php',
   'https://stampstour.com/refunds-cancellations.php',
-  'https://stampstour.com/shopping.php',
+  'https://stampstour.com/gallery.php',
+  'https://stampstour.com/blog.php',
   'https://stampstour.com/',
   'https://stampstour.com/discover-santiago-city-tour.php',
 ];
@@ -305,7 +314,7 @@ EOF
 node /tmp/row-star-dedup-verify.js
 ```
 
-Expected: `contact-us.php` drops from the 0.1878–0.1882 baseline into "Good" range (≤0.1, ideally near-zero). `privacy.php`, `refunds-cancellations.php`, and `shopping.php` (also using `content.css`) should show low/Good CLS too. Homepage and `discover-santiago-city-tour.php` should remain at their prior baselines (0.0003 and 0.0037–0.0221) — no regression.
+Expected: `contact-us.php` drops from the 0.1878–0.1882 baseline into "Good" range (≤0.1, ideally near-zero). `privacy.php`, `refunds-cancellations.php`, `gallery.php`, and `blog.php` (also using `content.css`) should show low/Good CLS too. Homepage and `discover-santiago-city-tour.php` should remain at their prior baselines (0.0003 and 0.0037–0.0221) — no regression.
 
 - [ ] **Step 5: Report the before/after numbers to the user**
 
