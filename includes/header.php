@@ -35,10 +35,10 @@
          <img alt="City tours" class="logo_normal" height="47" width="132" src="/img/logolargo.png"/>
         </picture>
        </a>
-       <a href="/" aria-label="Stamps Tour">
+       <a href="/" aria-label="Stamp's Tour">
         <picture>
          <source srcset="/img/logo_sticky.webp" type="image/webp">
-         <img alt="Stamps Tour" class="logo_sticky" height="34" width="147" src="/img/logo_sticky.png"/>
+         <img alt="Stamp's Tour" class="logo_sticky" height="34" width="147" src="/img/logo_sticky.png"/>
         </picture>
        </a>
       </div>

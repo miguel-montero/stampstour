@@ -42,9 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Stamps tour - Premium Tour agency based in Chile">
+    <meta name="description" content="Stamp's tour - Premium Tour agency based in Chile">
     <meta name="author" content="Miguel">
-    <title>Stamps Tour - Log In</title>
+    <title>Stamp's Tour - Log In</title>
 
     <!-- Favicons-->
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        <a href="/">
         <img alt="City tours" class="logo_normal" height="47" width="132" src="img/logolargo.png"/>
        </a>
-       <a href="/" aria-label="Stamps Tour">
+       <a href="/" aria-label="Stamp's Tour">
         <img alt="City tours" class="logo_sticky" height="34" width="147" src="img/logo_sticky.png"/>
        </a>
       </div>
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </a>
       <div class="main-menu">
        <div id="header_menu">
-        <img alt="StampsTour" height="34" src="img/logo_sticky.png" width="160"/>
+        <img alt="Stamp's Tour" height="34" src="img/logo_sticky.png" width="160"/>
        </div>
        <a class="open_close" href="#" id="close_in" aria-label="Close menu">
         <i class="icon_set_1_icon-77" aria-hidden="true">
@@ -248,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <li><a href="https://api.whatsapp.com/send?phone=56923993146" aria-label="WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a></li>
                             <li><a href="https://www.facebook.com/stampstour" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a></li>
                         </ul>
-                        <p>© Stampstour 2025</p>
+                        <p>© Stamp's Tour 2025</p>
                     </div>
                 </div>
             </div><!-- End row -->

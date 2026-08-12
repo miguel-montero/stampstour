@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var img = document.createElement('img');
     img.src = '/' + photo.thumb;
     img.loading = 'lazy';
-    img.alt = 'Stamps Tour gallery photo';
+    img.alt = "Stamp's Tour gallery photo";
     link.appendChild(img);
     item.appendChild(link);
 

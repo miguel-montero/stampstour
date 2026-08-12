@@ -28,8 +28,8 @@ foreach ($photos as $photo) {
 $allTags = array_keys($allTags);
 sort($allTags);
 
-$page_title       = 'Gallery | Stamps Tour';
-$page_description = 'Candid photos from Stamps Tour guides across our Santiago, Valparaíso, Maipo Valley, Andes, and cruise transfer tours.';
+$page_title       = 'Gallery | Stamp\'s Tour';
+$page_description = 'Candid photos from Stamp\'s Tour guides across our Santiago, Valparaíso, Maipo Valley, Andes, and cruise transfer tours.';
 $page_canonical   = 'https://stampstour.com/gallery.php';
 $critical_css_file = __DIR__ . '/includes/critical/content.css';
 $vendor_css_variant = 'core';
@@ -87,7 +87,7 @@ $lcp_preload_image = 'img/Tours/Stgo/big.webp';
           <?php foreach (array_slice($photosForJs, 0, 16) as $photo): ?>
             <div class="gallery-item" data-tags="<?= htmlspecialchars(implode('|', $photo['tags']), ENT_QUOTES, 'UTF-8') ?>">
               <a href="/<?= htmlspecialchars($photo['large'], ENT_QUOTES, 'UTF-8') ?>" data-lightbox="gallery" class="gallery-item-link"<?php if ($photo['dateLabel'] !== ''): ?> data-title="Upload date: <?= htmlspecialchars($photo['dateLabel'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>>
-                <img src="/<?= htmlspecialchars($photo['thumb'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" alt="Stamps Tour gallery photo">
+                <img src="/<?= htmlspecialchars($photo['thumb'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" alt="Stamp's Tour gallery photo">
               </a>
               <?php if ($photo['dateLabel'] !== ''): ?>
                 <p class="gallery-item-date">Upload date: <?= htmlspecialchars($photo['dateLabel'], ENT_QUOTES, 'UTF-8') ?></p>

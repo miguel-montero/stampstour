@@ -43,7 +43,7 @@ $page_canonical = 'https://stampstour.com/blog/' . rawurlencode($slug);
 $vendor_css_variant = 'core';
 
 if ($post) {
-    $page_title       = ($post['meta_title'] ?: $post['title']) . ' | Stamps Tour';
+    $page_title       = ($post['meta_title'] ?: $post['title']) . ' | Stamp\'s Tour';
     $page_description = $post['meta_description'] ?: $post['excerpt'];
     $page_og = [
         'title'       => $post['title'],
@@ -54,7 +54,7 @@ if ($post) {
         $page_og['image'] = 'https://stampstour.com/' . ltrim($post['featured_image'], '/');
     }
 } else {
-    $page_title       = 'Post Not Found | Stamps Tour';
+    $page_title       = 'Post Not Found | Stamp\'s Tour';
     $page_description = 'This blog post could not be found.';
 }
 ?>
