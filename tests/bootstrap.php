@@ -39,3 +39,4 @@ $GLOBALS['conn'] = $conn;
 
 require_once __DIR__ . '/../includes/reconcile_getnet.php';
 require_once __DIR__ . '/../includes/reprocess_paypal_events.php';
+require_once __DIR__ . '/../includes/hotel_resolver.php';

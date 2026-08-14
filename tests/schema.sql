@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   `id_cupon` int(11) DEFAULT NULL,
   `id_titular` int(11) NOT NULL,
   `id_hotel` int(11) DEFAULT NULL,
+  `hotel_manual` varchar(255) DEFAULT NULL,
   `id_guia` int(11) DEFAULT NULL,
   `id_conductor` int(11) DEFAULT NULL,
   `id_vendedor` int(11) DEFAULT NULL,
