@@ -112,6 +112,38 @@ if (!empty($_POST['codigo_vendedor'])) {
     }
 }
 
+// 3c) Resolver id_hotel: puede venir como <select> numérico (booking_manual.php)
+//     o como texto/hotelOption/customHotel (admin/preferentials.php, mismo patrón que return.php)
+$id_hotel = null;
+if (!empty($_POST['id_hotel']) && ctype_digit((string)$_POST['id_hotel'])) {
+    $id_hotel = (int)$_POST['id_hotel'];
+} else {
+    $hotelOption = $_POST['hotelOption'] ?? '';
+    $nombreHotel = '';
+    if ($hotelOption === 'not_listed') {
+        $nombreHotel = trim($_POST['customHotel'] ?? '');
+    } elseif ($hotelOption !== 'decide_later') {
+        $nombreHotel = trim($_POST['hotel'] ?? '');
+    }
+    if ($nombreHotel !== '') {
+        $stmt = $conn->prepare("SELECT id_hotel FROM hoteles WHERE nombre_hotel = ? LIMIT 1");
+        $stmt->bind_param("s", $nombreHotel);
+        $stmt->execute();
+        $stmt->bind_result($foundHotelId);
+        if ($stmt->fetch()) {
+            $id_hotel = (int)$foundHotelId;
+        }
+        $stmt->close();
+        if (!$id_hotel) {
+            $stmt = $conn->prepare("INSERT INTO hoteles (nombre_hotel) VALUES (?)");
+            $stmt->bind_param("s", $nombreHotel);
+            $stmt->execute();
+            $id_hotel = $stmt->insert_id;
+            $stmt->close();
+        }
+    }
+}
+
 // 4) Generar reference_id (antes del INSERT: reference_id es NOT NULL sin default,
 //    así que debe viajar en el propio INSERT en vez de depender de un UPDATE posterior)
 $stampCode = 'STAMP_' . substr(md5(uniqid((string)mt_rand(), true)), 0, 13);
@@ -131,18 +163,19 @@ $stmt = $conn->prepare("
         id_vendedor,
         id_experiencia,
         subtotal,
-        total_venta
+        total_venta,
+        id_hotel
     ) VALUES (
-        ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )
 ");
 if (!$stmt) {
     die("Error preparando inserción de reserva: " . $conn->error);
 }
 
-// 2 strings, 8 integers, 2 doubles = 12 parámetros
+// 2 strings, 9 integers, 2 doubles = 13 parámetros
 $stmt->bind_param(
-    "ssiiiiiiiidd",
+    "ssiiiiiiiiddi",
     $stampCode,       // s: reference_id
     $fecha,           // s: fecha actividad (YYYY-MM-DD)
     $adultos,         // i
@@ -154,7 +187,8 @@ $stmt->bind_param(
     $id_vendedor,     // i (puede ser null; ya con override si aplica)
     $id_experiencia,  // i
     $subtotal,        // d
-    $total            // d
+    $total,           // d
+    $id_hotel         // i (puede ser null)
 );
 
 if ($stmt->execute()) {

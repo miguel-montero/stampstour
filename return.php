@@ -28,8 +28,31 @@ function arr_get($arr, $path, $default = null) {
 if (isset($_GET['action']) && $_GET['action'] === 'updateHotel' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $res_id = (int)($_POST['id_reserva'] ?? 0);
 
-    // Si eligió "not_listed" o "decide_later", limpiamos el hotel
-    if (!empty($_POST['hotelOption']) && in_array($_POST['hotelOption'], ['not_listed','decide_later'], true)) {
+    // Si escribió su propio hotel ("not on this list"), lo guardamos (creando el registro
+    // en hoteles si hace falta) en vez de descartarlo
+    if (!empty($_POST['hotelOption']) && $_POST['hotelOption'] === 'not_listed' && !empty(trim($_POST['customHotel'] ?? ''))) {
+        $nombre = trim($_POST['customHotel']);
+        $stmt = $conn->prepare("SELECT id_hotel FROM hoteles WHERE nombre_hotel = ? LIMIT 1");
+        $stmt->bind_param("s", $nombre);
+        $stmt->execute();
+        $h = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        if ($h) {
+            $id_hotel = (int)$h['id_hotel'];
+        } else {
+            $ins = $conn->prepare("INSERT INTO hoteles (nombre_hotel) VALUES (?)");
+            $ins->bind_param("s", $nombre);
+            $ins->execute();
+            $id_hotel = $ins->insert_id;
+            $ins->close();
+        }
+        $upd = $conn->prepare("UPDATE reservas SET id_hotel = ? WHERE id_reserva = ?");
+        $upd->bind_param("ii", $id_hotel, $res_id);
+        $upd->execute();
+        $upd->close();
+    }
+    // "decide_later", o "not_listed" sin texto: el cliente eligió explícitamente no indicar hotel
+    elseif (!empty($_POST['hotelOption']) && in_array($_POST['hotelOption'], ['not_listed','decide_later'], true)) {
         $stmt = $conn->prepare("UPDATE reservas SET id_hotel = NULL WHERE id_reserva = ?");
         $stmt->bind_param("i", $res_id);
         $stmt->execute();
