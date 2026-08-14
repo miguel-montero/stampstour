@@ -26,7 +26,7 @@ $sql = "
     r.adultos AS adultos,
     r.ninos AS ninos,
     r.infantes AS infantes,
-    h.nombre_hotel AS hotel,
+    COALESCE(h.nombre_hotel, r.hotel_manual) AS hotel,
     h.direccion AS direccion,
     h.comuna AS comuna,
     t.email AS email,

@@ -24,7 +24,7 @@ $sql = "
     r.ninos,
     r.infantes,
     CASE WHEN r.airport_pickup = 1 THEN 'Sí' ELSE 'No' END AS airport_pickup,
-    h.nombre_hotel AS hotel,
+    COALESCE(h.nombre_hotel, r.hotel_manual) AS hotel,
     t.email AS correo_electronico,
     t.telefono AS telefono,
     r.total_venta AS total_pagado,
