@@ -626,6 +626,8 @@ function build_web_hotel_text(array $row): string {
         if ($v !== '' && !in_array($v, $parts, true)) $parts[] = $v;
     }
     if (!empty($parts)) return implode(', ', $parts);
+    $manual = trim((string)($row['hotel_manual'] ?? ''));
+    if ($manual !== '') return $manual;
     if ((int)($row['airport_pickup'] ?? 0) === 1) return 'SCL Airport pickup';
     return '';
 }
@@ -643,7 +645,8 @@ function fetch_web_reservations_for_dates(mysqli $conn, array $mysqlDates, array
             e.nombre AS experiencia_nombre, e.nombre_publico AS experiencia_nombre_publico,
             t.nombre AS titular_nombre, t.apellido AS titular_apellido,
             t.area_code AS titular_area_code, t.telefono AS titular_telefono, t.email AS titular_email,
-            h.nombre_hotel, h.direccion, h.comuna
+            h.nombre_hotel, h.direccion, h.comuna,
+            r.hotel_manual
         FROM reservas r
         LEFT JOIN experiencias e ON e.id_experiencia = r.id_experiencia
         LEFT JOIN titulares t ON t.id_titular = r.id_titular

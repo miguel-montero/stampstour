@@ -894,6 +894,8 @@ function build_web_hotel_text(array $row): string {
         if ($v !== '' && !in_array($v, $parts, true)) $parts[] = $v;
     }
     if (!empty($parts)) return implode(', ', $parts);
+    $manual = trim((string)($row['hotel_manual'] ?? ''));
+    if ($manual !== '') return $manual;
     if ((int)($row['airport_pickup'] ?? 0) === 1) return 'SCL Airport pickup';
     return '';
 }
@@ -919,6 +921,7 @@ function fetch_web_reservations_for_date(mysqli $conn, string $mysqlDate, array 
             r.estado,
             r.total_venta,
             r.id_hotel,
+            r.hotel_manual,
             r.id_titular,
             r.id_cupon,
             r.id_vendedor,

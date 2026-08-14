@@ -908,6 +908,11 @@ function buildWebHotelText(array $row): string
         return implode(', ', $parts);
     }
 
+    $manual = clean($row['hotel_manual'] ?? '');
+    if ($manual !== '') {
+        return $manual;
+    }
+
     if ((int)($row['airport_pickup'] ?? 0) === 1) {
         return 'SCL Airport pickup';
     }
@@ -938,6 +943,7 @@ function fetchWebReservationsForDate(mysqli $conn, string $mysqlDate, array &$we
             r.estado,
             r.total_venta,
             r.id_hotel,
+            r.hotel_manual,
             r.id_titular,
             r.pais_origen,
             r.idioma_actividad,
