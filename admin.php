@@ -583,6 +583,12 @@ if (!isset($_SESSION['username'])) {
 		});
 	</script>
 	<script>
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
   $(function(){
     const groups = {
       date: ['#group-date','#group-end-date','#btn-search-date'],
@@ -640,20 +646,20 @@ if (!isset($_SESSION['username'])) {
       data.forEach(r => {
         const listHtml = `
           <ul class="list-group mb-4">
-            <li class="list-group-item" style="background-color:#000; color:#fff;"><strong>Titular:</strong> ${r.nombre_titular}</li>
-            <li class="list-group-item"><strong>Experiencia:</strong> ${r.experiencia}</li>
-            <li class="list-group-item"><strong>Fecha Reserva:</strong> ${r.fecha_reserva}</li>
-            <li class="list-group-item"><strong>Fecha Actividad:</strong> ${r.fecha_actividad}</li>
-            <li class="list-group-item"><strong>Adultos:</strong> ${r.adultos}</li>
-            <li class="list-group-item"><strong>Niños:</strong> ${r.ninos}</li>
-            <li class="list-group-item"><strong>Infantes:</strong> ${r.infantes}</li>
-            <li class="list-group-item"><strong>Pickup Aeropuerto:</strong> ${r.airport_pickup}</li>
-            <li class="list-group-item"><strong>Hotel:</strong> ${r.hotel}</li>
-            <li class="list-group-item"><strong>Email:</strong> ${r.correo_electronico}</li>
-            <li class="list-group-item"><strong>Teléfono:</strong> ${r.telefono}</li>
-            <li class="list-group-item"><strong>Total Pagado:</strong> $${r.total_pagado}</li>
-            <li class="list-group-item"><strong>Vendedor:</strong> ${r.nombre_vendedor}</li>
-            ${r.codigo_externo ? `<li class="list-group-item"><strong>Código:</strong> ${r.codigo_externo}</li>` : ''}
+            <li class="list-group-item" style="background-color:#000; color:#fff;"><strong>Titular:</strong> ${escapeHtml(r.nombre_titular)}</li>
+            <li class="list-group-item"><strong>Experiencia:</strong> ${escapeHtml(r.experiencia)}</li>
+            <li class="list-group-item"><strong>Fecha Reserva:</strong> ${escapeHtml(r.fecha_reserva)}</li>
+            <li class="list-group-item"><strong>Fecha Actividad:</strong> ${escapeHtml(r.fecha_actividad)}</li>
+            <li class="list-group-item"><strong>Adultos:</strong> ${escapeHtml(r.adultos)}</li>
+            <li class="list-group-item"><strong>Niños:</strong> ${escapeHtml(r.ninos)}</li>
+            <li class="list-group-item"><strong>Infantes:</strong> ${escapeHtml(r.infantes)}</li>
+            <li class="list-group-item"><strong>Pickup Aeropuerto:</strong> ${escapeHtml(r.airport_pickup)}</li>
+            <li class="list-group-item"><strong>Hotel:</strong> ${escapeHtml(r.hotel)}</li>
+            <li class="list-group-item"><strong>Email:</strong> ${escapeHtml(r.correo_electronico)}</li>
+            <li class="list-group-item"><strong>Teléfono:</strong> ${escapeHtml(r.telefono)}</li>
+            <li class="list-group-item"><strong>Total Pagado:</strong> $${escapeHtml(r.total_pagado)}</li>
+            <li class="list-group-item"><strong>Vendedor:</strong> ${escapeHtml(r.nombre_vendedor)}</li>
+            ${r.codigo_externo ? `<li class="list-group-item"><strong>Código:</strong> ${escapeHtml(r.codigo_externo)}</li>` : ''}
           </ul>`;
         $c.append(`<div class="col-12">${listHtml}</div>`);
       });
@@ -663,20 +669,20 @@ if (!isset($_SESSION['username'])) {
       const $c = $('#search-results').empty();
       const listHtml = `
         <ul class="list-group mb-4">
-          <li class="list-group-item" style="background-color:#000; color:#fff;"><strong>Titular:</strong> ${r.nombre_titular}</li>
-          <li class="list-group-item"><strong>Experiencia:</strong> ${r.experiencia}</li>
-          <li class="list-group-item"><strong>Fecha Reserva:</strong> ${r.fecha_reserva}</li>
-          <li class="list-group-item"><strong>Fecha Actividad:</strong> ${r.fecha_actividad}</li>
-          <li class="list-group-item"><strong>Adultos:</strong> ${r.adultos}</li>
-          <li class="list-group-item"><strong>Niños:</strong> ${r.ninos}</li>
-          <li class="list-group-item"><strong>Infantes:</strong> ${r.infantes}</li>
-          <li class="list-group-item"><strong>Pickup Aeropuerto:</strong> ${r.airport_pickup}</li>
-          <li class="list-group-item"><strong>Hotel:</strong> ${r.hotel}</li>
-          <li class="list-group-item"><strong>Email:</strong> ${r.correo_electronico}</li>
-          <li class="list-group-item"><strong>Teléfono:</strong> ${r.telefono}</li>
-          <li class="list-group-item"><strong>Total Pagado:</strong> $${r.total_pagado}</li>
-          <li class="list-group-item"><strong>Vendedor:</strong> ${r.nombre_vendedor}</li>
-          ${r.codigo_externo ? `<li class="list-group-item"><strong>Código:</strong> ${r.codigo_externo}</li>` : ''}
+          <li class="list-group-item" style="background-color:#000; color:#fff;"><strong>Titular:</strong> ${escapeHtml(r.nombre_titular)}</li>
+          <li class="list-group-item"><strong>Experiencia:</strong> ${escapeHtml(r.experiencia)}</li>
+          <li class="list-group-item"><strong>Fecha Reserva:</strong> ${escapeHtml(r.fecha_reserva)}</li>
+          <li class="list-group-item"><strong>Fecha Actividad:</strong> ${escapeHtml(r.fecha_actividad)}</li>
+          <li class="list-group-item"><strong>Adultos:</strong> ${escapeHtml(r.adultos)}</li>
+          <li class="list-group-item"><strong>Niños:</strong> ${escapeHtml(r.ninos)}</li>
+          <li class="list-group-item"><strong>Infantes:</strong> ${escapeHtml(r.infantes)}</li>
+          <li class="list-group-item"><strong>Pickup Aeropuerto:</strong> ${escapeHtml(r.airport_pickup)}</li>
+          <li class="list-group-item"><strong>Hotel:</strong> ${escapeHtml(r.hotel)}</li>
+          <li class="list-group-item"><strong>Email:</strong> ${escapeHtml(r.correo_electronico)}</li>
+          <li class="list-group-item"><strong>Teléfono:</strong> ${escapeHtml(r.telefono)}</li>
+          <li class="list-group-item"><strong>Total Pagado:</strong> $${escapeHtml(r.total_pagado)}</li>
+          <li class="list-group-item"><strong>Vendedor:</strong> ${escapeHtml(r.nombre_vendedor)}</li>
+          ${r.codigo_externo ? `<li class="list-group-item"><strong>Código:</strong> ${escapeHtml(r.codigo_externo)}</li>` : ''}
         </ul>`;
       $c.append(`<div class="col-12">${listHtml}</div>`);
     }

@@ -10,13 +10,24 @@
 function resolve_hotel_selection(mysqli $conn, array $post): array
 {
     if (!empty($post['id_hotel']) && ctype_digit((string)$post['id_hotel'])) {
-        return [(int)$post['id_hotel'], null];
+        $idHotel = (int)$post['id_hotel'];
+        $checkStmt = $conn->prepare("SELECT 1 FROM hoteles WHERE id_hotel = ? LIMIT 1");
+        $checkStmt->bind_param("i", $idHotel);
+        $checkStmt->execute();
+        $checkStmt->store_result();
+        $idHotelExists = $checkStmt->num_rows > 0;
+        $checkStmt->close();
+
+        if ($idHotelExists) {
+            return [$idHotel, null];
+        }
     }
 
     $hotelOption = $post['hotelOption'] ?? '';
 
     if ($hotelOption === 'not_listed') {
-        $texto = trim($post['customHotel'] ?? '');
+        $texto = is_string($post['customHotel'] ?? null) ? trim($post['customHotel']) : '';
+        $texto = mb_substr($texto, 0, 255);
         return $texto !== '' ? [null, $texto] : [null, null];
     }
 
@@ -24,7 +35,8 @@ function resolve_hotel_selection(mysqli $conn, array $post): array
         return [null, null];
     }
 
-    $nombre = trim($post['hotel'] ?? '');
+    $nombre = is_string($post['hotel'] ?? null) ? trim($post['hotel']) : '';
+    $nombre = mb_substr($nombre, 0, 255);
     if ($nombre === '') {
         return [null, null];
     }

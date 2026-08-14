@@ -170,7 +170,7 @@ try {
                 <!-- Hotel selector -->
                 <div class="form-group">
                   <label for="hotel">Hotel (pickup)</label>
-                  <input type="text" id="hotel" name="hotel" class="form-control" placeholder="Start typing to search…">
+                  <input type="text" id="hotel" name="hotel" class="form-control" maxlength="255" placeholder="Start typing to search…">
                 </div>
                 <div class="form-group">
                   <div class="custom-control custom-radio">
@@ -178,7 +178,7 @@ try {
                     <label class="custom-control-label" for="notListed">My hotel is not listed</label>
                   </div>
                   <div id="customHotelWrapper" class="mt-2" style="display:none;">
-                    <input type="text" id="customHotel" name="customHotel" class="form-control" placeholder="Enter hotel name or address…">
+                    <input type="text" id="customHotel" name="customHotel" class="form-control" maxlength="255" placeholder="Enter hotel name or address…">
                   </div>
                 </div>
                 <div class="form-group">

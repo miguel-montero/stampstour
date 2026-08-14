@@ -31,12 +31,24 @@ if (isset($_GET['action']) && $_GET['action'] === 'updateHotel' && $_SERVER['REQ
 
     [$id_hotel, $hotel_manual] = resolve_hotel_selection($conn, $_POST);
 
+    header('Content-Type: application/json');
+
     $upd = $conn->prepare("UPDATE reservas SET id_hotel = ?, hotel_manual = ? WHERE id_reserva = ?");
+    if ($upd === false) {
+        http_response_code(500);
+        echo json_encode(['success' => false]);
+        exit;
+    }
     $upd->bind_param("isi", $id_hotel, $hotel_manual, $res_id);
-    $upd->execute();
+    $ok = $upd->execute();
     $upd->close();
 
-    header('Content-Type: application/json');
+    if (!$ok) {
+        http_response_code(500);
+        echo json_encode(['success' => false]);
+        exit;
+    }
+
     echo json_encode(['success' => true]);
     exit;
 }
@@ -334,7 +346,7 @@ $_SESSION['last_status'][$reference] = $status;
               <input type="hidden" name="id_reserva" value="<?= $res_id ?>">
               <div class="mb-3">
                 <label for="hotel" class="form-label">Choose your hotel:</label>
-                <input type="text" id="hotel" name="hotel" class="form-control" placeholder="Start typing hotel name...">
+                <input type="text" id="hotel" name="hotel" class="form-control" maxlength="255" placeholder="Start typing hotel name...">
               </div>
               <div class="d-flex align-items-center mb-3">
                 <div class="form-check me-2">
@@ -342,7 +354,7 @@ $_SESSION['last_status'][$reference] = $status;
                   <label class="form-check-label" for="notListed">My hotel is not on this list</label>
                 </div>
                 <div id="customHotelWrapper" style="display:none; flex-grow:1;">
-                  <input type="text" id="customHotel" name="customHotel" class="form-control"
+                  <input type="text" id="customHotel" name="customHotel" class="form-control" maxlength="255"
                          placeholder="enter address or hotel name..." style="color:#999;">
                 </div>
               </div>

@@ -92,6 +92,14 @@ final class HotelResolverTest extends TestCase
         $this->assertSame($before, $this->hotelesCount(), 'must not insert into hoteles');
     }
 
+    public function testAutocompleteTextIsExactMatchNotFuzzyMatch(): void
+    {
+        $this->insertTestHotel('TEST_Aji Hostel Clone');
+        [$id_hotel, $hotel_manual] = resolve_hotel_selection($this->conn, ['hotel' => 'TEST_Aji']);
+        $this->assertNull($id_hotel);
+        $this->assertSame('TEST_Aji', $hotel_manual);
+    }
+
     public function testNoHotelFieldsAtAllResolvesToNothing(): void
     {
         [$id_hotel, $hotel_manual] = resolve_hotel_selection($this->conn, []);
