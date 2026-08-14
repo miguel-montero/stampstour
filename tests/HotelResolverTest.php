@@ -98,4 +98,17 @@ final class HotelResolverTest extends TestCase
         $this->assertNull($id_hotel);
         $this->assertNull($hotel_manual);
     }
+
+    public function testSubmitAndReturnNeverInsertIntoHoteles(): void
+    {
+        foreach (['submit.php', 'return.php'] as $file) {
+            $source = file_get_contents(__DIR__ . '/../' . $file);
+            $this->assertNotFalse($source);
+            $this->assertStringNotContainsStringIgnoringCase(
+                'INSERT INTO hoteles',
+                $source,
+                "$file must never insert into the hoteles catalog table"
+            );
+        }
+    }
 }

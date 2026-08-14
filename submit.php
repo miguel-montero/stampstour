@@ -3,6 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require __DIR__ . '/../db_config.php';
+require_once __DIR__ . '/includes/hotel_resolver.php';
 
 if (!$conn) {
     die("No hay conexión con la base de datos.");
@@ -112,37 +113,8 @@ if (!empty($_POST['codigo_vendedor'])) {
     }
 }
 
-// 3c) Resolver id_hotel: puede venir como <select> numérico (booking_manual.php)
-//     o como texto/hotelOption/customHotel (admin/preferentials.php, mismo patrón que return.php)
-$id_hotel = null;
-if (!empty($_POST['id_hotel']) && ctype_digit((string)$_POST['id_hotel'])) {
-    $id_hotel = (int)$_POST['id_hotel'];
-} else {
-    $hotelOption = $_POST['hotelOption'] ?? '';
-    $nombreHotel = '';
-    if ($hotelOption === 'not_listed') {
-        $nombreHotel = trim($_POST['customHotel'] ?? '');
-    } elseif ($hotelOption !== 'decide_later') {
-        $nombreHotel = trim($_POST['hotel'] ?? '');
-    }
-    if ($nombreHotel !== '') {
-        $stmt = $conn->prepare("SELECT id_hotel FROM hoteles WHERE nombre_hotel = ? LIMIT 1");
-        $stmt->bind_param("s", $nombreHotel);
-        $stmt->execute();
-        $stmt->bind_result($foundHotelId);
-        if ($stmt->fetch()) {
-            $id_hotel = (int)$foundHotelId;
-        }
-        $stmt->close();
-        if (!$id_hotel) {
-            $stmt = $conn->prepare("INSERT INTO hoteles (nombre_hotel) VALUES (?)");
-            $stmt->bind_param("s", $nombreHotel);
-            $stmt->execute();
-            $id_hotel = $stmt->insert_id;
-            $stmt->close();
-        }
-    }
-}
+// 3c) Resolver hotel: id_hotel (catálogo, solo lectura) o hotel_manual (texto libre)
+[$id_hotel, $hotel_manual] = resolve_hotel_selection($conn, $_POST);
 
 // 4) Generar reference_id (antes del INSERT: reference_id es NOT NULL sin default,
 //    así que debe viajar en el propio INSERT en vez de depender de un UPDATE posterior)
@@ -164,18 +136,19 @@ $stmt = $conn->prepare("
         id_experiencia,
         subtotal,
         total_venta,
-        id_hotel
+        id_hotel,
+        hotel_manual
     ) VALUES (
-        ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )
 ");
 if (!$stmt) {
     die("Error preparando inserción de reserva: " . $conn->error);
 }
 
-// 2 strings, 9 integers, 2 doubles = 13 parámetros
+// 2 strings, 9 integers, 2 doubles, 1 string = 14 parámetros
 $stmt->bind_param(
-    "ssiiiiiiiiddi",
+    "ssiiiiiiiiddis",
     $stampCode,       // s: reference_id
     $fecha,           // s: fecha actividad (YYYY-MM-DD)
     $adultos,         // i
@@ -188,7 +161,8 @@ $stmt->bind_param(
     $id_experiencia,  // i
     $subtotal,        // d
     $total,           // d
-    $id_hotel         // i (puede ser null)
+    $id_hotel,        // i (puede ser null)
+    $hotel_manual     // s (puede ser null)
 );
 
 if ($stmt->execute()) {
