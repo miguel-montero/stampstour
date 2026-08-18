@@ -28,6 +28,18 @@
   gap: 1rem 1rem;
 }
 
+/* Thumbnails are generated at 350px wide (gallery-pipeline/lib/image-
+   processing.js). At the 220px min above, a narrow phone viewport collapses
+   to a single column stretched to ~350-400px CSS width, which upscales
+   past the source resolution on 2x/3x screens and looks soft/pixelated.
+   Smaller tiles here keep the displayed size under the source resolution. */
+@media (max-width: 767px) {
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.6rem 0.6rem;
+  }
+}
+
 .gallery-item-link {
   display: block;
   aspect-ratio: 4 / 3;
