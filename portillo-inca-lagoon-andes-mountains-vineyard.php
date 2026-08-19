@@ -6,6 +6,10 @@ $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Andes/big.jpg';
 $lcp_preload_image_mobile = 'img/Tours/Andes/big-mobile.webp';
 $vendor_css_variant = 'tour';
+$exp_name = 'Andes';
+require __DIR__ . '/../db_config.php';
+require __DIR__ . '/includes/tour_price.php';
+$dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +57,7 @@ $vendor_css_variant = 'tour';
          <sup>
           $
          </sup>
-         <span id="dynamic_price"></span>
+         <span id="dynamic_price"><?= $dynamic_price_adult !== null ? htmlspecialchars((string)$dynamic_price_adult, ENT_QUOTES, 'UTF-8') : '' ?></span>
         </span>
        </div>
       </div>
@@ -441,6 +445,6 @@ $vendor_css_variant = 'tour';
   <?php include __DIR__ . '/includes/footer.php'; ?>
   <!-- End footer -->
   <div id="toTop"></div>
-<?php $exp_name = 'Andes'; include __DIR__ . '/includes/tour-scripts.php'; ?>
+<?php include __DIR__ . '/includes/tour-scripts.php'; ?>
   </body>
 </html>

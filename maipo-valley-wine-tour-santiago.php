@@ -5,6 +5,10 @@ $page_canonical   = 'https://stampstour.com/maipo-valley-wine-tour-santiago';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Maipo/big-optimized.webp';
 $vendor_css_variant = 'tour';
+$exp_name = 'Maipo';
+require __DIR__ . '/../db_config.php';
+require __DIR__ . '/includes/tour_price.php';
+$dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +53,7 @@ $vendor_css_variant = 'tour';
       <div class="col-md-4">
        <div id="price_single_main">
         Special offer
-        <span><sup>$</sup><span id="dynamic_price"></span></span>
+        <span><sup>$</sup><span id="dynamic_price"><?= $dynamic_price_adult !== null ? htmlspecialchars((string)$dynamic_price_adult, ENT_QUOTES, 'UTF-8') : '' ?></span></span>
        </div>
       </div>
      </div>
@@ -384,6 +388,6 @@ $vendor_css_variant = 'tour';
   <!-- End footer -->
   <div id="toTop"></div>
   <!-- JavaScript Files -->
-<?php $exp_name = 'Maipo'; include __DIR__ . '/includes/tour-scripts.php'; ?>
+<?php include __DIR__ . '/includes/tour-scripts.php'; ?>
   </body>
 </html>
