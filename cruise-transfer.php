@@ -21,6 +21,15 @@ while ($row = $res->fetch_assoc()) {
   ];
 }
 $stmt->close();
+
+require __DIR__ . '/includes/tour_faq.php';
+$tour_faqs = [
+    ['q' => 'Can I combine my cruise transfer with sightseeing?', 'a' => 'Yes - every transfer between Santiago and the port includes a stop in Valparaíso and a wine tasting in the Casablanca Valley, so you see the region instead of just sitting in traffic.'],
+    ['q' => 'What pickup and drop-off points are available?', 'a' => 'Pickup from the San Antonio or Valparaíso cruise terminals, a Santiago hotel, or Santiago Airport (SCL); drop-off works the same way in reverse, with typical arrival around 2:00-2:30 PM at the passenger terminal or 5:00 PM in Santiago.'],
+    ['q' => 'Will my luggage fit?', 'a' => 'Yes - luggage travels in the same van as passengers, and a standard suitcase plus a carry-on per person fits comfortably.'],
+    ['q' => 'Is lunch included?', 'a' => 'No - meals and personal expenses are not included, only the wine tasting stop in Casablanca.'],
+    ['q' => "What's the cancellation policy?", 'a' => "Full refund for cancellations made at least 24 hours before the transfer's start time; no-shows are non-refundable."],
+];
 ?>
 <?php
 $page_title       = 'Cruise Transfer to Santiago with Valparaíso & Wine Tasting';
@@ -241,6 +250,8 @@ $lcp_preload_image_mobile = 'img/Tours/Cruise/big-mobile.webp';
                 </ul>
               </div>
             </div>
+
+            <?php render_tour_faq($tour_faqs); ?>
           </div>
         </section>
 
