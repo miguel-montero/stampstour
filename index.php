@@ -12,6 +12,12 @@ $critical_css_file = __DIR__ . '/includes/critical/home.css';
 $lcp_preload_image = 'img/Tours/portada.webp';
 $lcp_preload_image_mobile = 'img/Tours/portada-mobile-hero.webp';
 $vendor_css_variant = 'home';
+require __DIR__ . '/../db_config.php';
+require __DIR__ . '/includes/tour_price.php';
+$price_valparaiso = fetch_tour_adult_price($conn, 'Valparaiso');
+$price_maipo       = fetch_tour_adult_price($conn, 'Maipo');
+$price_andes       = fetch_tour_adult_price($conn, 'Andes');
+$price_santiago     = fetch_tour_adult_price($conn, 'Santiago');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,7 +123,7 @@ $vendor_css_variant = 'home';
                                 <div class="short_info">
                                     <i class="icon_set_1_icon-28"></i>
                                     <span class="price">
-                                        <sup>$</sup>79
+                                        <sup>$</sup><?= $price_valparaiso !== null ? htmlspecialchars((string)$price_valparaiso, ENT_QUOTES, 'UTF-8') : '' ?>
                                         <span class="normal_price_list">$99</span>
                                     </span>
                                 </div>
@@ -156,7 +162,7 @@ $vendor_css_variant = 'home';
                                 <div class="short_info">
                                     <i class="icon_set_1_icon-15"></i>
                                     <span class="price">
-                                        <sup>$</sup>121
+                                        <sup>$</sup><?= $price_maipo !== null ? htmlspecialchars((string)$price_maipo, ENT_QUOTES, 'UTF-8') : '' ?>
                                         <span class="normal_price_list">$135</span>
                                     </span>
                                 </div>
@@ -189,7 +195,7 @@ $vendor_css_variant = 'home';
                                 <div class="short_info">
                                     <i class="icon_set_1_icon-28"></i>
                                     <span class="price">
-                                        <sup>$</sup>79
+                                        <sup>$</sup><?= $price_andes !== null ? htmlspecialchars((string)$price_andes, ENT_QUOTES, 'UTF-8') : '' ?>
                                         <span class="normal_price_list">$99</span>
                                     </span>
                                 </div>
@@ -220,7 +226,7 @@ $vendor_css_variant = 'home';
                                 </div>
                                 <div class="short_info">
                                     <i class="icon_set_1_icon-23"></i>
-                                    <span class="price"><sup>$</sup>59</span>
+                                    <span class="price"><sup>$</sup><?= $price_santiago !== null ? htmlspecialchars((string)$price_santiago, ENT_QUOTES, 'UTF-8') : '' ?></span>
                                 </div>
                             </a>
                         </div>
