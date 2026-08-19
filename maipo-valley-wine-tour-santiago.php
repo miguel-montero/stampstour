@@ -11,7 +11,7 @@ require __DIR__ . '/includes/tour_price.php';
 require __DIR__ . '/includes/tour_faq.php';
 $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
 $tour_faqs = [
-    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four family-run wineries in Isla de Maipo: Campo La Quirinca, Viña Santa Ema, Viña TerraMater, and Viña Undurraga, with wine and pisco tastings at each stop."],
+    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four family-run stops in Isla de Maipo: Campo La Quirinca (wine and pisco tasting), Viña Santa Ema (wine tasting), Viña TerraMater (your lunch stop, at your own cost), and Viña Undurraga (wine tasting plus a wine glass gift). Tastings aren't at every stop - see the itinerary below for the full breakdown."],
     ['q' => 'Is lunch included?', 'a' => "No. You'll stop at the Zinfandel restaurant on the TerraMater estate, but the meal itself is at your own cost."],
     ['q' => 'Where does the tour pick me up?', 'a' => 'Hotel pickup is offered from Las Condes, Vitacura, Providencia, Santiago Centro, Recoleta, and the Airport area; your exact pickup time is sent the night before.'],
     ['q' => 'How many people are on the tour?', 'a' => "Groups are capped at 15 travelers, with a minimum of 4 required to run - if the minimum isn't met, you'll be offered another date or a full refund."],
