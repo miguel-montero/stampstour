@@ -500,6 +500,42 @@ if (!isset($_SESSION['username'])) {
 								</div>
 							</div>
 						</div>
+						<div class="col-md-4 col-sm-6 mb-4">
+							<div class="card h-100 shadow-sm">
+								<div class="card-body">
+									<h5 class="card-title">Gallery Upload</h5>
+									<p class="card-text">Upload and manage tour gallery photos.</p>
+									<a href="/admin/gallery-upload.php" class="btn btn-primary btn-sm">Open</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6 mb-4">
+							<div class="card h-100 shadow-sm">
+								<div class="card-body">
+									<h5 class="card-title">Getnet Reconciliation</h5>
+									<p class="card-text">Reconcile Getnet payment events against reservations.</p>
+									<a href="/admin/getnet-reconcile.php" class="btn btn-primary btn-sm">Open</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6 mb-4">
+							<div class="card h-100 shadow-sm">
+								<div class="card-body">
+									<h5 class="card-title">PayPal Reprocessing</h5>
+									<p class="card-text">Recover stuck PayPal webhook events.</p>
+									<a href="/admin/paypal-reprocess.php" class="btn btn-primary btn-sm">Open</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6 mb-4">
+							<div class="card h-100 shadow-sm">
+								<div class="card-body">
+									<h5 class="card-title">Refund by Reference</h5>
+									<p class="card-text">Look up a reservation by STAMP code and issue a PayPal refund.</p>
+									<a href="/admin/refund-by-reference.php" class="btn btn-primary btn-sm">Open</a>
+								</div>
+							</div>
+						</div>
 					</div>
 					</section>
 					<!-- End section 5 -->
