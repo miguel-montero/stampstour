@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 
 header('Content-Type: text/plain; charset=utf-8');
 
+require_once __DIR__ . '/admin/_auth.php';
 require_once __DIR__ . '/../paypal_config.php';
 require_once __DIR__ . '/../db_config.php';
 

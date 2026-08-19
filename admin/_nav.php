@@ -17,6 +17,7 @@ function stamp_admin_nav(string $active = ''): void {
         'gallery' => ['label' => 'Gallery Upload', 'href' => '/admin/gallery-upload.php'],
         'getnet-reconcile' => ['label' => 'Getnet Reconciliation', 'href' => '/admin/getnet-reconcile.php'],
         'paypal-reprocess' => ['label' => 'PayPal Reprocessing', 'href' => '/admin/paypal-reprocess.php'],
+        'refund-by-reference' => ['label' => 'Refund by Reference', 'href' => '/admin/refund-by-reference.php'],
     ];
     $toolsActive = array_key_exists($active, $toolsLinks);
     ?>
