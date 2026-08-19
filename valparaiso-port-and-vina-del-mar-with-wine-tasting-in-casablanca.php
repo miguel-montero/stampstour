@@ -9,7 +9,15 @@ $vendor_css_variant = 'tour';
 $exp_name = 'Valparaiso';
 require __DIR__ . '/../db_config.php';
 require __DIR__ . '/includes/tour_price.php';
+require __DIR__ . '/includes/tour_faq.php';
 $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
+$tour_faqs = [
+    ['q' => "What's included in the Valparaíso tour?", 'a' => "Hotel pickup and drop-off, a professional guide, one funicular ride up Valparaíso's hills, and a wine tasting at a Casablanca Valley winery."],
+    ['q' => 'Is lunch included?', 'a' => 'No - you\'ll have free time for lunch in Valparaíso at your own cost.'],
+    ['q' => 'How big are the groups?', 'a' => 'Departures are limited to 15 travelers, with a minimum of 4 required to run.'],
+    ['q' => 'What will I see in Viña del Mar?', 'a' => "A stop to see sea lions along the coast, plus the city's well-known gardens, before continuing to the Casablanca Valley for wine tasting."],
+    ['q' => "What's the cancellation policy?", 'a' => "Free cancellation up to 24 hours before the tour's start time; cancellations made inside that window aren't refunded."],
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -367,6 +375,7 @@ $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
       <div class="text-center">
        <button id="toggle-btn" class="btn_1" onclick="toggleItinerary()">See more</button>
       </div>
+      <?php render_tour_faq($tour_faqs); ?>
      </div>
 
      <!--End single_tour_desc-->

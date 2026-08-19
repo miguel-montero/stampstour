@@ -8,7 +8,15 @@ $vendor_css_variant = 'tour';
 $exp_name = 'Maipo';
 require __DIR__ . '/../db_config.php';
 require __DIR__ . '/includes/tour_price.php';
+require __DIR__ . '/includes/tour_faq.php';
 $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
+$tour_faqs = [
+    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four family-run wineries in Isla de Maipo: Campo La Quirinca, Viña Santa Ema, Viña TerraMater, and Viña Undurraga, with wine and pisco tastings at each stop."],
+    ['q' => 'Is lunch included?', 'a' => "No. You'll stop at the Zinfandel restaurant on the TerraMater estate, but the meal itself is at your own cost."],
+    ['q' => 'Where does the tour pick me up?', 'a' => 'Hotel pickup is offered from Las Condes, Vitacura, Providencia, Santiago Centro, Recoleta, and the Airport area; your exact pickup time is sent the night before.'],
+    ['q' => 'How many people are on the tour?', 'a' => "Groups are capped at 15 travelers, with a minimum of 4 required to run - if the minimum isn't met, you'll be offered another date or a full refund."],
+    ['q' => "What's the cancellation policy?", 'a' => "Free cancellation up to 24 hours before the tour's start time; cancellations made inside that window aren't refunded."],
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -269,6 +277,7 @@ $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
       <div class="text-center">
        <button id="toggle-btn" class="btn_1" onclick="toggleItinerary()">See more</button>
       </div>
+      <?php render_tour_faq($tour_faqs); ?>
      </div>
      <!--End single_tour_desc-->
      <aside class="col-lg-4" id="sidebar">

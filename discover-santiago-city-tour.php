@@ -9,7 +9,15 @@ $vendor_css_variant = 'tour';
 $exp_name = 'Santiago';
 require __DIR__ . '/../db_config.php';
 require __DIR__ . '/includes/tour_price.php';
+require __DIR__ . '/includes/tour_faq.php';
 $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
+$tour_faqs = [
+    ['q' => 'How long is the Santiago city tour?', 'a' => "It's a 5-hour half-day tour, so you'll still have the rest of the day free."],
+    ['q' => 'What landmarks does the tour visit?', 'a' => 'Parque Bicentenario, Bellavista, the Central Market, Plaza de Armas, the Metropolitan Cathedral, the former Congress building, La Moneda Palace, Parque Forestal, and Cerro Santa Lucía.'],
+    ['q' => 'Is food included?', 'a' => 'A local snack is included; lunch is not, since the tour runs half a day.'],
+    ['q' => 'Is there a minimum group size?', 'a' => 'Yes - a minimum of 4 travelers is required to run the tour, and groups are capped at 15.'],
+    ['q' => "What's the cancellation policy?", 'a' => "Free cancellation up to 24 hours before the tour's start time; cancellations made inside that window aren't refunded."],
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -391,6 +399,7 @@ $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
       <div class="text-center">
        <button id="toggle-btn" class="btn_1" onclick="toggleItinerary()">See more</button>
       </div>
+      <?php render_tour_faq($tour_faqs); ?>
      </div>
 
      <!--End single_tour_desc-->

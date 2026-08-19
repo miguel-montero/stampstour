@@ -9,7 +9,15 @@ $vendor_css_variant = 'tour';
 $exp_name = 'Andes';
 require __DIR__ . '/../db_config.php';
 require __DIR__ . '/includes/tour_price.php';
+require __DIR__ . '/includes/tour_faq.php';
 $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
+$tour_faqs = [
+    ['q' => 'How high up does the Andes tour go?', 'a' => 'The route climbs the switchback road Los Caracoles to about 3,000 meters, reaching Hotel Portillo and the turquoise Inca Lagoon.'],
+    ['q' => 'What should I bring or wear?', 'a' => "Warm layers are recommended even in summer - you're at high altitude near snowcapped peaks, and it's noticeably colder than Santiago."],
+    ['q' => 'Is food included?', 'a' => 'An empanada snack stop is included at Ventisquero Guardia Vieja; lunch at Hotel Portillo is at your own expense.'],
+    ['q' => 'How long is the tour and where does it start?', 'a' => 'It\'s a full 10-hour day tour with hotel pickup in Santiago, from Las Condes, Vitacura, Providencia, Santiago Centro, Recoleta, or the Airport area.'],
+    ['q' => "What's the cancellation policy?", 'a' => "Free cancellation up to 24 hours before the tour's start time; cancellations made inside that window aren't refunded."],
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -327,6 +335,7 @@ $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
 <div class="text-center">
        <button id="toggle-btn" class="btn_1" onclick="toggleItinerary()">See more</button>
       </div>
+      <?php render_tour_faq($tour_faqs); ?>
      </div>
      <!--End single_tour_desc-->
      <aside class="col-lg-4" id="sidebar">
