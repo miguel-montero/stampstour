@@ -130,7 +130,7 @@ $tour_faqs = [
       <!-- End Image Gallery -->
       <hr/>
       <div class="row">
-        <h2>Tour Overview & Highlights</h2>
+        <h2>Maipo Wine Tour Overview & Highlights</h2>
        <div class="col-lg-3">
         <h3>Description</h3>
        </div>
