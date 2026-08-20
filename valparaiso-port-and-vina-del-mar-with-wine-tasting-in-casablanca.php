@@ -17,6 +17,7 @@ $tour_faqs = [
     ['q' => 'How big are the groups?', 'a' => 'Departures are limited to 15 travelers, with a minimum of 4 required to run.'],
     ['q' => 'What will I see in Viña del Mar?', 'a' => "A stop to see sea lions along the coast, plus the city's well-known gardens, before continuing to the Casablanca Valley for wine tasting."],
     ['q' => "What's the cancellation policy?", 'a' => "Free cancellation up to 24 hours before the tour's start time; cancellations made inside that window aren't refunded."],
+    ['q' => 'Can I book this directly instead of through Viator or Tripadvisor?', 'a' => "Yes - this is the same tour you may see listed on Viator or Tripadvisor. Booking directly on this page means working straight with the local team that runs it, with no reseller in between."],
 ];
 ?>
 <!DOCTYPE html>

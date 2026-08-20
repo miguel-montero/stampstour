@@ -29,6 +29,9 @@ $tour_faqs = [
     ['q' => 'Will my luggage fit?', 'a' => 'Yes - luggage travels in the same van as passengers, and a standard suitcase plus a carry-on per person fits comfortably.'],
     ['q' => 'Is lunch included?', 'a' => 'No - meals and personal expenses are not included, only the wine tasting stop in Casablanca.'],
     ['q' => "What's the cancellation policy?", 'a' => "Full refund for cancellations made at least 24 hours before the transfer's start time; no-shows are non-refundable."],
+    ['q' => 'Do we stop at the historic funicular in Valparaíso?', 'a' => "Yes - the transfer includes a ride on one of Valparaíso's historic funiculars as part of the included sightseeing stop."],
+    ['q' => "What happens if the funicular isn't running?", 'a' => 'Funiculars occasionally pause for maintenance or weather; if that happens on your transfer day, your guide will adjust the stop accordingly.'],
+    ['q' => 'Is this a private or shared transfer?', 'a' => "It's a small-group service, not a large bus tour. If you're traveling with a child, let us know in advance so we can arrange a child seat."],
 ];
 ?>
 <?php
