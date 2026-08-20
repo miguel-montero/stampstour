@@ -124,7 +124,7 @@ $price_santiago     = fetch_tour_adult_price($conn, 'Santiago');
                                     <i class="icon_set_1_icon-28"></i>
                                     <span class="price">
                                         <sup>$</sup><?= $price_valparaiso !== null ? htmlspecialchars((string)$price_valparaiso, ENT_QUOTES, 'UTF-8') : '' ?>
-                                        <span class="normal_price_list">$99</span>
+                                        <span class="normal_price_list">$89</span>
                                     </span>
                                 </div>
                             </a>
