@@ -11,7 +11,7 @@ require __DIR__ . '/includes/tour_price.php';
 require __DIR__ . '/includes/tour_faq.php';
 $dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
 $tour_faqs = [
-    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four family-run stops in Isla de Maipo: Campo La Quirinca (wine and pisco tasting), Viña Santa Ema (wine tasting), Viña TerraMater (your lunch stop, at your own cost), and Viña Undurraga (wine tasting plus a wine glass gift). Tastings aren't at every stop - see the itinerary below for the full breakdown."],
+    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four family-run stops in Isla de Maipo: Campo La Quirinca (wine and pisco tasting), Viña Santa Ema (wine tasting), Viña TerraMater (your lunch stop, at your own cost), and Viña Undurraga (wine tasting). Tastings aren't at every stop - see the itinerary below for the full breakdown."],
     ['q' => 'Is lunch included?', 'a' => "No. You'll stop at the Zinfandel restaurant on the TerraMater estate, but the meal itself is at your own cost."],
     ['q' => 'Where does the tour pick me up?', 'a' => 'Hotel pickup is offered from Las Condes, Vitacura, Providencia, Santiago Centro, Recoleta, and the Airport area; your exact pickup time is sent the night before.'],
     ['q' => 'How many people are on the tour?', 'a' => "Groups are capped at 15 travelers, with a minimum of 4 required to run - if the minimum isn't met, you'll be offered another date or a full refund."],
@@ -139,7 +139,7 @@ $tour_faqs = [
         <p>Your adventure begins with pickup from your Santiago hotel or private residence in Downtown, Providencia, Las Condes, Vitacura, and Recoleta. If you are not in one of these areas, you will be provided with the nearest pickup point.</p>
         <p>The first stop on your wine tour is the picturesque family farm, Campo La Quirinca, to learn about Chilean winemaking traditions and enjoy wine tastings, accompanied by the famous Chilean pisco.</p>
         <p>Next, visit Vi&ntilde;a Santa Ema, a charming winery offering tastings of three premium wines, including a signature blend. Then it’s on to Vi&ntilde;a TerraMater for lunch at the Zinfandel restaurant (at your own cost).</p>
-        <p>Cap off your wine tour at Vi&ntilde;a Undurraga, one of the oldest and most traditional wineries with 130 years of expertise. Delight in tastings of four premium wines and a comprehensive tour of gardens, vineyards, production facilities, and the wine barrel cellar. Receive a wine glass as a keepsake.</p>
+        <p>Cap off your wine tour at Vi&ntilde;a Undurraga, one of the oldest and most traditional wineries with 130 years of expertise. Delight in tastings of four premium wines and a comprehensive tour of gardens, vineyards, production facilities, and the wine barrel cellar.</p>
         <p>Your experience concludes with a drop-off at your original departure point.</p>
         <h4>What's included</h4>
         <div class="row">
@@ -147,7 +147,6 @@ $tour_faqs = [
           <ul class="list_ok">
            <li>Hotel pickup and drop-off (Pick up time will be delivered the night before the tour)</li>
            <li>Professional and expert tour guide</li>
-           <li>Wine glass Gift</li>
            <li>Pisco Tasting</li>
            <li>Entry/Admission - Campo la Quirinca</li>
            <li>Entry/Admission - Vi&ntilde;a Santa Ema</li>
@@ -260,7 +259,7 @@ $tour_faqs = [
          <div class="cbp_tmicon icon-wine"></div>
          <div class="cbp_tmlabel">
           <h2><span>Isla de Maipo</span> Vi&ntilde;a Undurraga</h2>
-          <p>One of the oldest and most traditional wineries with 130 years of experience. This winery will share the long history of Chilean wine production, giving you a better understanding of why our wines are high quality. You’ll taste 4 premium wines and enjoy a full tour of the gardens, vineyards, production warehouse, wine barrel cellar, and pre-Columbian exhibit. You will also receive a wine glass as a gift.</p>
+          <p>One of the oldest and most traditional wineries with 130 years of experience. This winery will share the long history of Chilean wine production, giving you a better understanding of why our wines are high quality. You’ll taste 4 premium wines and enjoy a full tour of the gardens, vineyards, production warehouse, wine barrel cellar, and pre-Columbian exhibit.</p>
          </div>
         </li>
         <li>
