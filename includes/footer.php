@@ -31,6 +31,8 @@
       <h3>Need help?</h3>
      <a href="https://api.whatsapp.com/send?phone=56923993146" id="phone">+56 9 2399 3146</a>
       <a href="mailto:reservations@stampstour.com" id="email_footer">reservations@stampstour.com</a>
+      <div class="mt-3" id="TA_cdsratingsonlynarrow1"><ul id="TA_narrow_list1" class="TA_links"><li id="TA_narrow_item1"><a target="_blank" href="https://www.tripadvisor.com/Attraction_Review-g294305-d8634627-Reviews-Stamp_s_Tour-Santiago_Santiago_Metropolitan_Region.html"><img src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="Stamp's Tour reviews on Tripadvisor"/></a></li></ul></div>
+      <script async src="https://www.jscache.com/wejs?wtype=cdsratingsonlynarrow&amp;uniq=1&amp;locationId=8634627&amp;lang=en_US&amp;border=true&amp;display_version=2"></script>
      </div>
      <div class="col-md-3">
       <h3>About/Legal</h3>
