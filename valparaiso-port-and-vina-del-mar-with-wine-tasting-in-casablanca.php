@@ -1,5 +1,5 @@
 <?php
-$page_title       = 'Valparaiso Port and Viña del Mar with Casablanca Wine Tasting';
+$page_title       = 'Valparaiso Wine Tour from Santiago with Viña del Mar';
 $page_description = 'Full-day Valparaíso & Viña del Mar tour from Santiago with Casablanca Valley wine tasting. Hotel pickup, small groups, free cancellation.';
 $page_canonical   = 'https://stampstour.com/valparaiso-port-and-vina-del-mar-with-wine-tasting-in-casablanca';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
@@ -63,7 +63,7 @@ $tour_faqs = [
       <div class="col-md-8">
         <!-- save badge -->
         <div class="badge_save">Save<strong>20%</strong></div> 
-       <h1>Valparaíso & Viña del Mar Day Trip from Santiago with Wine Tasting</h1>
+       <h1>Valparaiso Wine Tour from Santiago: Viña del Mar & Casablanca Valley</h1>
       </div>
       <div class="col-md-4">
        <div id="price_single_main">
