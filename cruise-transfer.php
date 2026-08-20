@@ -62,6 +62,16 @@ $lcp_preload_image_mobile = 'img/Tours/Cruise/big-mobile.webp';
   <!-- Header================================================== -->
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
+  <?php
+  require __DIR__ . '/includes/tour_schema.php';
+  render_tour_product_schema([
+      'name' => 'San Antonio & Valparaíso Shore Excursion with Santiago Cruise Transfer',
+      'description' => $page_description,
+      'image' => $lcp_preload_image,
+      'url' => $page_canonical,
+      'price' => $prices['CRUISE.SA_STGO']['adult'] ?? null,
+  ]);
+  ?>
   <!-- End Header -->
 
 <!-- Parallax Hero Section -->

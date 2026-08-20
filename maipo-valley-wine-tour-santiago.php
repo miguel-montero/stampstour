@@ -43,6 +43,16 @@ $tour_faqs = [
   <!-- Header================================================== -->
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
+  <?php
+  require __DIR__ . '/includes/tour_schema.php';
+  render_tour_product_schema([
+      'name' => 'Small-Group Maipo Valley Wine Tour: 4 Vineyards from Santiago',
+      'description' => $page_description,
+      'image' => $lcp_preload_image,
+      'url' => $page_canonical,
+      'price' => $dynamic_price_adult,
+  ]);
+  ?>
   <!-- End Header -->
   <section class="tour-banner">
    <img src="img/Tours/Maipo/big-optimized.webp" width="720" height="480" fetchpriority="high" alt="Maipo Valley banner" class="tour-banner-bg">

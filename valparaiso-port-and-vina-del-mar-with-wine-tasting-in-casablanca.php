@@ -45,6 +45,16 @@ $tour_faqs = [
   <!-- Header================================================== -->
   <?php include __DIR__ . '/includes/header.php'; ?>
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
+  <?php
+  require __DIR__ . '/includes/tour_schema.php';
+  render_tour_product_schema([
+      'name' => 'Valparaiso Wine Tour from Santiago: Viña del Mar & Casablanca Valley',
+      'description' => $page_description,
+      'image' => $lcp_preload_image,
+      'url' => $page_canonical,
+      'price' => $dynamic_price_adult,
+  ]);
+  ?>
   <!-- End Header -->
   <section class="tour-banner">
    <picture>
