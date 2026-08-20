@@ -32,14 +32,17 @@ $tour_faqs = [
     ['q' => 'Do we stop at the historic funicular in Valparaíso?', 'a' => "Yes - the transfer includes a ride on one of Valparaíso's historic funiculars as part of the included sightseeing stop."],
     ['q' => "What happens if the funicular isn't running?", 'a' => 'Funiculars occasionally pause for maintenance or weather; if that happens on your transfer day, your guide will adjust the stop accordingly.'],
     ['q' => 'Is this a private or shared transfer?', 'a' => "It's a small-group service, not a large bus tour. If you're traveling with a child, let us know in advance so we can arrange a child seat."],
+    ['q' => 'Can I book this as a shore excursion from my cruise ship?', 'a' => "This is a one-way transfer, not a same-day round trip back to your ship. If your cruise is ending, we pick you up at the San Antonio or Valparaíso terminal on disembarkation day, add guided sightseeing and wine tasting, and drop you in Santiago. If your cruise is starting, it runs the other way: pickup in Santiago, sightseeing and wine tasting, then drop-off at the port in time to board."],
+    ['q' => "What's the difference between a pre-cruise and post-cruise transfer?", 'a' => 'A pre-cruise transfer picks you up in Santiago (hotel or airport) and drops you at your ship in San Antonio or Valparaíso before boarding. A post-cruise transfer picks you up at the cruise terminal on disembarkation day and takes you into Santiago. Either way, the same guided sightseeing and Casablanca wine tasting are included en route.'],
+    ['q' => 'Can I book this directly instead of through Viator, Expedia, or Travelocity?', 'a' => 'Yes - this is the same shore excursion listed on Viator, Expedia, and Travelocity. Booking directly on this page means working straight with the local team that runs it, with no reseller in between.'],
 ];
 ?>
 <?php
-$page_title       = 'Cruise Transfer to Santiago with Valparaíso & Wine Tasting';
-$page_description = 'Cruise transfer between Santiago and the Port with guided city highlights and Casablanca Valley wine tasting. Small-group, luggage included, bilingual guides.';
+$page_title       = 'San Antonio & Valparaíso Shore Excursion | Santiago Cruise Transfer';
+$page_description = 'Pre-cruise or post-cruise shore excursion from San Antonio or Valparaíso, with Santiago transfer, guided sightseeing, and Casablanca Valley wine tasting on disembarkation day or before boarding.';
 $page_canonical   = 'https://stampstour.com/cruise-transfer.php';
 $page_og = [
-  'title'       => 'Cruise Transfer ↔ Santiago with Valparaiso Tour & Casablanca Wine Tasting | Stamp\'s Tour',
+  'title'       => 'San Antonio & Valparaíso Shore Excursion | Santiago Cruise Transfer | Stamp\'s Tour',
   'description' => $page_description,
   'url'         => $page_canonical,
   'image'       => 'https://stampstour.com/img/Tours/Cruise/big.jpg',
@@ -73,7 +76,7 @@ $lcp_preload_image_mobile = 'img/Tours/Cruise/big-mobile.webp';
         <div class="col-md-8">
           <!-- save badge -->
         <div class="badge_save">Save<strong>20%</strong></div>
-          <h1>Cruise Transfer ↔ Santiago with Valparaiso Tour & Casablanca Wine Tasting</h1>
+          <h1>San Antonio & Valparaíso Shore Excursion with Santiago Cruise Transfer</h1>
         </div>
         <div class="col-md-4">
           <!-- Price display (per person) -->
@@ -148,8 +151,8 @@ $lcp_preload_image_mobile = 'img/Tours/Cruise/big-mobile.webp';
             <h3>Description</h3>
           </div>
           <div class="col-lg-9">
-            <h4>Cruise Terminal Scenic Transfer with Valparaíso & Casablanca Wine Tasting</h4>
-            <p>Transform your mandatory ride between Santiago and the coast into a seamless, value-packed experience by pairing the transfer with curated stops in Chile’s most iconic wine region and port cities. Instead of spending the day in traffic or juggling separate bookings, a single small-group service handles luggage, timing, and door-to-dock logistics while adding guided sightseeing and wine tasting en route—so you arrive at your destination having already sampled the local culture, scenery, and flavors without sacrificing extra vacation time or budget.</p>
+            <h4>San Antonio & Valparaíso Shore Excursion: Pre-Cruise and Post-Cruise Transfer with Wine Tasting</h4>
+            <p>Whether it's disembarkation day and you're stepping off your ship in San Antonio or Valparaíso for good, or you need a pre-cruise transfer from Santiago to reach your ship before boarding, turn this one-way trip into a seamless, value-packed experience by pairing it with curated stops in Chile’s most iconic wine region and port cities. Instead of spending your limited time in port stuck in traffic or juggling separate bookings, a single small-group service handles luggage, timing, and door-to-dock logistics while adding guided sightseeing and wine tasting en route—so you arrive at your next stop having already sampled the local culture, scenery, and flavors.</p>
           </div>
         </div>
 
