@@ -53,6 +53,7 @@ $tour_faqs = [
       'image' => $lcp_preload_image,
       'url' => $page_canonical,
       'price' => $dynamic_price_adult,
+      'sameAs' => ['https://www.tripadvisor.com/AttractionProductReview-g294305-d11467569-Valparaiso_Port_and_Vina_del_Mar_with_Casablanca_Wine_Tasting-Santiago_Santiago_Me.html'],
   ]);
   ?>
   <!-- End Header -->

@@ -3,7 +3,9 @@
 // Renders Product JSON-LD structured data for a tour/transfer page - gives
 // search engines and AI answer engines a machine-readable name/price fact
 // instead of requiring them to parse it out of prose. $data keys:
-// name, description, image (root-relative or absolute), url, price (float|null).
+// name, description, image (root-relative or absolute), url, price (float|null),
+// sameAs (optional array of external URLs for this exact product, e.g. its
+// Tripadvisor listing).
 
 function render_tour_product_schema(array $data): void
 {
@@ -31,6 +33,11 @@ function render_tour_product_schema(array $data): void
             'name' => "Stamp's Tour",
         ],
     ];
+
+    $sameAs = array_filter((array)($data['sameAs'] ?? []));
+    if (!empty($sameAs)) {
+        $schema['sameAs'] = array_values($sameAs);
+    }
 
     $price = $data['price'] ?? null;
     if ($price !== null) {

@@ -236,3 +236,4 @@
 <!-- CUSTOM CSS -->
 <link href="/css/custom.css" rel="stylesheet"/>
 <?php endif; ?>
+<?php require __DIR__ . '/site_schema.php'; render_site_organization_schema(); ?>

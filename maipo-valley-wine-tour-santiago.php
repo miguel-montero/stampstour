@@ -51,6 +51,7 @@ $tour_faqs = [
       'image' => $lcp_preload_image,
       'url' => $page_canonical,
       'price' => $dynamic_price_adult,
+      'sameAs' => ['https://www.tripadvisor.com/AttractionProductReview-g294305-d15040546-Maipo_Valley_Wine_Tour_with_4_vineyards_from_Santiago-Santiago_Santiago_Metropolit.html'],
   ]);
   ?>
   <!-- End Header -->
