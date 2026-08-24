@@ -1963,6 +1963,7 @@ function findWebReservationByReferenceId(mysqli $conn, string $code, array &$web
             r.total_venta,
             r.estado,
             r.id_experiencia,
+            r.is_private,
             e.nombre AS experiencia_nombre,
             e.nombre_publico AS experiencia_nombre_publico,
             t.nombre AS titular_nombre,
@@ -2013,6 +2014,7 @@ function findWebReservationByReferenceId(mysqli $conn, string $code, array &$web
                 r.total_venta,
                 r.estado,
                 r.id_experiencia,
+                r.is_private,
                 e.nombre AS experiencia_nombre,
                 e.nombre_publico AS experiencia_nombre_publico,
                 t.nombre AS titular_nombre,
@@ -2093,8 +2095,7 @@ function findWebReservationByReferenceId(mysqli $conn, string $code, array &$web
 
 function isPrivateTourFromDbRow(array $row): int
 {
-    $experienceName = strtoupper(removeAccents((string)(($row['experiencia_nombre'] ?? '') . ' ' . ($row['experiencia_nombre_publico'] ?? ''))));
-    return (str_contains($experienceName, 'PVT') || str_contains($experienceName, 'PRIVATE') || str_contains($experienceName, 'PRIVADO')) ? 1 : 0;
+    return (int)($row['is_private'] ?? 0);
 }
 
 

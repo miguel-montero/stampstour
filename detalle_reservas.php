@@ -22,6 +22,7 @@ $estado = 'realizado';
 $sql = "
   SELECT
     e.nombre AS experiencia,
+    r.is_private AS is_private,
     CONCAT(t.nombre, ' ', t.apellido) AS titular,
     r.adultos AS adultos,
     r.ninos AS ninos,
@@ -66,6 +67,7 @@ $res = $stmt->get_result();
             <thead class="table-light">
               <tr>
                 <th>Experiencia</th>
+                <th class="text-center">Privado</th>
                 <th>Titular</th>
                 <th class="text-center">Ad.</th>
                 <th class="text-center">Niños</th>
@@ -91,6 +93,13 @@ $res = $stmt->get_result();
                 ?>
                 <tr>
                   <td><?= htmlspecialchars($row['experiencia']) ?></td>
+                  <td class="text-center">
+                    <?php if ((int)$row['is_private'] === 1): ?>
+                      <span class="badge text-bg-warning">Privado</span>
+                    <?php else: ?>
+                      <span class="text-muted">—</span>
+                    <?php endif; ?>
+                  </td>
                   <td><?= htmlspecialchars($row['titular']) ?></td>
                   <td class="text-center"><?= (int)$row['adultos'] ?></td>
                   <td class="text-center"><?= (int)$row['ninos'] ?></td>
