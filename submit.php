@@ -35,6 +35,9 @@ $infantes  = intval($_POST['infants']  ?? 0);
 // Airport pickup: 1 si está marcado, 0 si no
 $pickup    = (isset($_POST['airport_pick_up']) && $_POST['airport_pick_up'] === 'Yes') ? 1 : 0;
 
+// Private experience: 1 si el checkbox viene marcado, 0 si no (público no lo envía)
+$isPrivate = (isset($_POST['is_private']) && $_POST['is_private'] === '1') ? 1 : 0;
+
 $actividad = limpiar($_POST['activity_name'] ?? '');
 $cupon     = limpiar($_POST['coupon_code']   ?? '');
 $subtotal  = floatval($_POST['subtotal']    ?? 0);
@@ -130,6 +133,7 @@ $stmt = $conn->prepare("
         ninos,
         infantes,
         airport_pickup,
+        is_private,
         id_cupon,
         id_titular,
         id_vendedor,
@@ -139,22 +143,23 @@ $stmt = $conn->prepare("
         id_hotel,
         hotel_manual
     ) VALUES (
-        ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )
 ");
 if (!$stmt) {
     die("Error preparando inserción de reserva: " . $conn->error);
 }
 
-// 2 strings, 9 integers, 2 doubles, 1 string = 14 parámetros
+// 2 strings, 10 integers, 2 doubles, 1 string = 15 parámetros
 $stmt->bind_param(
-    "ssiiiiiiiiddis",
+    "ssiiiiiiiiiddis",
     $stampCode,       // s: reference_id
     $fecha,           // s: fecha actividad (YYYY-MM-DD)
     $adultos,         // i
     $ninos,           // i
     $infantes,        // i
     $pickup,          // i
+    $isPrivate,       // i
     $id_cupon,        // i (puede ser null)
     $id_titular,      // i
     $id_vendedor,     // i (puede ser null; ya con override si aplica)

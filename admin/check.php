@@ -887,10 +887,7 @@ function webDbDateToPlanilla(string $value): string
 
 function isPrivateWebDbRow(array $row): bool
 {
-    $txt = mb_strtolower((string)(($row['experiencia_nombre'] ?? '') . ' ' . ($row['experiencia_nombre_publico'] ?? '')), 'UTF-8');
-    $txt = removeAccents($txt);
-
-    return str_contains($txt, 'pvt') || str_contains($txt, 'private') || str_contains($txt, 'privado');
+    return (bool)($row['is_private'] ?? false);
 }
 
 function buildWebHotelText(array $row): string
@@ -939,6 +936,7 @@ function fetchWebReservationsForDate(mysqli $conn, string $mysqlDate, array &$we
             r.ninos,
             r.infantes,
             r.airport_pickup,
+            r.is_private,
             r.id_experiencia,
             r.estado,
             r.total_venta,

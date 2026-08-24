@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   `infantes` int(11) NOT NULL DEFAULT '0',
   `airport_pickup` tinyint(1) NOT NULL DEFAULT '0',
   `airport_dropoff` tinyint(1) NOT NULL DEFAULT '0',
+  `is_private` tinyint(1) NOT NULL DEFAULT '0',
   `pais_origen` varchar(100) DEFAULT NULL,
   `idioma_actividad` varchar(100) DEFAULT NULL,
   `id_cupon` int(11) DEFAULT NULL,

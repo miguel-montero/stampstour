@@ -614,9 +614,7 @@ function enrich_viator_with_passenger_lookup(array &$viatorRows, array $lookup, 
 
 /* ---------- WEB DB ---------- */
 function is_private_web_db_row(array $row): bool {
-    $txt = mb_strtolower((string)(($row['experiencia_nombre'] ?? '') . ' ' . ($row['experiencia_nombre_publico'] ?? '')));
-    $txt = strtr($txt, ['á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u','ñ'=>'n']);
-    return str_contains($txt, 'pvt') || str_contains($txt, 'private') || str_contains($txt, 'privado');
+    return (bool)($row['is_private'] ?? false);
 }
 
 function build_web_hotel_text(array $row): string {
@@ -640,7 +638,7 @@ function fetch_web_reservations_for_dates(mysqli $conn, array $mysqlDates, array
     $sql = "
         SELECT
             r.id_reserva, r.reference_id, r.fecha_reserva, r.fecha_actividad,
-            r.adultos, r.ninos, r.infantes, r.airport_pickup, r.estado,
+            r.adultos, r.ninos, r.infantes, r.airport_pickup, r.is_private, r.estado,
             r.pais_origen, r.idioma_actividad,
             e.nombre AS experiencia_nombre, e.nombre_publico AS experiencia_nombre_publico,
             t.nombre AS titular_nombre, t.apellido AS titular_apellido,

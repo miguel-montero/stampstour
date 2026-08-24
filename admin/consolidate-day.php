@@ -882,9 +882,7 @@ function enrich_viator_with_passenger_lookup(array &$viatorRows, array $lookup, 
 
 /* ---------- WEB reservations from internal database ---------- */
 function is_private_web_db_row(array $row): bool {
-    $txt = mb_strtolower((string)(($row['experiencia_nombre'] ?? '') . ' ' . ($row['experiencia_nombre_publico'] ?? '')));
-    $txt = strtr($txt, ['á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u','ñ'=>'n']);
-    return str_contains($txt, 'pvt') || str_contains($txt, 'private') || str_contains($txt, 'privado');
+    return (bool)($row['is_private'] ?? false);
 }
 
 function build_web_hotel_text(array $row): string {
@@ -917,6 +915,7 @@ function fetch_web_reservations_for_date(mysqli $conn, string $mysqlDate, array 
             r.ninos,
             r.infantes,
             r.airport_pickup,
+            r.is_private,
             r.id_experiencia,
             r.estado,
             r.total_venta,
