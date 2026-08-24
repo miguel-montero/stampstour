@@ -76,6 +76,7 @@ $res = $stmt->get_result();
                 <th class="text-center">Pick-up Aerop.</th>
                 <th class="text-center">Drop-off Aerop.</th>
                 <th class="text-nowrap">Código Ext.</th>
+                <th class="text-center">Copiar</th>
               </tr>
             </thead>
             <tbody>
@@ -129,6 +130,18 @@ $res = $stmt->get_result();
                   <td class="text-nowrap">
                     <code class="small"><?= htmlspecialchars($row['codigo_externo']) ?></code>
                   </td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-copy-reserva"
+                      data-nombre="<?= htmlspecialchars($row['titular']) ?>"
+                      data-pax="<?= (int)$row['adultos'] + (int)$row['ninos'] + (int)$row['infantes'] ?>"
+                      data-hotel="<?= htmlspecialchars($hotelName) ?>"
+                      data-telefono="<?= htmlspecialchars($row['telefono']) ?>"
+                      data-email="<?= htmlspecialchars($row['email']) ?>"
+                      data-stamp-code="<?= htmlspecialchars($row['codigo_externo']) ?>"
+                      title="Copiar datos de la reserva">
+                      <i class="bi bi-clipboard"></i>
+                    </button>
+                  </td>
                 </tr>
               <?php endwhile; ?>
             </tbody>
@@ -167,6 +180,24 @@ function exportCSV() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('.btn-copy-reserva');
+  if (!btn) return;
+
+  const d = btn.dataset;
+  const texto = `${d.nombre} ${d.pax} pax ${d.hotel}  ${d.telefono}  WEB ${d.email}, ${d.stampCode}`;
+
+  navigator.clipboard.writeText(texto).then(() => {
+    const icon = btn.querySelector('i');
+    icon.classList.remove('bi-clipboard');
+    icon.classList.add('bi-clipboard-check');
+    setTimeout(() => {
+      icon.classList.remove('bi-clipboard-check');
+      icon.classList.add('bi-clipboard');
+    }, 1500);
+  });
+});
 </script>
 
 <?php
