@@ -36,6 +36,10 @@
 /Tripadvisor TC BOTB Left Aligned White - L.png
 /index (4).html
 
+# Local-only dev helpers for previewing blog posts via `php -S` - not source
+/_dev_router.php
+/_preview_valpo.html
+
 # OS cruft
 .DS_Store
 
