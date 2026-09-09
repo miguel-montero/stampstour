@@ -167,6 +167,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="mb-3">
       <label class="form-label">Content <small class="text-muted">(click any image already in the text to swap it from the gallery)</small></label>
       <div id="content-editor" style="background: #fff;"><?= $post['content'] ?></div>
+      <div id="table-tools">
+        <button type="button" onclick="stampTable('insertTable', 3, 3)" class="btn btn-outline-secondary">Insert table</button>
+        <button type="button" onclick="stampTable('insertRowBelow')" class="btn btn-outline-secondary">+ Row</button>
+        <button type="button" onclick="stampTable('deleteRow')" class="btn btn-outline-secondary">&minus; Row</button>
+        <button type="button" onclick="stampTable('insertColumnRight')" class="btn btn-outline-secondary">+ Column</button>
+        <button type="button" onclick="stampTable('deleteColumn')" class="btn btn-outline-secondary">&minus; Column</button>
+        <button type="button" onclick="stampTable('deleteTable')" class="btn btn-outline-secondary">Delete table</button>
+        <small class="text-muted" style="align-self:center;">Row/column buttons act on the table your cursor is in. First row is styled as the header.</small>
+      </div>
       <textarea name="content" id="content-input" style="display: none;"></textarea>
     </div>
 
@@ -247,9 +256,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <style>
   /* Hover cue so it's discoverable that inline content images are clickable */
   /* Matches .blog_post_content img in css/blog.css, so the editor never
-     shows an image wider/differently-scaled than the live page will. */
-  #content-editor img { max-width: 100%; height: auto; cursor: pointer; transition: outline 0.15s; outline: 2px solid transparent; outline-offset: 2px; }
+     shows an image wider/differently-scaled or differently-spaced than the
+     live page will. Keep these three declarations in sync with that rule. */
+  #content-editor img { max-width: 100%; height: auto; display: block; margin: 2.5rem auto; border-radius: 6px; cursor: pointer; transition: outline 0.15s; outline: 2px solid transparent; outline-offset: 2px; }
   #content-editor img:hover { outline: 2px solid #0d6efd; }
+
+  /* Mirrors .blog_post_content table in css/blog.css so tables built with the
+     toolbar below look while editing the way they will once published. */
+  #content-editor table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; }
+  #content-editor td { border: 1px solid #ccc; padding: 8px 10px; vertical-align: top; }
+  #content-editor tr:first-child td { background: #f5f5f5; font-weight: 600; }
+
+  #table-tools { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  #table-tools button { font-size: 12px; padding: 3px 8px; }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
@@ -257,6 +276,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   var quill = new Quill('#content-editor', {
     theme: 'snow',
     modules: {
+      // Quill 2's built-in table module (bundled in the CDN quill.js above,
+      // just off by default). No toolbar entry exists for it, so the
+      // #table-tools buttons below drive it via quill.getModule('table').
+      table: true,
       toolbar: {
         container: [
           [{ header: [2, 3, false] }],
@@ -274,6 +297,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
   });
+
+  // Drives the built-in table module from the #table-tools buttons. Row and
+  // column operations need the cursor inside a table cell; Quill throws if it
+  // isn't, so surface that as a plain hint instead of a silent no-op.
+  function stampTable(method) {
+    var table = quill.getModule('table');
+    var args = Array.prototype.slice.call(arguments, 1);
+    try {
+      table[method].apply(table, args);
+    } catch (e) {
+      alert('Put your cursor inside a table cell first, then use that button.');
+    }
+    quill.focus();
+  }
 
   document.querySelector('form').addEventListener('submit', function () {
     document.getElementById('content-input').value = quill.root.innerHTML;
