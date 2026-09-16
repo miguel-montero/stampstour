@@ -1494,7 +1494,10 @@ function buildViatorMap(array $rows): array
         $productCode = $idxProductCode !== -1 ? clean($row[$idxProductCode] ?? '') : '';
         $tourGrade = $idxTourGrade !== -1 ? clean($row[$idxTourGrade] ?? '') : '';
         $tour = canonicalTourFromViator($product, $productCode, $tourGrade);
-        $isPrivate = isPrivateViatorProductGrade($productCode, $tourGrade);
+        $maipoGrade = classify_viator_maipo_grade($productCode, $tourGrade, '');
+        $isPrivate = $maipoGrade === 'MAIPO_PLAIN_PRIVATE'
+            ? true
+            : ($maipoGrade !== null ? false : isPrivateViatorProductGrade($productCode, $tourGrade));
 
         $adults = $idxAdults !== -1 ? parseNumber($row[$idxAdults] ?? '') : 0;
         $children = $idxChildren !== -1 ? parseNumber($row[$idxChildren] ?? '') : 0;

@@ -216,21 +216,6 @@ function categorize_from_viator_product(?string $prodCode, ?string $prodName, ?b
     };
 }
 
-function is_viator_maipo_tastings_lunch_grade(?string $productCode, ?string $tourGrade, ?string $tourGradeTitle = ''): bool {
-    $code = strtoupper(trim((string)($productCode ?? '')));
-    $grade = strtoupper(trim((string)($tourGrade ?? '')));
-    $title = mb_strtolower(trim((string)($tourGradeTitle ?? '')));
-
-    if ($code !== '20268P25') return false;
-
-    // Viator Maipo 4-winery product can now sell the Classic / 3-winery lunch option as TG3.
-    // Keep TG2 as private Maipo; TG1 stays regular Maipo Valley.
-    if (preg_match('/^TG3(?:\b|~)/i', $grade) === 1) return true;
-
-    // Safety fallback in case Viator changes or omits the grade code but keeps the title.
-    return str_contains($title, 'classic maipo valley');
-}
-
 function is_private_viator_product_grade(?string $productCode, ?string $tourGrade): bool {
     $code = strtoupper(trim((string)$productCode));
     $grade = strtoupper(trim((string)$tourGrade));
