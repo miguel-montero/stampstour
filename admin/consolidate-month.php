@@ -8,6 +8,7 @@
  */
 declare(strict_types=1);
 require __DIR__ . '/_auth.php';
+require __DIR__ . '/_viator_categorization.php';
 
 /* ---------- Autoload (Composer / PhpSpreadsheet) ---------- */
 $autoload_candidates = [
@@ -340,8 +341,11 @@ function parse_viator_csv(string $tmpPath): array {
         $tourGradeTitle = (string)($get($line, 'Tour Grade Title') ?? '');
         $isLowCost = false;
         $catHint = categorize_from_viator_product($prodCode, $experience, $isLowCost);
-        if (is_viator_maipo_tastings_lunch_grade($prodCode, $tourGrade, $tourGradeTitle)) {
+        $maipoGrade = classify_viator_maipo_grade($prodCode, $tourGrade, $tourGradeTitle);
+        if ($maipoGrade === 'MAIPO_LUNCH') {
             $catHint = 'Maipo Valley Tastings & Lunch';
+        } elseif ($maipoGrade === 'MAIPO_PLAIN') {
+            $catHint = 'Maipo Valley';
         }
         if ($isLowCost) $experience = rtrim($experience) . ' (Low Cost)';
 
@@ -370,7 +374,9 @@ function parse_viator_csv(string $tmpPath): array {
             'TravelDate' => $travelDate,
             'MysqlDate' => $mysqlDate,
             'CategoryHint' => $catHint,
-            'isPrivate' => is_private_viator_product_grade($prodCode, $tourGrade),
+            'isPrivate' => $maipoGrade === 'MAIPO_PLAIN_PRIVATE'
+                ? true
+                : ($maipoGrade !== null ? false : is_private_viator_product_grade($prodCode, $tourGrade)),
         ]);
     }
     fclose($fh);
