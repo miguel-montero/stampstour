@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__ . '/_auth.php';
+require __DIR__ . '/_viator_categorization.php';
 
 /****************************************************
  * STAMP'S TOUR — CHECK + CIERRE OPERATIVO
@@ -2663,12 +2664,20 @@ function canonicalTour(string $product): string
 function canonicalTourFromViator(string $product, string $productCode, string $tourGrade = ''): string
 {
     $code = strtoupper(clean($productCode));
-    if ($code === '20268P5' || $code === '20268P32') $tour = 'VALPARAISO & VIÑA DEL MAR';
-    elseif ($code === '20268P25') $tour = 'WINE TOUR MAIPO VALLEY';
+    $maipoGrade = classify_viator_maipo_grade($productCode, $tourGrade, '');
+
+    if ($maipoGrade === 'MAIPO_LUNCH') $tour = 'WINE TOUR MAIPO VALLEY TASTINGS & LUNCH';
+    elseif ($maipoGrade === 'MAIPO_PLAIN' || $maipoGrade === 'MAIPO_PLAIN_PRIVATE') $tour = 'WINE TOUR MAIPO VALLEY';
+    elseif ($code === '20268P5' || $code === '20268P32') $tour = 'VALPARAISO & VIÑA DEL MAR';
     elseif ($code === '20268P12') $tour = 'PORTILLO INCA LAGOON';
     elseif ($code === '20268P8') $tour = 'CITY TOUR';
     else $tour = canonicalTour($product);
-    return applyPrivateTourLabel($tour, isPrivateViatorProductGrade($productCode, $tourGrade));
+
+    $isPrivate = $maipoGrade === 'MAIPO_PLAIN_PRIVATE'
+        ? true
+        : ($maipoGrade !== null ? false : isPrivateViatorProductGrade($productCode, $tourGrade));
+
+    return applyPrivateTourLabel($tour, $isPrivate);
 }
 
 function canonicalTourFromGyg(string $productAndOption): string
