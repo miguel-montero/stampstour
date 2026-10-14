@@ -1,0 +1,28 @@
+/* css/src/lab.css - Tailwind v4 entry for css/lab.css (build: bin/build-css).
+ * Loaded only on pages that opted into the "lab" design (Maipo first).
+ * - No preflight: the site's Bootstrap reboot stays the only global reset.
+ * - Every utility is prefixed tw: so it can't collide with Bootstrap/CityTours
+ *   class names (container, hidden, table, btn...).
+ * - No @layer anywhere: the site's CSS is unlayered, and unlayered rules beat
+ *   every layered rule regardless of specificity.
+ * - lab-base.css is imported BEFORE the utilities so utilities win ties.
+ * - source(none) + explicit @source: only these files are scanned for classes.
+ */
+@import "tailwindcss/theme.css" prefix(tw);
+@import "./lab-base.css";
+@import "tailwindcss/utilities.css" prefix(tw) source(none);
+
+@source "../../maipo-valley-wine-tour-santiago.php";
+@source "../../includes/ui";
+
+@theme static {
+  --color-bg: #1c1f21;
+  --color-card: #262a2d;
+  --color-line: rgba(255, 255, 255, .09);
+  --color-text: #e9ecee;
+  --color-muted: #a8b0b5;
+  --color-teal: #008489;
+  --color-teal-soft: #5fd0d4;
+  --color-coral: #e04f67;
+  --font-sans: Montserrat, "Montserrat-fallback", system-ui, sans-serif;
+}
