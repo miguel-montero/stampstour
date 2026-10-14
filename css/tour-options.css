@@ -15,4 +15,3 @@
 .tour-options--inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
 .tour-options--inline .tour-options__legend { grid-column: 1 / -1; }
 .tour-options--inline .tour-option { margin: 0; }
-.tour-compare th, .tour-compare td { font-size: 14px; vertical-align: top; }

@@ -40,13 +40,6 @@ final class OptionUiTest extends TestCase
         $this->assertStringContainsString('Viña Ballek', $hidden);
     }
 
-    public function testCompareTableListsAllOptions(): void
-    {
-        $html = $this->capture(fn() => render_option_compare_table(maipo_options(), $this->prices()));
-        foreach (['Classic Route', 'Classic Route + Lunch', 'Premium Route', 'Included', 'Own cost', '$110', '$139'] as $needle) {
-            $this->assertStringContainsString($needle, $html);
-        }
-    }
 
     public function testOutputIsEscaped(): void
     {

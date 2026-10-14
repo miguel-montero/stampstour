@@ -30,18 +30,13 @@ function maipo_options(): array
         'icon' => 'icon-wine',
         'text' => "Founded in 1956, Santa Ema makes wines shaped by the Maipo River and the valley's geography. Enjoy a guided tasting of three wines, including one of their blends.",
     ];
-    $terraMater = function (bool $lunchIncluded): array {
-        $lunch = $lunchIncluded
-            ? 'Lunch is included in your booking at Zinfandel, the restaurant on the TerraMater estate.'
-            : 'Lunch break at Zinfandel, the restaurant on the TerraMater estate. Lunch is at your own cost: order from the menu and pay at the restaurant, or bring your own food.';
-        return [
-            'place' => 'Isla de Maipo',
-            'title' => 'Viña TerraMater',
-            'duration' => '1 hour 30 minutes',
-            'icon' => 'icon-restaurant',
-            'text' => $lunch . ' TerraMater is also known for its award-winning olive oil, which you can buy in the shop at cellar-door prices.',
-        ];
-    };
+    $terraMater = [
+        'place' => 'Isla de Maipo',
+        'title' => 'Viña TerraMater',
+        'duration' => '1 hour',
+        'icon' => 'icon-wine',
+        'text' => 'Visit TerraMater, a winery also known for its award-winning olive oil, which you can buy in the shop at cellar-door prices.',
+    ];
     $ballek = [
         'place' => 'Isla de Maipo',
         'title' => 'Viña Ballek',
@@ -75,18 +70,16 @@ function maipo_options(): array
     $notIncludedCommon = [
         'Extra drinks, wine bottles and souvenirs',
     ];
-    $lunchNotIncluded = 'Lunch at Zinfandel restaurant (pay at the restaurant or bring your own food)';
+    $lunchNotIncluded = 'Lunch at a winery restaurant (pay at the restaurant or bring your own food)';
 
     return [
         'classic' => [
             'exp_name' => 'MAIPO_CLASSIC',
             'public_name' => 'Maipo Valley Wine Tour - Classic Route',
             'label' => 'Classic Route',
-            'tagline' => 'Ends at boutique Viña Ballek. Lunch at your own cost.',
-            'final_winery' => 'Viña Ballek, a boutique family winery',
-            'best_for' => 'A relaxed, social day in wine country',
+            'tagline' => 'Ends at boutique Viña Ballek. Lunch at a winery restaurant at your own cost.',
             'lunch_included' => false,
-            'stops' => [$pickup, $quirinca, $santaEma, $terraMater(false), $ballek, $return],
+            'stops' => [$pickup, $quirinca, $santaEma, $terraMater, $ballek, $return],
             'included' => array_merge($includedCommon, ['Wine tasting at Viña Ballek']),
             'not_included' => array_merge([$lunchNotIncluded], $notIncludedCommon),
         ],
@@ -94,23 +87,19 @@ function maipo_options(): array
             'exp_name' => 'MAIPO_CLASSIC_LUNCH',
             'public_name' => 'Classic Maipo Valley Tastings & Lunch',
             'label' => 'Classic Route + Lunch',
-            'tagline' => 'Same Classic itinerary, with lunch at TerraMater included.',
-            'final_winery' => 'Viña Ballek, a boutique family winery',
-            'best_for' => 'Having everything paid in advance',
+            'tagline' => 'Same Classic itinerary, with lunch at a winery restaurant included.',
             'lunch_included' => true,
-            'stops' => [$pickup, $quirinca, $santaEma, $terraMater(true), $ballek, $return],
-            'included' => array_merge($includedCommon, ['Lunch at Zinfandel restaurant, Viña TerraMater', 'Wine tasting at Viña Ballek']),
+            'stops' => [$pickup, $quirinca, $santaEma, $terraMater, $ballek, $return],
+            'included' => array_merge($includedCommon, ['Lunch at a winery restaurant', 'Wine tasting at Viña Ballek']),
             'not_included' => $notIncludedCommon,
         ],
         'premium' => [
             'exp_name' => 'Maipo',
             'public_name' => 'Maipo Valley Wine Tour - Premium Route with Undurraga',
             'label' => 'Premium Route',
-            'tagline' => 'Ends with an extended guided tour of historic Viña Undurraga. Lunch at your own cost.',
-            'final_winery' => 'Viña Undurraga, a historic winery with an extended guided tour',
-            'best_for' => 'Wine lovers curious about history and winemaking',
+            'tagline' => 'Ends with an extended guided tour of historic Viña Undurraga. Lunch at a winery restaurant at your own cost.',
             'lunch_included' => false,
-            'stops' => [$pickup, $quirinca, $santaEma, $terraMater(false), $undurraga, $return],
+            'stops' => [$pickup, $quirinca, $santaEma, $terraMater, $undurraga, $return],
             'included' => array_merge($includedCommon, ['Extended guided tour and tasting of four premium wines at Viña Undurraga']),
             'not_included' => array_merge([$lunchNotIncluded], $notIncludedCommon),
         ],

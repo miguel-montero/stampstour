@@ -67,10 +67,34 @@ final class MaipoOptionsTest extends TestCase
         $this->assertFalse($opts['premium']['lunch_included']);
     }
 
+    public function testWineriesAreQuirincaSantaEmaTerraMaterThenFinal(): void
+    {
+        foreach (maipo_options() as $slug => $o) {
+            $titles = array_column($o['stops'], 'title');
+            $this->assertSame(['Campo La Quirinca', 'Viña Santa Ema', 'Viña TerraMater'], array_slice($titles, 1, 3), $slug);
+        }
+    }
+
+    public function testLunchVenueIsNeverNamed(): void
+    {
+        $text = mb_strtolower(json_encode(maipo_options(), JSON_UNESCAPED_UNICODE));
+        foreach (['zinfandel', 'labranza'] as $name) {
+            $this->assertStringNotContainsString($name, $text);
+        }
+        foreach (maipo_options() as $slug => $o) {
+            $this->assertStringNotContainsString('lunch', mb_strtolower($o['stops'][3]['text']), "$slug: TerraMater stop must not mention lunch");
+            foreach (array_merge($o['included'], $o['not_included'], [$o['tagline']]) as $line) {
+                if (stripos($line, 'lunch') !== false) {
+                    $this->assertStringContainsString('winery restaurant', $line, "$slug: '$line'");
+                }
+            }
+        }
+    }
+
     public function testEveryOptionHasCompleteContent(): void
     {
         foreach (maipo_options() as $slug => $o) {
-            foreach (['exp_name', 'public_name', 'label', 'tagline', 'final_winery', 'best_for'] as $key) {
+            foreach (['exp_name', 'public_name', 'label', 'tagline'] as $key) {
                 $this->assertNotSame('', trim($o[$key]), "$slug.$key");
             }
             $this->assertCount(6, $o['stops'], "$slug has pickup + 4 stops + return");

@@ -33,10 +33,11 @@ $maipo_adult_prices  = array_column($maipo_js_options, 'adult');
 $dynamic_price_adult = $maipo_adult_prices ? min($maipo_adult_prices) : null;
 
 $tour_faqs = [
-    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four stops in the Maipo Valley on every option: Campo La Quirinca (wine and pisco tasting), Viña Santa Ema (wine tasting), Viña TerraMater (lunch stop) and a final winery that depends on the option you book - boutique Viña Ballek on the Classic routes, or historic Viña Undurraga on the Premium route."],
-    ['q' => "What's the difference between Classic, Classic + Lunch and Premium?", 'a' => "The first three stops are the same. Classic ends at Viña Ballek, a relaxed boutique winery by the Maipo River, with lunch at your own cost. Classic + Lunch is the same itinerary with lunch at TerraMater included in the price. Premium replaces Ballek with an extended guided tour of Viña Undurraga - gardens, production area, barrel cellar and a tasting of four premium wines - with lunch at your own cost."],
+    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four stops in the Maipo Valley on every option: Campo La Quirinca (wine and pisco tasting), Viña Santa Ema (wine tasting), Viña TerraMater (winery and olive oil) and a final winery that depends on the option you book - boutique Viña Ballek on the Classic routes, or historic Viña Undurraga on the Premium route."],
+    ['q' => "What's the difference between Classic, Classic + Lunch and Premium?", 'a' => "The first three stops are the same. Classic ends at Viña Ballek, a relaxed boutique winery by the Maipo River, with lunch at your own cost. Classic + Lunch is the same itinerary with lunch at a winery restaurant included in the price. Premium replaces Ballek with an extended guided tour of Viña Undurraga - gardens, production area, barrel cellar and a tasting of four premium wines - with lunch at your own cost."],
+    ['q' => 'Can the wineries change?', 'a' => 'Yes. If a winery is unavailable on your date, it may be replaced with another winery of equal quality.'],
     ['q' => 'Do we visit both Viña Ballek and Viña Undurraga?', 'a' => 'No. They are alternative final stops: the Classic routes end at Ballek and the Premium route ends at Undurraga.'],
-    ['q' => 'Is lunch included?', 'a' => 'Only on the Classic Route + Lunch option. On Classic and Premium you stop for lunch at Zinfandel restaurant on the TerraMater estate and pay there, or you can bring your own food.'],
+    ['q' => 'Is lunch included?', 'a' => 'Only on the Classic Route + Lunch option. On Classic and Premium you stop for lunch at a winery restaurant and pay there, or you can bring your own food.'],
     ['q' => 'Where does the tour pick me up?', 'a' => 'Hotel pickup is offered from Las Condes, Vitacura, Providencia, Santiago Centro, and Recoleta; your exact pickup time is sent the night before.'],
     ['q' => 'How many people are on the tour?', 'a' => "Groups are capped at 15 travelers, with a minimum of 4 required to run - if the minimum isn't met, you'll be offered another date or a full refund."],
     ['q' => "What's the cancellation policy?", 'a' => "Free cancellation up to 24 hours before the tour's start time; cancellations made inside that window aren't refunded."],
@@ -179,10 +180,9 @@ $tour_faqs = [
         <p>Spend a day in Chilean wine country around Isla de Maipo, a farming town named for the tributaries of the Maipo River that surround it and make for perfect grape-growing conditions. Every option visits four stops, from a small family farm to established wineries, with guided tastings, hotel pickup and an English-speaking guide.</p>
         <h4>Choose your route</h4>
         <p>All three options share the first three stops: Campo La Quirinca, Vi&ntilde;a Santa Ema and Vi&ntilde;a TerraMater. They differ in the final winery and in whether lunch is included.</p>
-        <?php render_option_compare_table($maipo_options, $maipo_js_options); ?>
         <h4>What to expect</h4>
         <p>Your day begins with pickup from your hotel or residence in Santiago Centro, Providencia, Las Condes, Vitacura or Recoleta. If you are staying elsewhere, send us your address and we will confirm pickup or the nearest meeting point.</p>
-        <p>The first stop is Campo La Quirinca, a family farm where you learn about traditional Chilean winemaking and taste local wines and Chilean pisco. Next is Vi&ntilde;a Santa Ema for a guided tasting of three wines, then Vi&ntilde;a TerraMater for lunch at its Zinfandel restaurant.</p>
+        <p>The first stop is Campo La Quirinca, a family farm where you learn about traditional Chilean winemaking and taste local wines and Chilean pisco. Next is Vi&ntilde;a Santa Ema for a guided tasting of three wines, then Vi&ntilde;a TerraMater, also known for its award-winning olive oil. Along the way you stop for lunch at a winery restaurant.</p>
         <p>The Classic routes end at Vi&ntilde;a Ballek, a boutique family winery by the Maipo River. The Premium route ends instead at Vi&ntilde;a Undurraga, one of Chile's most traditional wineries, with an extended guided tour and a tasting of four premium wines. The day ends with drop-off at your original pickup point.</p>
         <h4>What's included</h4>
         <?php foreach ($maipo_options as $slug => $opt): ?>
@@ -265,7 +265,7 @@ $tour_faqs = [
       <hr/>
       <div class="main_title">
        <h2>Detailed <span>timeline</span> for your tour</h2>
-       <p>Pick an option to see its itinerary</p>
+       <p>Pick an option to see its itinerary. If a winery is unavailable on your date, it may be replaced with another of equal quality.</p>
       </div>
       <?php render_option_selector($maipo_options, $maipo_js_options, $maipo_selected, 'tour_option_itin', 'Itinerary for', 'inline'); ?>
       <hr/>
