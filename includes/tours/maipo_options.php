@@ -70,7 +70,7 @@ function maipo_options(): array
     $notIncludedCommon = [
         'Extra drinks, wine bottles and souvenirs',
     ];
-    $lunchNotIncluded = 'Lunch at a winery restaurant (pay at the restaurant or bring your own food)';
+    $lunchNotIncluded = 'Lunch at a winery restaurant (paid at the restaurant)';
 
     return [
         'classic' => [

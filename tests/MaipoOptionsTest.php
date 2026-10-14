@@ -78,7 +78,7 @@ final class MaipoOptionsTest extends TestCase
     public function testLunchVenueIsNeverNamed(): void
     {
         $text = mb_strtolower(json_encode(maipo_options(), JSON_UNESCAPED_UNICODE));
-        foreach (['zinfandel', 'labranza'] as $name) {
+        foreach (['zinfandel', 'labranza', 'own food'] as $name) {
             $this->assertStringNotContainsString($name, $text);
         }
         foreach (maipo_options() as $slug => $o) {
