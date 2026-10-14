@@ -2,7 +2,7 @@
 
 - Date: 2026-10-14
 - Branch: `feature/maipo-lab-redesign`
-- Commit range: `75526b72..ad66eb58`, plus this report's commit. Task 9 started at `12440ace`.
+- Commit range: `75526b72..48a62139`, plus this report's commits. Task 9 started at `12440ace`.
 - Page: `maipo-valley-wine-tour-santiago.php`, served by a local `php -S 127.0.0.1:8099`.
 
 ## Summary
@@ -11,11 +11,11 @@
 |---|---|
 | PHPUnit | PASS: 152 tests, 686 assertions, 1 pre-existing deprecation |
 | `bin/build-css --check` | PASS (`css/lab.css is up to date`), 20,439 bytes |
-| `lab-check.js` | 30/30 PASS, after 1 fix |
-| `check.js` | 8/8 PASS |
+| `lab-check.js` | 30/30 PASS, after 1 fix (re-run after the footer fix: 30/30) |
+| `check.js` | 8/8 PASS (re-run after the footer fix: 8/8) |
 | `e2e.js` | 3/3 bookings: totals 220 / 258 / 278, `book_tour.php` returns 302 to `shopping.php` |
-| Lighthouse perf, median | 55 → 64 (PASS, not below the baseline) |
-| Lighthouse CLS | 0.382 → 0.192 (**FAIL**, above 0.1). The cause is shared footer code outside this redesign. See below. |
+| Lighthouse perf, median | 55 → 73 (PASS, not below the baseline) |
+| Lighthouse CLS | 0.382 → 0.002 (PASS, every run ≤ 0.1). The first measurement was 0.192; `48a62139` fixed it in the shared footer. See below. |
 | Safety incident | **`shopping.php` was loaded 3 times on the local server during one e2e run.** See "Incident". |
 
 ## Fixes made in this task
@@ -25,9 +25,14 @@
    - **Fix:** the rule is now `:where(.lab) .lab-btn:where(:hover, :focus-visible)`, at (0,1,0).
    - **Result after the fix:**
      - Apply stays `white/10` after a click and turns `white/20` on hover.
-     - Keyboard focus shows the teal-soft outline ring.
+     - Keyboard focus on a `<button class="lab-btn">` (Apply, Book now) shows the teal-soft outline ring. On `<a class="lab-btn">` (hero CTA, sticky bar), `css/style.css:112` `a:focus{outline:none}` removes the ring; keyboard focus there shows only the darker `#006f73` background.
      - The primary buttons (Book now, the hero CTA) still darken to `#006f73` on hover.
    - **Verification:** PHPUnit was re-run and all three browser scripts were re-run.
+2. **`48a62139` fix: size the footer TripAdvisor logo to stop the layout shift.** File: `includes/footer.php` (attribute-only change, allowed by a controller ruling).
+   - **Problem:** the TripAdvisor SVG `<img>` had no size. Its intrinsic width is 3354px, which caused CLS 0.192 (details under Lighthouse).
+   - **Fix:** added `width="115" height="24"`, matching its final rendered width (115px; 3354×713 natural ratio gives 24.45px of image height). Nothing else in the footer changed, including the jscache widget script.
+   - **Visually identical:** footer screenshots before and after differ in 0 pixels at 390 (288,210 px) and 1440 (604,800 px): `shots/{mobile,desktop}-footer-{before,after}.png`.
+   - **Verification:** PHPUnit 152 OK (1 known deprecation), `lab-check.js` 30/30, `check.js` 8/8, Lighthouse ×3. `e2e.js` was not re-run (not needed for this change).
 
 The scratch test scripts were also changed. They are outside the repo and not committed:
 
@@ -105,11 +110,11 @@ The local server log shows three `GET /shopping.php?reference_id=…` with statu
 
 **Possible impact.**
 
-- **A possible call to the live Getnet gateway.** `shopping.php` calls `callGetnet(...)` server-side when it loads. With the local `../db_config.php` and `helpers.php` settings (base `https://checkout.getnet.cl`), that call may have reached the live gateway.
-- **No stored session ID.** None of the three reservation rows got a `process_id`, so no gateway session ID was saved locally. The gateway response itself was not captured.
+- **No payment-gateway call.** In `shopping.php`, `callGetnet()` (line 91) runs only inside `if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_getnet']))` (line 71). The three incident requests were GETs, and the server log has no `POST /shopping` at all. A GET only reads the local DB and renders the page. Consistent with that, none of the three rows got a `process_id`.
+- **Third-party traffic.** The rendered page loads GA4 with consent defaulting to 'denied', so in a fresh browser context at most cookieless consent pings went out.
 - **Data affected.** Only the e2e test bookings were involved: amounts 220, 258 and 278, with `e2e-*@example.test` emails. No payment was made.
 
-**Owner action.** Check the Getnet merchant dashboard for unpaid sessions with those three references. They should expire unpaid.
+**Detection.** The incident run still printed `shopping.php navigated: null`, because the followed redirect never passed through the route handler. The local server log was the only reliable detector, so every later run was checked against it.
 
 **Fix.**
 
@@ -151,17 +156,23 @@ Before testing there were 0 e2e rows and 1271 rows in total. After cleanup the c
 | after-3 | 64 | 8707 | 0.192 | 22 |
 | **after median** | **64** | **8707** | **0.192** | **24** |
 | diagnostic: after, with the footer TripAdvisor SVG blocked | 74 | 8712 | 0.000 | 33 |
+| after-fix-1 (`48a62139`) | 75 | 8638 | 0.000 | 25 |
+| after-fix-2 | 73 | 8721 | 0.002 | 24 |
+| after-fix-3 | 73 | 8707 | 0.002 | 26 |
+| **after-fix median (final)** | **73** | **8707** | **0.002** | **25** |
 
-**Perf: PASS.** The median rose from 55 to 64.
+Raw files: `.superpowers/lab-metrics/before.txt`, `after.txt`, `after-fix.txt`, `diag.txt`.
 
-**CLS: FAIL** (0.192 > 0.1). This failure was already present before the redesign: the baseline was 0.254–0.382. The cause was investigated:
+**Perf: PASS.** The final median is 73, up from 55.
+
+**CLS: PASS after the footer fix.** Every final run is ≤ 0.002. The first measurement after the redesign was 0.192, above 0.1. That shift was already present before the redesign (the baseline was 0.254–0.382). The cause was investigated:
 
 1. Lighthouse attributes every shift to `#cookie-consent-banner`, with the cause "Media element lacking an explicit size".
 2. A throttled mobile trace shows how it happens. Mid-load, the layout viewport grows to 1648px wide because one `<a>` in the shared footer is 3354px wide. That `<a>` holds the TripAdvisor widget logo: `<img src="…Tripadvisor_lockup_horizontal…svg">` in `includes/footer.php:34`, which has no `width` or `height`. The SVG loads before the widget's own CSS sizes it.
 3. The banner is fixed with `left:0;right:0`, so it stretches to 1648px wide and loses height (137px → 62px). When the CSS arrives, the banner snaps back to normal size. That snap is the layout shift.
 4. When the run blocks only that SVG, CLS falls to **0.000** (diagnostic row above).
 
-The fix belongs in `includes/footer.php`: give the TripAdvisor `<img>` explicit `width`/`height`, or `max-width:100%; height:auto` in the critical CSS. That file is shared by every page and lies outside the page/lab scope; the plan also requires the footer to stay unchanged. So it was **not changed here**, and the decision is left to the owner. The same fix should also improve CLS on every other page that uses the footer.
+Fix: `48a62139` gives that `<img>` explicit `width="115" height="24"`, an attribute-only change in `includes/footer.php` allowed by a controller ruling. CLS fell to 0.000–0.002. The footer is shared, so other pages that use it should benefit too; this was not measured.
 
 **LCP.** LCP improved slightly (median 9079 → 8707 ms), but it is still dominated by about 7.8 s of simulated "render delay". The observed, unthrottled LCP is 171 ms. In the simulation, `lab.css` (20 KB) is the only render-blocking stylesheet, with an estimated saving of 0 ms. The full-screen `#preloader` overlay, which `js/functions.js` fades out after the load event, is worth investigating next. It was kept from the old page.
 
@@ -175,6 +186,8 @@ The fix belongs in `includes/footer.php`: give the TripAdvisor `<img>` explicit 
 | `desktop-booking-adults12.png` | Booking panel at 1440 with 12 adults (fits) |
 | `mobile-coupon-apply-clicked.png` | Apply button after a click, after the fix |
 | `desktop-coupon-apply-clicked.png` | Apply button after a click, after the fix |
+| `mobile-footer-before.png`, `mobile-footer-after.png` | Footer at 390, before and after `48a62139` (0 px differ) |
+| `desktop-footer-before.png`, `desktop-footer-after.png` | Footer at 1440, before and after `48a62139` (0 px differ) |
 
 Visual review against the approved mockup:
 
@@ -185,16 +198,14 @@ Visual review against the approved mockup:
 - The timeline dots line up.
 - The booking panel shows two columns on desktop and one on mobile, and the +/- counters fit.
 - The accordions are closed.
-- The footer is unchanged.
+- The footer is visually unchanged (the `48a62139` attribute change renders pixel-identically).
 - No white Bootstrap backgrounds or dark-on-dark text leak in.
 
 Minor cosmetic note, not fixed: in the booking panel, the "Route" segmented control sits only about 10px above the "Name" label, which is tighter than the spacing between the other fields. (The full-page screenshot shows the fixed cookie banner partway down the page. That comes from full-page capture and does not affect the layout.)
 
 ## Manual checks left for the owner after deploy
 
-- [ ] Getnet dashboard: look for the 3 unpaid local test sessions (see "Incident").
 - [ ] Rich Results test on the live URL (FAQ schema).
 - [ ] One real booking reaching the payment page with the right amount.
 - [ ] Visual check on a real phone.
 - [ ] Purge the Cloudflare cache.
-- [ ] Optional: fix the footer TripAdvisor `<img>` size (site-wide CLS).
