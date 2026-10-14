@@ -43,3 +43,5 @@ require_once __DIR__ . '/../includes/hotel_resolver.php';
 require_once __DIR__ . '/../admin/_viator_categorization.php';
 
 require_once __DIR__ . '/../includes/booking.php';
+
+require_once __DIR__ . '/../includes/tours/maipo_options.php';
