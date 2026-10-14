@@ -1,0 +1,19 @@
+# =========================
+# docs/ holds internal specs, plans and verification reports that are
+# not meant to be public, so nothing here should be web-reachable.
+#
+# Deny everything in this directory.
+#
+# Both syntaxes are IfModule-guarded so this works whether the host runs
+# Apache 2.4 (mod_authz_core) or 2.2 (mod_authz_host).
+
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+  <IfModule mod_authz_host.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</IfModule>
