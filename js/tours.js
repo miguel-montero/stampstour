@@ -71,21 +71,36 @@ $(function () {
      const PRICE_PICKUP = 30;
      const prices = { adult: 0, child: 0 };
      let couponApplied = false;
-     // Fetch tour prices from server
-     const exp = window.EXP_NAME || 'Maipo';
-     fetch(`get_prices.php?nombre=${encodeURIComponent(exp)}`)
-       .then(res => res.json())
-       .then(data => {
-         prices.adult = parseFloat(data.precio_adulto) || 0;
-         prices.child = parseFloat(data.precio_nino) || 0;
-         document.getElementById('dynamic_price').textContent = prices.adult;
-         document.getElementById('activity_name').value = data.nombre || 'Maipo';
-         calcularTotal(); // initialize total with fetched prices
-       })
-       .catch(err => {
-         console.error('Error fetching prices:', err);
-         // if error, prices remain 0 (total will be 0, form submit disabled)
+     if (window.MAIPO_OPTIONS) {
+       // Pages with options (Maipo) inject all prices server-side; js/maipo-options.js
+       // owns activity_name and fires 'maipo:optionchange' when the option changes.
+       const applyOptionPrices = () => {
+         const p = window.MAIPO_OPTIONS[window.MAIPO_SELECTED] || {};
+         prices.adult = parseFloat(p.adult) || 0;
+         prices.child = parseFloat(p.child) || 0;
+       };
+       applyOptionPrices();
+       document.addEventListener('maipo:optionchange', () => {
+         applyOptionPrices();
+         calcularTotal();
        });
+     } else {
+       // Fetch tour prices from server
+       const exp = window.EXP_NAME || 'Maipo';
+       fetch(`get_prices.php?nombre=${encodeURIComponent(exp)}`)
+         .then(res => res.json())
+         .then(data => {
+           prices.adult = parseFloat(data.precio_adulto) || 0;
+           prices.child = parseFloat(data.precio_nino) || 0;
+           document.getElementById('dynamic_price').textContent = prices.adult;
+           document.getElementById('activity_name').value = data.nombre || 'Maipo';
+           calcularTotal(); // initialize total with fetched prices
+         })
+         .catch(err => {
+           console.error('Error fetching prices:', err);
+           // if error, prices remain 0 (total will be 0, form submit disabled)
+         });
+     }
      // Calculate total price
      function calcularTotal() {
        const adults   = parseInt(document.getElementById('adults').value)   || 0;
@@ -154,6 +169,9 @@ $(function () {
                el.disabled = true;
              }
            });
+           // Option selectors (incl. the one above the itinerary) are locked too,
+           // so the discounted total can't drift from the selected option
+           document.querySelectorAll('[data-booking-lock]').forEach(el => { el.disabled = true; });
            // Disable plus/minus controls
            document.querySelectorAll('.numbers-row').forEach(row => {
              row.querySelectorAll('input, button, span, div').forEach(el => {
@@ -210,7 +228,7 @@ $(function () {
        };
        // Create a form and submit (or use AJAX) – here we create a hidden form for POST
        const form = document.createElement('form');
-       form.action = 'submit.php';
+       form.action = this.getAttribute('action') || 'submit.php'; // Maipo: book_tour.php
        form.method = 'POST';
        for (const key in formData) {
          const hiddenInput = document.createElement('input');
