@@ -52,3 +52,9 @@ require_once __DIR__ . '/../includes/migrations/maipo_options_2026_10_13.php';
 require_once __DIR__ . '/../includes/book_tour_handler.php';
 
 require_once __DIR__ . '/../includes/tour_schema.php';
+
+require_once __DIR__ . '/../includes/tours/maipo_lab_content.php';
+
+require_once __DIR__ . '/../includes/ui/ui.php';
+
+require_once __DIR__ . '/../includes/tour_faq.php';

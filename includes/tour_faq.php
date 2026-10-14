@@ -1,7 +1,8 @@
 <?php
 // includes/tour_faq.php
 // Renders a Bootstrap accordion FAQ block plus matching FAQPage JSON-LD
-// structured data for a tour page. $faqs is a list of ['q' => ..., 'a' => ...].
+// structured data for a tour page (render_tour_faq_schema() emits the JSON-LD
+// alone, for pages with their own FAQ markup). $faqs is a list of ['q' => ..., 'a' => ...].
 // Bootstrap 5 JS (collapse) is already loaded on these pages for #collapseMap.
 
 function render_tour_faq(array $faqs): void
@@ -37,6 +38,16 @@ function render_tour_faq(array $faqs): void
        </div>
       </div>
     <?php
+    render_tour_faq_schema($faqs);
+}
+
+/** FAQPage JSON-LD only - for pages that render their own FAQ markup
+ *  (e.g. the lab <details> accordion on the Maipo page). */
+function render_tour_faq_schema(array $faqs): void
+{
+    if (empty($faqs)) {
+        return;
+    }
     $schema = [
         '@context' => 'https://schema.org',
         '@type' => 'FAQPage',
@@ -51,7 +62,6 @@ function render_tour_faq(array $faqs): void
             ];
         }, $faqs),
     ];
-    ?>
-    <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
-    <?php
+    // JSON_HEX_TAG: a "</script>" inside an answer can't end the tag early
+    echo '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) . '</script>' . "\n";
 }

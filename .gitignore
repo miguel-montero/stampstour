@@ -64,3 +64,9 @@
 /tests/test_db_config.php
 /tests/tools/
 /.phpunit.result.cache
+
+# Superpowers local scratch (brainstorm mockups, SDD workspaces)
+/.superpowers/
+
+# Tailwind standalone CLI binary, downloaded by bin/build-css
+/bin/.tailwind/
