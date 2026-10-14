@@ -112,3 +112,12 @@ CREATE TABLE IF NOT EXISTS `getnet_webhook_events` (
   `raw_payload` json DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `cupones` (
+  `id_cupon` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `id_vendedor` int(11) NOT NULL,
+  `porcentaje` int(11) NOT NULL,
+  PRIMARY KEY (`id_cupon`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

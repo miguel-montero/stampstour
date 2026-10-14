@@ -41,3 +41,5 @@ require_once __DIR__ . '/../includes/reconcile_getnet.php';
 require_once __DIR__ . '/../includes/reprocess_paypal_events.php';
 require_once __DIR__ . '/../includes/hotel_resolver.php';
 require_once __DIR__ . '/../admin/_viator_categorization.php';
+
+require_once __DIR__ . '/../includes/booking.php';
