@@ -78,6 +78,7 @@ $(function () {
          const p = window.MAIPO_OPTIONS[window.MAIPO_SELECTED] || {};
          prices.adult = parseFloat(p.adult) || 0;
          prices.child = parseFloat(p.child) || 0;
+        prices.infant = parseFloat(p.infant) || 0;
        };
        applyOptionPrices();
        document.addEventListener('maipo:optionchange', () => {
@@ -119,7 +120,7 @@ $(function () {
          pickUpCheckbox.disabled = false;
        }
        // Total = (adult tickets * price) + (child tickets * price) + pickup (flat)
-       const total = (adults * prices.adult) + (children * prices.child) + pickUpCost;
+       const total = (adults * prices.adult) + (children * prices.child) + (infants * (prices.infant || 0)) + pickUpCost;
        document.getElementById('total_price').textContent = total;
        // Enable/disable submit button: only allow booking if total > 0 (at least one passenger)
        const submitBtn = document.querySelector('#booking button[type="submit"]');
@@ -131,6 +132,8 @@ $(function () {
      document.getElementById('children').addEventListener('input',  calcularTotal);
      document.getElementById('adults').addEventListener('change', calcularTotal);
      document.getElementById('children').addEventListener('change', calcularTotal);
+    document.getElementById('infants').addEventListener('input',  calcularTotal);
+    document.getElementById('infants').addEventListener('change', calcularTotal);
      document.getElementById('option_2').addEventListener('change', calcularTotal);
      // Also recalc when plus/minus buttons are clicked (they modify input values)
      document.getElementById('booking').addEventListener('click', e => {
@@ -222,7 +225,7 @@ $(function () {
          infants:           document.getElementById('infants').value,
          airport_pick_up:   pickupValue,
          activity_name:     document.getElementById('activity_name').value,
-         coupon_code:       document.getElementById('coupon_code').value.trim(),
+         coupon_code:       (window.MAIPO_OPTIONS && !couponApplied) ? '' : document.getElementById('coupon_code').value.trim(),
          subtotal:          totalDOM,            // original total before discount
          total_price:       discountedTotal      // final total after coupon (if applied)
        };

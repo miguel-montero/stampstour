@@ -19,6 +19,12 @@ function book_tour_handle(mysqli $conn, array $post, DateTimeImmutable $today): 
 {
     $fail = fn(string $msg) => ['ok' => false, 'error' => $msg];
 
+    foreach ($post as $value) {
+        if (!is_string($value)) {
+            return $fail('Please check the booking form and try again.');
+        }
+    }
+
     $exp = trim((string)($post['activity_name'] ?? ''));
     if (!in_array($exp, book_tour_allowed_experiences(), true)) {
         return $fail('This tour cannot be booked online. Please contact us.');

@@ -160,7 +160,8 @@ $stmt = $conn->prepare(
          t.nombre    AS tit_nombre,
          t.apellido  AS tit_apellido,
          t.email     AS tit_email,
-         e.nombre    AS actividad
+         e.nombre    AS actividad,
+         COALESCE(e.nombre_publico, e.nombre) AS actividad_publica
      FROM reservas r
      JOIN titulares   t ON r.id_titular    = t.id_titular
      JOIN experiencias e ON r.id_experiencia = e.id_experiencia
@@ -381,7 +382,7 @@ $_SESSION['last_status'][$reference] = $status;
               <tbody>
                 <tr>
                   <td><strong>Activity</strong></td>
-                  <td><?= htmlspecialchars($reserva['actividad'], ENT_QUOTES, 'UTF-8') ?></td>
+                  <td><?= htmlspecialchars($reserva['actividad_publica'], ENT_QUOTES, 'UTF-8') ?></td>
                 </tr>
                 <tr>
                   <td><strong>Name</strong></td>

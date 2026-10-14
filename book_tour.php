@@ -5,6 +5,8 @@
 // server-side - see includes/book_tour_handler.php and
 // docs/superpowers/specs/2026-10-13-maipo-tour-options-design.md
 
+ini_set('display_errors', '0');
+
 require __DIR__ . '/../db_config.php';
 require_once __DIR__ . '/includes/book_tour_handler.php';
 

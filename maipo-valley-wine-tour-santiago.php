@@ -50,7 +50,7 @@ $tour_faqs = [
 <?php include __DIR__ . '/includes/head.php'; ?>
   <link rel="stylesheet" href="css/timeline.css" media="print" onload="this.media='all';this.onload=null;">
   <noscript><link href="css/timeline.css" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="css/tour-options.css">
+  <link rel="stylesheet" href="css/tour-options.css?v=20261013">
  </head>
  <body>
   <div id="preloader">
@@ -403,6 +403,6 @@ window.MAIPO_OPTIONS = <?= json_encode((object)$maipo_js_options, JSON_UNESCAPED
 window.MAIPO_SELECTED = <?= json_encode($maipo_selected) ?>;
 </script>
 <?php include __DIR__ . '/includes/tour-scripts.php'; ?>
-<script defer src="js/maipo-options.js"></script>
+<script defer src="js/maipo-options.js?v=20261013"></script>
   </body>
 </html>

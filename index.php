@@ -14,8 +14,10 @@ $lcp_preload_image_mobile = 'img/Tours/portada-mobile-hero.webp';
 $vendor_css_variant = 'home';
 require __DIR__ . '/../db_config.php';
 require __DIR__ . '/includes/tour_price.php';
+require_once __DIR__ . '/includes/tours/maipo_options.php';
 $price_valparaiso = fetch_tour_adult_price($conn, 'Valparaiso');
-$price_maipo       = fetch_tour_adult_price($conn, 'Maipo');
+$maipo_option_prices = fetch_tour_prices($conn, array_values(maipo_option_exp_names()));
+$price_maipo       = $maipo_option_prices ? min(array_column($maipo_option_prices, 'adult')) : null;
 $price_andes       = fetch_tour_adult_price($conn, 'Andes');
 $price_santiago     = fetch_tour_adult_price($conn, 'Santiago');
 ?>

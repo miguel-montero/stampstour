@@ -138,6 +138,7 @@ final class BookTourHandlerTest extends TestCase
             'missing email'              => [['email_booking' => '']],
             'invalid email'              => [['email_booking' => 'not-an-email']],
             'missing phone'              => [['phone_booking' => '  ']],
+            'array-valued field'         => [['name_booking' => ['x']]],
         ];
     }
 }

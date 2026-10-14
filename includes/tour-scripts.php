@@ -50,4 +50,4 @@ document.addEventListener('DOMContentLoaded', function () {
 <script>window.EXP_NAME = '<?php echo htmlspecialchars($exp_name, ENT_QUOTES, 'UTF-8'); ?>';</script>
 
 <!-- Your custom code LAST -->
-<script defer src="js/tours.js"></script>
+<script defer src="js/tours.js?v=20261013"></script>

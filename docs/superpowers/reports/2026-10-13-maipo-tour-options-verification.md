@@ -123,6 +123,7 @@ after:  reservas_count=0   titulares_count=0
 4. Smoke test: /maipo-valley-wine-tour-santiago?option=premium shows Premium;
    one real booking reaches the payment page with the right amount.
 5. Rich Results Test on the live URL: Product (AggregateOffer) + FAQPage valid.
+6. Static assets are versioned with ?v=20261013; bump the value whenever tours.js / maipo-options.js / tour-options.css change.
 
 ## Follow-ups (not in this change)
 - Move Valparaíso, Andes, Santiago and cruise pages to book_tour.php, then
