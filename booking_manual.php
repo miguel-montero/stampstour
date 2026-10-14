@@ -164,7 +164,7 @@ require __DIR__ . '/../db_config.php';
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <!-- Your existing calculator logic -->
-  <script src="js/tours.js?v=20261013"></script>
+  <script src="js/tours.js?v=20261014"></script>
 
   <script>
   (function () {

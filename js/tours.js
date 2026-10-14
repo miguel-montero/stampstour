@@ -1,18 +1,22 @@
 
-   $('#Img_carousel').sliderPro({
-     width: 960,
-     height: 500,
-     fade: true,
-     arrows: true,
-     buttons: false,
-     fullScreen: false,
-     smallSize: 500,
-     startSlide: 0,
-     mediumSize: 1000,
-     largeSize: 3000,
-     thumbnailArrows: true,
-     autoplay: false
-   }).css('visibility', 'visible');
+   // Slider Pro gallery - only on pages that have it (the lab Maipo page
+   // and booking_manual.php don't load the plugin / have no #Img_carousel)
+   if (window.jQuery && jQuery.fn.sliderPro && jQuery('#Img_carousel').length) {
+     jQuery('#Img_carousel').sliderPro({
+       width: 960,
+       height: 500,
+       fade: true,
+       arrows: true,
+       buttons: false,
+       fullScreen: false,
+       smallSize: 500,
+       startSlide: 0,
+       mediumSize: 1000,
+       largeSize: 3000,
+       thumbnailArrows: true,
+       autoplay: false
+     }).css('visibility', 'visible');
+   }
   
   <!-- Date and time pickers -->
  
@@ -250,6 +254,9 @@ $(function () {
   <!-- Optional: "Book Now" floating button on header (unchanged from original) -->
   
    $(function() {
+     // Pages with the lab sticky CTA bar (includes/ui/sticky_bar.php) have
+     // their own "Check availability" button - don't add this one.
+     if (document.querySelector('[data-sticky-cta]')) return;
      var $win = $(window),
          $booking = $('#booking'),
          $headerRow = $('header > .container > .row').first().css('position','relative'),

@@ -3,6 +3,10 @@
  * (valparaiso, maipo, portillo/andes, discover-santiago).
  * Caller sets $exp_name before including, e.g.:
  *   <?php $exp_name = 'Maipo'; include __DIR__ . '/includes/tour-scripts.php'; ?>
+ * Optional: $tour_scripts_skip_gallery = true; before including omits the
+ * Slider Pro gallery (CSS+JS) and the theia sticky sidebar - for pages
+ * without #Img_carousel / #sidebar (the lab Maipo page). js/tours.js guards
+ * its Slider Pro init, so it is safe to omit them.
  *
  * All scripts below are `defer` so they download in parallel instead of
  * one at a time, and don't block HTML parsing/painting - deferred
@@ -30,6 +34,7 @@
 <!-- Site functions (ok after core+extras) -->
 <script defer src="js/functions.js"></script>
 
+<?php if (empty($tour_scripts_skip_gallery)): ?>
 <!-- Gallery Plugin -->
 <link rel="stylesheet" href="css/slider-pro.min.css">
 <script defer src="js/jquery.sliderPro.min.js"></script>
@@ -45,9 +50,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+<?php endif; ?>
 
 <!-- Expose tour name BEFORE tours.js -->
 <script>window.EXP_NAME = '<?php echo htmlspecialchars($exp_name, ENT_QUOTES, 'UTF-8'); ?>';</script>
 
 <!-- Your custom code LAST -->
-<script defer src="js/tours.js?v=20261013"></script>
+<script defer src="js/tours.js?v=20261014"></script>
