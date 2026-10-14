@@ -1,22 +1,46 @@
 <?php
-$page_title       = 'Maipo Valley Wine Tour with 4 vineyards from Santiago.';
-$page_description = 'Small-group or private Maipo Valley wine tour from Santiago. Multiple tastings, optional winery lunch, hotel pickup, English-speaking guide.';
+$page_title       = 'Maipo Valley Wine Tour from Santiago: 4 Wineries, Classic or Premium';
+$page_description = 'Small-group Maipo Valley wine tour from Santiago: 4 wineries with tastings, hotel pickup and guide. Choose Classic, Classic with lunch included, or Premium with Undurraga.';
 $page_canonical   = 'https://stampstour.com/maipo-valley-wine-tour-santiago';
 $critical_css_file = __DIR__ . '/includes/critical/tour.css';
 $lcp_preload_image = 'img/Tours/Maipo/big-optimized.webp';
 $vendor_css_variant = 'tour';
-$exp_name = 'Maipo';
+$exp_name = 'Maipo'; // availability (cupos) is shared by all three options - always the Maipo row
 require __DIR__ . '/../db_config.php';
 require __DIR__ . '/includes/tour_price.php';
 require __DIR__ . '/includes/tour_faq.php';
-$dynamic_price_adult = fetch_tour_adult_price($conn, $exp_name);
+require __DIR__ . '/includes/tours/maipo_options.php';
+require __DIR__ . '/includes/tours/option_ui.php';
+
+$maipo_options  = maipo_options();
+$maipo_selected = maipo_resolve_option($_GET['option'] ?? null);
+$maipo_db_prices = fetch_tour_prices($conn, array_column($maipo_options, 'exp_name'));
+
+// slug => {exp, adult, child, infant}; options without a DB row are left out
+// (the selector shows them disabled with "Contact us")
+$maipo_js_options = [];
+foreach ($maipo_options as $slug => $opt) {
+    if (!isset($maipo_db_prices[$opt['exp_name']])) {
+        continue;
+    }
+    $maipo_js_options[$slug] = ['exp' => $opt['exp_name']] + $maipo_db_prices[$opt['exp_name']];
+}
+// If the requested option has no DB price (row missing) but others do, open on the first priced option
+if (!isset($maipo_js_options[$maipo_selected]) && $maipo_js_options) {
+    $maipo_selected = array_key_first($maipo_js_options);
+}
+$maipo_adult_prices  = array_column($maipo_js_options, 'adult');
+$dynamic_price_adult = $maipo_adult_prices ? min($maipo_adult_prices) : null;
+
 $tour_faqs = [
-    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four family-run stops in Isla de Maipo: Campo La Quirinca (wine and pisco tasting), Viña Santa Ema (wine tasting), Viña TerraMater (your lunch stop, at your own cost), and Viña Undurraga (wine tasting). Tastings aren't at every stop - see the itinerary below for the full breakdown."],
-    ['q' => 'Is lunch included?', 'a' => "No. You'll stop at the Zinfandel restaurant on the TerraMater estate, but the meal itself is at your own cost."],
-    ['q' => 'Where does the tour pick me up?', 'a' => 'Hotel pickup is offered from Las Condes, Vitacura, Providencia, Santiago Centro, Recoleta, and the Airport area; your exact pickup time is sent the night before.'],
+    ['q' => 'How many wineries do we visit on the Maipo Valley wine tour?', 'a' => "Four stops in the Maipo Valley on every option: Campo La Quirinca (wine and pisco tasting), Viña Santa Ema (wine tasting), Viña TerraMater (lunch stop) and a final winery that depends on the option you book - boutique Viña Ballek on the Classic routes, or historic Viña Undurraga on the Premium route."],
+    ['q' => "What's the difference between Classic, Classic + Lunch and Premium?", 'a' => "The first three stops are the same. Classic ends at Viña Ballek, a relaxed boutique winery by the Maipo River, with lunch at your own cost. Classic + Lunch is the same itinerary with lunch at TerraMater included in the price. Premium replaces Ballek with an extended guided tour of Viña Undurraga - gardens, production area, barrel cellar and a tasting of four premium wines - with lunch at your own cost."],
+    ['q' => 'Do we visit both Viña Ballek and Viña Undurraga?', 'a' => 'No. They are alternative final stops: the Classic routes end at Ballek and the Premium route ends at Undurraga.'],
+    ['q' => 'Is lunch included?', 'a' => 'Only on the Classic Route + Lunch option. On Classic and Premium you stop for lunch at Zinfandel restaurant on the TerraMater estate and pay there, or you can bring your own food.'],
+    ['q' => 'Where does the tour pick me up?', 'a' => 'Hotel pickup is offered from Las Condes, Vitacura, Providencia, Santiago Centro, and Recoleta; your exact pickup time is sent the night before.'],
     ['q' => 'How many people are on the tour?', 'a' => "Groups are capped at 15 travelers, with a minimum of 4 required to run - if the minimum isn't met, you'll be offered another date or a full refund."],
     ['q' => "What's the cancellation policy?", 'a' => "Free cancellation up to 24 hours before the tour's start time; cancellations made inside that window aren't refunded."],
-    ['q' => 'Is the Maipo Valley wine tour worth it?', 'a' => "If you want a taste of Chilean wine country without renting a car or planning your own route between wineries, yes - in one day you visit four different Isla de Maipo wineries with guided tastings and hotel pickup included."],
+    ['q' => 'Is the Maipo Valley wine tour worth it?', 'a' => "If you want a taste of Chilean wine country without renting a car or planning your own route between wineries, yes - in one day you visit four different Maipo Valley wineries with guided tastings and hotel pickup included."],
     ['q' => 'Can I book this tour privately?', 'a' => 'A private version of this tour is available - pricing depends on your group size, so please contact us directly to inquire.'],
 ];
 ?>
@@ -26,6 +50,7 @@ $tour_faqs = [
 <?php include __DIR__ . '/includes/head.php'; ?>
   <link rel="stylesheet" href="css/timeline.css" media="print" onload="this.media='all';this.onload=null;">
   <noscript><link href="css/timeline.css" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="css/tour-options.css">
  </head>
  <body>
   <div id="preloader">
@@ -45,12 +70,17 @@ $tour_faqs = [
   <?php include __DIR__ . '/includes/cookie-banner.php'; ?>
   <?php
   require __DIR__ . '/includes/tour_schema.php';
+  $schema_offers = [];
+  foreach ($maipo_js_options as $slug => $o) {
+      $schema_offers[] = ['name' => $maipo_options[$slug]['label'], 'price' => $o['adult'], 'url' => $page_canonical . '?option=' . $slug];
+  }
   render_tour_product_schema([
-      'name' => 'Small-Group Maipo Valley Wine Tour: 4 Vineyards from Santiago',
+      'name' => 'Small-Group Maipo Valley Wine Tour from Santiago: 4 Wineries',
       'description' => $page_description,
       'image' => $lcp_preload_image,
       'url' => $page_canonical,
       'price' => $dynamic_price_adult,
+      'offers' => $schema_offers,
       'sameAs' => ['https://www.tripadvisor.com/AttractionProductReview-g294305-d15040546-Maipo_Valley_Wine_Tour_with_4_vineyards_from_Santiago-Santiago_Santiago_Metropolit.html'],
   ]);
   ?>
@@ -69,11 +99,11 @@ $tour_faqs = [
       <div class="col-md-8">
           <!-- save badge -->
         <div class="badge_save">Save<strong>10%</strong></div> 
-       <h1>Small-Group Maipo Valley Wine Tour: 4 Vineyards from Santiago</h1>
+       <h1>Small-Group Maipo Valley Wine Tour from Santiago: 4 Wineries</h1>
       </div>
       <div class="col-md-4">
        <div id="price_single_main">
-        Special offer
+        From
         <span><sup>$</sup><span id="dynamic_price"><?= $dynamic_price_adult !== null ? htmlspecialchars((string)$dynamic_price_adult, ENT_QUOTES, 'UTF-8') : '' ?></span></span>
        </div>
       </div>
@@ -146,29 +176,36 @@ $tour_faqs = [
         <h3>Description</h3>
        </div>
        <div class="col-lg-9">
-        
-        <p>Visit the bucolic town of Isla de Maipo for a day of exploring Chilean wine country. Though not truly an island, the area takes its name because it is surrounded by tributaries of the Maipo River, which make for perfect grape-growing conditions. Visit four wineries, each with their own specialties and enjoy several tastings and a delicious lunch along the way.</p>
-        <h4>What to expect.</h4>
-        <p>Your adventure begins with pickup from your Santiago hotel or private residence in Downtown, Providencia, Las Condes, Vitacura, and Recoleta. If you are not in one of these areas, you will be provided with the nearest pickup point.</p>
-        <p>The first stop on your wine tour is the picturesque family farm, Campo La Quirinca, to learn about Chilean winemaking traditions and enjoy wine tastings, accompanied by the famous Chilean pisco.</p>
-        <p>Next, visit Vi&ntilde;a Santa Ema, a charming winery offering tastings of three premium wines, including a signature blend. Then it’s on to Vi&ntilde;a TerraMater for lunch at the Zinfandel restaurant (at your own cost).</p>
-        <p>Cap off your wine tour at Vi&ntilde;a Undurraga, one of the oldest and most traditional wineries with 130 years of expertise. Delight in tastings of four premium wines and a comprehensive tour of gardens, vineyards, production facilities, and the wine barrel cellar.</p>
-        <p>Your experience concludes with a drop-off at your original departure point.</p>
+        <p>Spend a day in Chilean wine country around Isla de Maipo, a farming town named for the tributaries of the Maipo River that surround it and make for perfect grape-growing conditions. Every option visits four stops, from a small family farm to established wineries, with guided tastings, hotel pickup and an English-speaking guide.</p>
+        <h4>Choose your route</h4>
+        <p>All three options share the first three stops: Campo La Quirinca, Vi&ntilde;a Santa Ema and Vi&ntilde;a TerraMater. They differ in the final winery and in whether lunch is included.</p>
+        <?php render_option_compare_table($maipo_options, $maipo_js_options); ?>
+        <h4>What to expect</h4>
+        <p>Your day begins with pickup from your hotel or residence in Santiago Centro, Providencia, Las Condes, Vitacura or Recoleta. If you are staying elsewhere, send us your address and we will confirm pickup or the nearest meeting point.</p>
+        <p>The first stop is Campo La Quirinca, a family farm where you learn about traditional Chilean winemaking and taste local wines and Chilean pisco. Next is Vi&ntilde;a Santa Ema for a guided tasting of three wines, then Vi&ntilde;a TerraMater for lunch at its Zinfandel restaurant.</p>
+        <p>The Classic routes end at Vi&ntilde;a Ballek, a boutique family winery by the Maipo River. The Premium route ends instead at Vi&ntilde;a Undurraga, one of Chile's most traditional wineries, with an extended guided tour and a tasting of four premium wines. The day ends with drop-off at your original pickup point.</p>
         <h4>What's included</h4>
-        <div class="row">
-         <div class="col-md-6">
-          <ul class="list_ok">
-           <li>Hotel pickup and drop-off (Pick up time will be delivered the night before the tour)</li>
-           <li>Professional and expert tour guide</li>
-           <li>Pisco Tasting</li>
-           <li>Entry/Admission - Campo la Quirinca</li>
-           <li>Entry/Admission - Vi&ntilde;a Santa Ema</li>
-           <li>Entry/Admission - Vi&ntilde;a Undurraga</li>
-           <li>Live coordination via WhatsApp with guide. (Recommended the use of WhatsApp)</li>
-          </ul>
-         </div>
-        </div>
-        <!-- End row  -->
+        <?php foreach ($maipo_options as $slug => $opt): ?>
+         <?php render_option_block_start($slug, $maipo_selected); ?>
+          <div class="row">
+           <div class="col-md-6">
+            <ul class="list_ok">
+             <?php foreach ($opt['included'] as $item): ?>
+              <li><?= option_ui_h($item) ?></li>
+             <?php endforeach; ?>
+            </ul>
+           </div>
+           <div class="col-md-6">
+            <p><strong>Not included</strong></p>
+            <ul>
+             <?php foreach ($opt['not_included'] as $item): ?>
+              <li><?= option_ui_h($item) ?></li>
+             <?php endforeach; ?>
+            </ul>
+           </div>
+          </div>
+         <?php render_option_block_end(); ?>
+        <?php endforeach; ?>
        </div>
       </div>
       <!-- End row -->
@@ -228,62 +265,14 @@ $tour_faqs = [
       <hr/>
       <div class="main_title">
        <h2>Detailed <span>timeline</span> for your tour</h2>
-       <p>take a look</p>
+       <p>Pick an option to see its itinerary</p>
       </div>
+      <?php render_option_selector($maipo_options, $maipo_js_options, $maipo_selected, 'tour_option_itin', 'Itinerary for', 'inline'); ?>
       <hr/>
-      <ul class="cbp_tmtimeline">
-       <li>
-        <!-- <time class="cbp_tmtime" datetime="07:30"><span>45 minutes</span><span>07:30</span></time> -->
-        <div class="cbp_tmicon icon-location-outline"></div>
-        <div class="cbp_tmlabel">
-         <h2><span>Santiago</span> Meeting point</h2>
-         <p>Pick up at your location in Santiago City</p>
-        </div>
-       </li>
-      </ul>
       <div id="itinerary-wrapper" style="position:relative; max-height:180px; overflow:hidden; transition:max-height 0.5s ease;">
-       <ul class="cbp_tmtimeline" id="hidden-timeline">
-        <li>
-         <time class="cbp_tmtime" datetime="07:30"><span>1 hour 30 minutes</span><span></span></time>
-         <div class="cbp_tmicon icon-camera-alt"></div>
-         <div class="cbp_tmlabel">
-          <h2><span>Isla de Maipo</span> Campo La Quirinca</h2>
-          <p>The first stop is the amazing family farm “Campo La Quirinca”. The experience is completed with a full tour in the facilities and gardens, discovering different kinds of agricultural productions. You will be introduced to the Chilean countryside way to produce wine, also learn about the animal husbandry of alpacas, various breeds of chickens and more. After the fun tour you’ll relax in the salon and enjoy the wine tasting plus the famous Chilean pisco. Many of the local products are available for purchase so you can take something authentic home.</p>
-         </div>
-        </li>
-        <li>
-         <time class="cbp_tmtime" datetime="07:30"><span>1 Hour</span><span></span></time>
-         <div class="cbp_tmicon icon-wine"></div>
-         <div class="cbp_tmlabel">
-          <h2><span>Isla de Maipo</span> Vi&ntilde;a Santa Ema</h2>
-          <p>This charming winery offers a full tasting of 3 premium wines including one of their signature wines in a beautiful environment.</p>
-         </div>
-        </li>
-        <li>
-         <time class="cbp_tmtime" datetime="07:30"><span>1 hour 30 minutes</span><span></span></time>
-         <div class="cbp_tmicon icon-restaurant"></div>
-         <div class="cbp_tmlabel">
-          <h2><span>Isla de Maipo</span> Vi&ntilde;a TerraMater</h2>
-          <p>Around 1 pm you will visit the TerraMater winery which has a fantastic restaurant, Zinfandel, for lunch (own cost). This winery is also home to an olive oil that is the most awarded in Chile and the world. In the shop you will be able to buy it at cellar price.</p>
-         </div>
-        </li>
-        <li>
-         <time class="cbp_tmtime" datetime="07:30"><span>1 hour 30 minutes</span><span></span></time>
-         <div class="cbp_tmicon icon-wine"></div>
-         <div class="cbp_tmlabel">
-          <h2><span>Isla de Maipo</span> Vi&ntilde;a Undurraga</h2>
-          <p>One of the oldest and most traditional wineries with 130 years of experience. This winery will share the long history of Chilean wine production, giving you a better understanding of why our wines are high quality. You’ll taste 4 premium wines and enjoy a full tour of the gardens, vineyards, production warehouse, wine barrel cellar, and pre-Columbian exhibit.</p>
-         </div>
-        </li>
-        <li>
-         <!-- <time class="cbp_tmtime" datetime="07:30"><span>45 minutes</span><span>07:30</span></time> -->
-         <div class="cbp_tmicon icon-location-outline"></div>
-         <div class="cbp_tmlabel">
-          <h2><span>Santiago</span> Return to the starting point</h2>
-          <p>Drop-off at your location in Santiago City</p>
-         </div>
-        </li>
-       </ul>
+       <?php foreach ($maipo_options as $slug => $opt): ?>
+        <?php render_option_itinerary($slug, $opt, $maipo_selected); ?>
+       <?php endforeach; ?>
        <div id="fade-effect" class="fade-overlay" style="position:absolute; bottom:0; left:0; right:0; height:160px; background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1)); pointer-events:none; transition: opacity 0.3s ease;"></div>
       </div>
       <div class="text-center">
@@ -299,10 +288,10 @@ $tour_faqs = [
       </p>
       -->
       <div class="box_style_1 expose">
-       <form action="submit.php" method="POST" id="booking">
-        <input id="activity_name" name="activity_name" type="hidden" value="2"/>
-        <!-- <input id="activity_name" name="activity_name" type="hidden" value=""/> -->
+       <form action="book_tour.php" method="POST" id="booking">
+        <input id="activity_name" name="activity_name" type="hidden" value="<?= option_ui_h($maipo_options[$maipo_selected]['exp_name']) ?>"/>
         <h3 class="inner">- Booking -</h3>
+        <?php render_option_selector($maipo_options, $maipo_js_options, $maipo_selected, 'tour_option', 'Choose your tour'); ?>
         <div class="row">
          <div class="col-sm-6">
           <div class="form-group">
@@ -409,6 +398,11 @@ $tour_faqs = [
   <!-- End footer -->
   <div id="toTop"></div>
   <!-- JavaScript Files -->
+<script>
+window.MAIPO_OPTIONS = <?= json_encode((object)$maipo_js_options, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+window.MAIPO_SELECTED = <?= json_encode($maipo_selected) ?>;
+</script>
 <?php include __DIR__ . '/includes/tour-scripts.php'; ?>
+<script defer src="js/maipo-options.js"></script>
   </body>
 </html>
