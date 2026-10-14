@@ -1,6 +1,6 @@
 
-   // Slider Pro gallery - only on pages that have it (the lab Maipo page
-   // and booking_manual.php don't load the plugin / have no #Img_carousel)
+   // Slider Pro gallery - skipped on pages without the plugin or
+   // #Img_carousel (e.g. the lab Maipo page)
    if (window.jQuery && jQuery.fn.sliderPro && jQuery('#Img_carousel').length) {
      jQuery('#Img_carousel').sliderPro({
        width: 960,

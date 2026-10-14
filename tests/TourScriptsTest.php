@@ -36,4 +36,10 @@ final class TourScriptsTest extends TestCase
         $this->assertStringContainsString("window.EXP_NAME = 'Maipo'", $html);
         $this->assertStringContainsString('js/tours.js?v=20261014', $html);
     }
+
+    public function testBookingManualDoesNotLoadToursJs(): void
+    {
+        $src = (string)file_get_contents(__DIR__ . '/../booking_manual.php');
+        $this->assertStringNotContainsString('js/tours.js', $src);
+    }
 }
