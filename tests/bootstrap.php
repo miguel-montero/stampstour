@@ -45,3 +45,5 @@ require_once __DIR__ . '/../admin/_viator_categorization.php';
 require_once __DIR__ . '/../includes/booking.php';
 
 require_once __DIR__ . '/../includes/tours/maipo_options.php';
+
+require_once __DIR__ . '/../includes/migrations/maipo_options_2026_10_13.php';
