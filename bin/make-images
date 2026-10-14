@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# bin/make-images - one-off: resize the 2026 Maipo photo set into
+# img/Tours/Maipo/2026/<slug>-<width>.webp plus one .jpg fallback per photo.
+# Originals (multi-MB) stay OUTSIDE the repo; only these outputs are committed.
+# Never upscales: list only widths <= the source width.
+# Usage: bin/make-images [SRC_DIR]     (default: ../photos next to the repo)
+# Needs macOS sips + cwebp (brew install webp).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SRC="${1:-$ROOT/../photos}"
+OUT="$ROOT/img/Tours/Maipo/2026"
+QUALITY="${WEBP_QUALITY:-72}"
+
+command -v cwebp >/dev/null || { echo "bin/make-images: cwebp not found (brew install webp)" >&2; exit 1; }
+mkdir -p "$OUT"
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+
+# slug|source file|webp widths|jpg fallback width
+while IFS='|' read -r slug file widths jpgw; do
+  [ -z "$slug" ] && continue
+  src="$SRC/$file"
+  [ -f "$src" ] || { echo "bin/make-images: missing $src" >&2; exit 1; }
+  for w in $widths; do
+    sips -s format jpeg -s formatOptions 92 --resampleWidth "$w" "$src" --out "$tmp/$slug-$w.jpg" >/dev/null
+    cwebp -quiet -q "$QUALITY" -metadata none "$tmp/$slug-$w.jpg" -o "$OUT/$slug-$w.webp"
+  done
+  sips -s format jpeg -s formatOptions 72 --resampleWidth "$jpgw" "$src" --out "$OUT/$slug-$jpgw.jpg" >/dev/null
+  echo "$slug: $(sips -g pixelWidth -g pixelHeight "$OUT/$slug-960.webp" 2>/dev/null | awk '/pixel/{printf "%s ", $2}')(960 webp w h)"
+done <<'EOF'
+vineyard-toast|PHOTO-2026-01-03-11-47-39.jpeg|480 960 1280|1280
+asado-grill|Portada.jpeg|480 960 1600|960
+tasting-room|_MG_3977.jpeg|480 960 1600|960
+pisco-sour|_MG_4039.jpeg|480 960 1600|960
+toast-table|_MG_4389.jpeg|480 960 1600|960
+empanadas|_MG_4228.jpeg|480 960 1600|960
+red-wine-friends|cf93172a-8b95-47d7-945c-f9c61d9fc5d4.jpeg|480 960 1600|960
+asado-skewer|_MG_4129.jpeg|480 960 1600|960
+EOF
+ls -l "$OUT"
