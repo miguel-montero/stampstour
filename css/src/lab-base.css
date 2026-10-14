@@ -35,7 +35,7 @@
 :where(.lab) .lab-card { background: var(--tw-color-card); border: 1px solid var(--tw-color-line); border-radius: 12px; }
 
 :where(.lab) .lab-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 26px; background: var(--tw-color-teal); color: #fff; border: 0; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 800; letter-spacing: .5px; line-height: 1.2; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background-color .15s ease; }
-:where(.lab) .lab-btn:hover, :where(.lab) .lab-btn:focus { background: #006f73; color: #fff; }
+:where(.lab) .lab-btn:where(:hover, :focus-visible) { background: #006f73; color: #fff; }
 :where(.lab) .lab-btn:disabled { opacity: .5; cursor: not-allowed; }
 
 :where(.lab) .lab-label { display: block; margin-bottom: 4px; color: var(--tw-color-muted); font-size: 12px; font-weight: 600; }
