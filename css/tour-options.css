@@ -1,0 +1,18 @@
+/* css/tour-options.css
+ * Option selector cards + comparison table for tour pages sold in several
+ * options (Maipo first). Rendered by includes/tours/option_ui.php. */
+.tour-options { border: 0; margin: 0 0 20px; padding: 0; min-width: 0; }
+.tour-options__legend { float: none; width: auto; font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+.tour-option { display: block; position: relative; margin: 0 0 8px; cursor: pointer; }
+.tour-option input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.tour-option__body { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; background: #fff; transition: border-color .15s ease, box-shadow .15s ease; }
+.tour-option__label { font-weight: 700; color: #333; }
+.tour-option__price { font-weight: 700; color: #008489; text-align: right; }
+.tour-option__tagline { grid-column: 1 / -1; font-size: 12px; line-height: 1.4; color: #666; }
+.tour-option input:checked + .tour-option__body { border-color: #008489; box-shadow: 0 0 0 2px rgba(0, 132, 137, .2); }
+.tour-option input:focus-visible + .tour-option__body { outline: 2px solid #333; outline-offset: 2px; }
+.tour-option input:disabled + .tour-option__body { opacity: .55; cursor: not-allowed; }
+.tour-options--inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+.tour-options--inline .tour-options__legend { grid-column: 1 / -1; }
+.tour-options--inline .tour-option { margin: 0; }
+.tour-compare th, .tour-compare td { font-size: 14px; vertical-align: top; }
