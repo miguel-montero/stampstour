@@ -29,6 +29,8 @@
 .lab :where(a) { color: var(--tw-color-teal-soft); text-decoration: none; }
 .lab :where(a):hover, .lab :where(a):focus { color: #fff; }
 .lab :where(:focus-visible) { outline: 2px solid var(--tw-color-teal-soft); outline-offset: 2px; }
+/* beat css/style.css `a:hover,a:focus{outline:none}` (0,1,1) */
+.lab :where(a):focus-visible { outline: 2px solid var(--tw-color-teal-soft); outline-offset: 2px; }
 
 /* ---- component classes ---- */
 :where(.lab) .lab-eyebrow { color: var(--tw-color-coral); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; line-height: 1.4; text-transform: uppercase; }

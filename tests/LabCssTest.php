@@ -29,6 +29,12 @@ final class LabCssTest extends TestCase
         $this->assertStringContainsString('.lab{', $css);
     }
 
+    public function testAnchorFocusVisibleRuleIsCompiled(): void
+    {
+        $css = (string)file_get_contents(self::CSS);
+        $this->assertMatchesRegularExpression('/\.lab :where\(a\):focus-visible\s*\{[^}]*outline:\s*2px solid/', $css);
+    }
+
     public function testSizeBudget(): void
     {
         $this->assertLessThanOrEqual(30 * 1024, filesize(self::CSS));
