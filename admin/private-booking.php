@@ -105,7 +105,7 @@ if (empty($tours)) {
       <div class="row">
         <div class="col">
           <label style="display:flex; align-items:center; gap:.5rem;">
-            <input type="checkbox" name="is_private" id="is_private" value="1" style="width:auto;">
+            <input type="checkbox" name="is_private" id="is_private" value="1" style="width:auto;" checked>
             Private experience (exclusive tour, not shared/group)
           </label>
         </div>
@@ -202,9 +202,6 @@ if (empty($tours)) {
       // vendor code → hidden codigo_vendedor (submit.php override logic)
       document.getElementById('codigo_vendedor').value =
         (document.getElementById('vendor_code').value || '').trim();
-
-      // custom label: we’re forcing activity_name = "custom" for experiencia resolution on the server.
-      // If you want to persist this label too, store it in a concierge table from a webhook or later step.
     }, false);
   })();
   </script>
