@@ -13,7 +13,8 @@ function stampstour_valid_date($value, $default) {
 $start_date = stampstour_valid_date($_GET['start_date'] ?? null, date('Y-m-01'));
 $end_date   = stampstour_valid_date($_GET['end_date'] ?? null, date('Y-m-t'));
 
-$CUSTOM_EXPR = "e.nombre_publico = 'Custom Invoice'";
+// Privados: Custom Invoice o reservas marcadas como privadas (r.is_private = 1)
+$PRIVATE_EXPR = "(IFNULL(e.nombre_publico, '') = 'Custom Invoice' OR IFNULL(r.is_private, 0) = 1)";
 $JOYCE_ONLY  = "v.id_vendedor = 11";
 $NOT_JOYCE   = "(v.id_vendedor IS NULL OR v.id_vendedor <> 11)";
 
@@ -43,11 +44,11 @@ LEFT JOIN vendedores  v ON v.id_vendedor    = r.id_vendedor
 ";
 $ORDER_BY = " ORDER BY e.id_experiencia, r.fecha_reserva, r.id_reserva";
 
-/** ---- Tabla 1: TODO EXCEPTO Custom Invoice (EXCLUYE Joyce pero MANTIENE NULL) ---- */
+/** ---- Tabla 1: TODO EXCEPTO privados (Custom Invoice o is_private = 1) (EXCLUYE Joyce pero MANTIENE NULL) ---- */
 $query_no_custom = "
 SELECT $SELECT_COMMON
 $FROM_JOINS
-WHERE $whereBase AND NOT ($CUSTOM_EXPR) AND $NOT_JOYCE
+WHERE $whereBase AND NOT ($PRIVATE_EXPR) AND $NOT_JOYCE
 $ORDER_BY";
 $result_no_custom = $conn->query($query_no_custom);
 
@@ -58,14 +59,14 @@ SELECT
   SUM(r.ninos)       AS total_ninos,
   SUM(r.infantes)    AS total_infantes
 $FROM_JOINS
-WHERE $whereBase AND NOT ($CUSTOM_EXPR) AND $NOT_JOYCE";
+WHERE $whereBase AND NOT ($PRIVATE_EXPR) AND $NOT_JOYCE";
 $totalRow_no_custom = $conn->query($queryTotal_no_custom)->fetch_assoc();
 
-/** ---- Tabla 2: SOLO Custom Invoice (EXCLUYE Joyce pero MANTIENE NULL) ---- */
+/** ---- Tabla 2: SOLO privados (Custom Invoice o is_private = 1) (EXCLUYE Joyce pero MANTIENE NULL) ---- */
 $query_custom = "
 SELECT $SELECT_COMMON
 $FROM_JOINS
-WHERE $whereBase AND ($CUSTOM_EXPR) AND $NOT_JOYCE
+WHERE $whereBase AND ($PRIVATE_EXPR) AND $NOT_JOYCE
 $ORDER_BY";
 $result_custom = $conn->query($query_custom);
 
@@ -76,7 +77,7 @@ SELECT
   SUM(r.ninos)       AS total_ninos,
   SUM(r.infantes)    AS total_infantes
 $FROM_JOINS
-WHERE $whereBase AND ($CUSTOM_EXPR) AND $NOT_JOYCE";
+WHERE $whereBase AND ($PRIVATE_EXPR) AND $NOT_JOYCE";
 $totalRow_custom = $conn->query($queryTotal_custom)->fetch_assoc();
 
 /** ---- Tabla 3: Vendedores externos (Joyce = ID 11) ---- */
@@ -137,7 +138,7 @@ $totalRow_joyce = $conn->query($queryTotal_joyce)->fetch_assoc();
     </div>
   </div>
 
-  <!-- Tabla 1: Todas excepto Custom Invoice (excluye Joyce, incluye NULL) -->
+  <!-- Tabla 1: Todas excepto privados (excluye Joyce, incluye NULL) -->
   <div class="card mb-4">
     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
       <span>Ventas WEB - Tours regulares</span>
@@ -165,11 +166,11 @@ $totalRow_joyce = $conn->query($queryTotal_joyce)->fetch_assoc();
           <tbody>
           <?php while ($row = $result_no_custom->fetch_assoc()): ?>
             <tr>
-              <td><?= htmlspecialchars($row['experiencia']) ?></td>
+              <td><?= htmlspecialchars($row['experiencia'] ?? '') ?></td>
               <td><span class="text-monospace"><?= htmlspecialchars($row['reference_id']) ?></span></td>
               <td><?= htmlspecialchars($row['fecha_reserva']) ?></td>
               <td><?= htmlspecialchars($row['fecha_actividad']) ?></td>
-              <td><?= htmlspecialchars($row['titular']) ?></td>
+              <td><?= htmlspecialchars($row['titular'] ?? '') ?></td>
               <td class="text-end"><?= (int)$row['adultos'] ?></td>
               <td class="text-end"><?= (int)$row['ninos'] ?></td>
               <td class="text-end"><?= (int)$row['infantes'] ?></td>
@@ -206,7 +207,7 @@ $totalRow_joyce = $conn->query($queryTotal_joyce)->fetch_assoc();
     </div>
   </div>
 
-  <!-- Tabla 2: Solo Custom Invoice (excluye Joyce, incluye NULL) -->
+  <!-- Tabla 2: Solo privados (Custom Invoice o is_private = 1) (excluye Joyce, incluye NULL) -->
   <div class="card mb-4">
     <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
       <span>Tours Privados y tickets de otras actividades</span>
@@ -235,11 +236,11 @@ $totalRow_joyce = $conn->query($queryTotal_joyce)->fetch_assoc();
           <tbody>
           <?php while ($row = $result_custom->fetch_assoc()): ?>
             <tr>
-              <td><?= htmlspecialchars($row['experiencia']) ?></td>
+              <td><?= htmlspecialchars($row['experiencia'] ?? '') ?></td>
               <td><span class="text-monospace"><?= htmlspecialchars($row['reference_id']) ?></span></td>
               <td><?= htmlspecialchars($row['fecha_reserva']) ?></td>
               <td><?= htmlspecialchars($row['fecha_actividad']) ?></td>
-              <td><?= htmlspecialchars($row['titular']) ?></td>
+              <td><?= htmlspecialchars($row['titular'] ?? '') ?></td>
               <td class="text-end"><?= (int)$row['adultos'] ?></td>
               <td class="text-end"><?= (int)$row['ninos'] ?></td>
               <td class="text-end"><?= (int)$row['infantes'] ?></td>
@@ -254,7 +255,7 @@ $totalRow_joyce = $conn->query($queryTotal_joyce)->fetch_assoc();
                     ? '<span class="badge text-bg-success">Sí</span>'
                     : '<span class="badge text-bg-secondary">No</span>' ?>
               </td>
-              <td><?= htmlspecialchars($row['nombre_vendedor']) ?></td>
+              <td><?= htmlspecialchars($row['nombre_vendedor'] ?? '') ?></td>
               <td class="text-end fw-semibold">$<?= number_format((float)$row['total_venta'],0,',','.') ?></td>
             </tr>
           <?php endwhile; ?>
@@ -306,11 +307,11 @@ $totalRow_joyce = $conn->query($queryTotal_joyce)->fetch_assoc();
           <tbody>
           <?php while ($row = $result_joyce->fetch_assoc()): ?>
             <tr>
-              <td><?= htmlspecialchars($row['experiencia']) ?></td>
+              <td><?= htmlspecialchars($row['experiencia'] ?? '') ?></td>
               <td><span class="text-monospace"><?= htmlspecialchars($row['reference_id']) ?></span></td>
               <td><?= htmlspecialchars($row['fecha_reserva']) ?></td>
               <td><?= htmlspecialchars($row['fecha_actividad']) ?></td>
-              <td><?= htmlspecialchars($row['titular']) ?></td>
+              <td><?= htmlspecialchars($row['titular'] ?? '') ?></td>
               <td class="text-end"><?= (int)$row['adultos'] ?></td>
               <td class="text-end"><?= (int)$row['ninos'] ?></td>
               <td class="text-end"><?= (int)$row['infantes'] ?></td>
@@ -325,7 +326,7 @@ $totalRow_joyce = $conn->query($queryTotal_joyce)->fetch_assoc();
                     ? '<span class="badge text-bg-success">Sí</span>'
                     : '<span class="badge text-bg-secondary">No</span>' ?>
               </td>
-              <td><?= htmlspecialchars($row['nombre_vendedor']) ?></td>
+              <td><?= htmlspecialchars($row['nombre_vendedor'] ?? '') ?></td>
               <td class="text-end fw-semibold">$<?= number_format((float)$row['total_venta'],0,',','.') ?></td>
             </tr>
           <?php endwhile; ?>
