@@ -105,7 +105,7 @@ if (empty($tours)) {
       <div class="row">
         <div class="col">
           <label style="display:flex; align-items:center; gap:.5rem;">
-            <input type="checkbox" name="is_private" id="is_private" value="1" style="width:auto;" checked>
+            <input type="checkbox" name="is_private" id="is_private" value="1" style="width:auto;">
             Private experience (exclusive tour, not shared/group)
           </label>
         </div>
