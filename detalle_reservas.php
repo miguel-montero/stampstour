@@ -34,7 +34,8 @@ $sql = "
     t.telefono AS telefono,
     r.reference_id AS codigo_externo,
     r.airport_pickup  AS pickup,
-    r.airport_dropoff AS dropoff
+    r.airport_dropoff AS dropoff,
+    r.notas_internas  AS notas_internas
   FROM reservas r
   JOIN experiencias e ON r.id_experiencia = e.id_experiencia
   JOIN titulares    t ON r.id_titular     = t.id_titular
@@ -78,6 +79,7 @@ $res = $stmt->get_result();
                 <th class="text-center">Pick-up Aerop.</th>
                 <th class="text-center">Drop-off Aerop.</th>
                 <th class="text-nowrap">Código Ext.</th>
+                <th>Notas internas</th>
                 <th class="text-center">Copiar</th>
               </tr>
             </thead>
@@ -138,6 +140,13 @@ $res = $stmt->get_result();
                   </td>
                   <td class="text-nowrap">
                     <code class="small"><?= htmlspecialchars($row['codigo_externo']) ?></code>
+                  </td>
+                  <td class="small" style="min-width: 180px;">
+                    <?php if (($row['notas_internas'] ?? '') !== ''): ?>
+                      <?= nl2br(htmlspecialchars($row['notas_internas'])) ?>
+                    <?php else: ?>
+                      <span class="text-muted">—</span>
+                    <?php endif; ?>
                   </td>
                   <td class="text-center">
                     <button type="button" class="btn btn-outline-secondary btn-sm btn-copy-reserva"

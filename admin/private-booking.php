@@ -160,8 +160,8 @@ if (empty($tours)) {
         <input type="text" id="vendor_code" placeholder="e.g., 11">
       </div>
       <div class="col">
-        <label>Notes (optional)</label>
-        <input type="text" id="notes" placeholder="Internal notes (not sent anywhere here)">
+        <label>Internal notes (optional)</label>
+        <textarea name="notas_internas" id="notas_internas" rows="3" class="form-control" placeholder="Visible only to staff in Detalle reservas"></textarea>
       </div>
     </div>
 

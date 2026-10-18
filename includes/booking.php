@@ -168,6 +168,10 @@ function booking_insert_reservation(mysqli $conn, array $post, float $subtotal, 
     // 3c) Resolver hotel: id_hotel (catálogo, solo lectura) o hotel_manual (texto libre)
     [$id_hotel, $hotel_manual] = resolve_hotel_selection($conn, $post);
 
+    // 3d) Notas internas (solo admin/private-booking las envía); vacío => NULL
+    $notasInternas = trim((string)($post['notas_internas'] ?? ''));
+    $notasInternas = $notasInternas !== '' ? $notasInternas : null;
+
     // 4) Generar reference_id (reference_id es NOT NULL sin default)
     $stampCode = 'STAMP_' . substr(md5(uniqid((string)mt_rand(), true)), 0, 13);
 
@@ -189,9 +193,10 @@ function booking_insert_reservation(mysqli $conn, array $post, float $subtotal, 
             subtotal,
             total_venta,
             id_hotel,
-            hotel_manual
+            hotel_manual,
+            notas_internas
         ) VALUES (
-            ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )
     ");
     if (!$stmt) {
@@ -199,7 +204,7 @@ function booking_insert_reservation(mysqli $conn, array $post, float $subtotal, 
     }
 
     $stmt->bind_param(
-        "ssiiiiiiiiiddis",
+        "ssiiiiiiiiiddiss",
         $stampCode,
         $fecha,
         $adultos,
@@ -214,7 +219,8 @@ function booking_insert_reservation(mysqli $conn, array $post, float $subtotal, 
         $subtotal,
         $total,
         $id_hotel,
-        $hotel_manual
+        $hotel_manual,
+        $notasInternas
     );
 
     if (!$stmt->execute()) {
