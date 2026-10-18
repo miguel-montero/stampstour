@@ -73,6 +73,20 @@ final class BookingInsertTest extends TestCase
         $this->assertNotNull($this->reserva($ref)['id_vendedor']);
     }
 
+    public function testStoresNotasInternasTrimmed(): void
+    {
+        $ref = booking_insert_reservation($this->conn, $this->post(['notas_internas' => "  Pickup 8:30\nVegetarian lunch  "]), 10.0, 10.0);
+        $this->assertSame("Pickup 8:30\nVegetarian lunch", $this->reserva($ref)['notas_internas']);
+    }
+
+    public function testEmptyOrMissingNotasInternasStoresNull(): void
+    {
+        $ref = booking_insert_reservation($this->conn, $this->post(['notas_internas' => '   ']), 10.0, 10.0);
+        $this->assertNull($this->reserva($ref)['notas_internas']);
+        $ref = booking_insert_reservation($this->conn, $this->post(), 10.0, 10.0);
+        $this->assertNull($this->reserva($ref)['notas_internas']);
+    }
+
     public function testUnknownExperienceThrowsAndInsertsNothing(): void
     {
         try {
