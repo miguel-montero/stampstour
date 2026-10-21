@@ -440,6 +440,15 @@ if (!isset($_SESSION['username'])) {
 						<div class="col-md-4 col-sm-6 mb-4">
 							<div class="card h-100 shadow-sm">
 								<div class="card-body">
+									<h5 class="card-title">Refresh Reservations</h5>
+									<p class="card-text">Trigger the Gmail booking scan and view new reservations.</p>
+									<a href="/admin/refresh-reservations.php" class="btn btn-primary btn-sm">Open</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6 mb-4">
+							<div class="card h-100 shadow-sm">
+								<div class="card-body">
 									<h5 class="card-title">Check Reservations</h5>
 									<p class="card-text">Reconcile planilla, OTA files, and web reservations.</p>
 									<a href="/admin/check.php" class="btn btn-primary btn-sm">Open</a>
