@@ -530,6 +530,15 @@ if (!isset($_SESSION['username'])) {
 						<div class="col-md-4 col-sm-6 mb-4">
 							<div class="card h-100 shadow-sm">
 								<div class="card-body">
+									<h5 class="card-title">Getnet Diagnose</h5>
+									<p class="card-text">Check one reservation live against Getnet, even outside the batch tool's 1-day window.</p>
+									<a href="/admin/getnet-diagnose.php" class="btn btn-primary btn-sm">Open</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6 mb-4">
+							<div class="card h-100 shadow-sm">
+								<div class="card-body">
 									<h5 class="card-title">PayPal Reprocessing</h5>
 									<p class="card-text">Recover stuck PayPal webhook events.</p>
 									<a href="/admin/paypal-reprocess.php" class="btn btn-primary btn-sm">Open</a>
