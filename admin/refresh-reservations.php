@@ -74,9 +74,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_refresh'])) {
   <?php if ($error !== ''): ?>
     <div class="alert alert-danger mt-4"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
   <?php elseif ($result !== null): ?>
+    <?php
+      $sheetRows = is_array($result['rows'] ?? null) ? $result['rows'] : [];
+      $header = $sheetRows[0] ?? [];
+      $dataRows = array_slice($sheetRows, 1);
+    ?>
     <div class="alert alert-success mt-4">
       Done - sheet rewritten with <?= (int)($result['rowsWritten'] ?? 0) ?> reservation row(s).
     </div>
+
+    <?php if ($dataRows): ?>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <?php foreach ($header as $col): ?>
+                <th><?= htmlspecialchars((string)$col, ENT_QUOTES, 'UTF-8') ?></th>
+              <?php endforeach; ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($dataRows as $row): ?>
+              <tr>
+                <?php foreach ($row as $cell): ?>
+                  <td><?= htmlspecialchars((string)$cell, ENT_QUOTES, 'UTF-8') ?></td>
+                <?php endforeach; ?>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php endif; ?>
   <?php endif; ?>
 </div>
 </body>

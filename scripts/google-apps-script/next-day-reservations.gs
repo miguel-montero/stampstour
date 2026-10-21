@@ -315,7 +315,9 @@ function doGet(e) {
         JSON.stringify({
           ok: true,
           rowsWritten:
-            (result && result.rowsWritten) || 0
+            (result && result.rowsWritten) || 0,
+          rows:
+            (result && result.rows) || []
         })
       )
       .setMimeType(
@@ -1704,7 +1706,8 @@ function updateNextDayBookings() {
 
 
   return {
-    rowsWritten: rows.length - 1
+    rowsWritten: rows.length - 1,
+    rows: rows
   };
 
 }
