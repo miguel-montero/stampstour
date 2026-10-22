@@ -6,9 +6,14 @@ require __DIR__ . '/../includes/reconcile_getnet.php';
 
 set_time_limit(0);
 
+$lookbackDays = (int)($_POST['lookback_days'] ?? 1);
+if (!in_array($lookbackDays, [1, 7, 60], true)) {
+    $lookbackDays = 1;
+}
+
 $result = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_check'])) {
-    $result = reconcile_getnet_pending($conn, 50);
+    $result = reconcile_getnet_pending($conn, 50, null, $lookbackDays);
 }
 ?>
 <!DOCTYPE html>
@@ -30,13 +35,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_check'])) {
     or refunded but whose webhook never arrived.
   </p>
 
-  <form method="post">
-    <button type="submit" name="run_check" value="1" class="btn btn-primary">Run Check Now</button>
+  <form method="post" class="row g-2 align-items-end">
+    <div class="col-auto">
+      <label for="lookback_days" class="form-label">Lookback window</label>
+      <select id="lookback_days" name="lookback_days" class="form-select">
+        <option value="1" <?= $lookbackDays === 1 ? 'selected' : '' ?>>Last 24 hours (default - what the automatic job uses)</option>
+        <option value="7" <?= $lookbackDays === 7 ? 'selected' : '' ?>>Last 7 days</option>
+        <option value="60" <?= $lookbackDays === 60 ? 'selected' : '' ?>>Last 60 days</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button type="submit" name="run_check" value="1" class="btn btn-primary">Run Check Now</button>
+    </div>
   </form>
 
   <?php if ($result !== null): ?>
     <div class="mt-4">
-      <p><strong>Checked:</strong> <?= (int)$result['checked'] ?> &nbsp;
+      <p><strong>Window:</strong> last <?= (int)$lookbackDays ?> day(s) &nbsp;
+         <strong>Checked:</strong> <?= (int)$result['checked'] ?> &nbsp;
          <strong>Corrected:</strong> <?= (int)$result['corrected'] ?> &nbsp;
          <strong>Failed:</strong> <?= (int)$result['failed'] ?></p>
 

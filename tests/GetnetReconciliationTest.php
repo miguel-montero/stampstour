@@ -156,6 +156,18 @@ final class GetnetReconciliationTest extends TestCase
         $this->assertSame(0, $result['checked']);
     }
 
+    public function testWiderLookbackWindowIncludesOlderRow(): void
+    {
+        $this->insertReserva('TEST_RC_G2', '2010', 'pendiente', '-2 days');
+        $fakeLookup = fn(int $id) => ['status' => ['status' => 'APPROVED']];
+
+        $result = reconcile_getnet_pending($this->conn, 50, $fakeLookup, 7);
+
+        $this->assertSame(1, $result['checked']);
+        $this->assertSame(1, $result['corrected']);
+        $this->assertSame('realizado', $this->currentEstado('TEST_RC_G2'));
+    }
+
     public function testAlreadyRealizadoRowIsNeverSelected(): void
     {
         $this->insertReserva('TEST_RC_H', '2008', 'realizado');

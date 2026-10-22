@@ -29,11 +29,20 @@ require_once __DIR__ . '/../helpers.php';
  *                  defaults to the real getSessionInfo() (helpers.php).
  *                  Injectable for testing - see
  *                  docs/superpowers/specs/2026-08-06-payment-test-infrastructure-design.md
+ * @param int $lookbackDays How many days back to consider a 'pendiente'
+ *                  reservation eligible for checking. Defaults to 1, which
+ *                  is what the automatic cron job (cron_reconcile_getnet.php)
+ *                  relies on for its routine frequent runs. Pass a larger
+ *                  value (e.g. from admin/getnet-reconcile.php's manual
+ *                  "Run Check Now") to sweep further back - e.g. a passenger
+ *                  shows a receipt for a booking whose 'pendiente' state is
+ *                  older than 24h and the automatic job never re-checks it.
  * @return array{checked:int, corrected:int, failed:int, corrections:array<int,array{reference:string,from:string,to:string}>}
  */
-function reconcile_getnet_pending(mysqli $conn, int $limit = 50, ?callable $sessionLookup = null): array
+function reconcile_getnet_pending(mysqli $conn, int $limit = 50, ?callable $sessionLookup = null, int $lookbackDays = 1): array
 {
     $sessionLookup = $sessionLookup ?? 'getSessionInfo';
+    $lookbackDays = max(1, $lookbackDays);
 
     @mkdir(__DIR__ . '/../../logs', 0775, true);
     ini_set('error_log', __DIR__ . '/../../logs/getnet_reconcile.log');
@@ -57,11 +66,11 @@ function reconcile_getnet_pending(mysqli $conn, int $limit = 50, ?callable $sess
         FROM reservas
         WHERE estado = 'pendiente'
           AND process_id IS NOT NULL
-          AND fecha_reserva >= NOW() - INTERVAL 1 DAY
+          AND fecha_reserva >= NOW() - INTERVAL ? DAY
         ORDER BY id_reserva ASC
         LIMIT ?
     ");
-    $stmt->bind_param('i', $limit);
+    $stmt->bind_param('ii', $lookbackDays, $limit);
     $stmt->execute();
     $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
