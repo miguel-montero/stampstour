@@ -82,7 +82,20 @@ CREATE TABLE IF NOT EXISTS `vendedores` (
   `canal_venta` varchar(100) DEFAULT NULL,
   `telefono` varchar(50) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id_vendedor`)
+  `ta_code` char(4) DEFAULT NULL,
+  `ta_status` enum('pending','active','inactive','rejected') DEFAULT NULL,
+  `ta_applied_at` datetime DEFAULT NULL,
+  `ta_approved_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_vendedor`),
+  UNIQUE KEY `uniq_ta_code` (`ta_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `ta_code_attempts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(45) NOT NULL,
+  `attempted_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_ip_time` (`ip`,`attempted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `paypal_webhook_events` (
