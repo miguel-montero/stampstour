@@ -41,10 +41,18 @@ function migrate_travel_agents(mysqli $conn): array
     $tbl = $conn->query("SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'ta_code_attempts'");
     if ($tbl->num_rows > 0) {
         $log[] = '[skip] table ta_code_attempts already exists';
+        $kind = $conn->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'ta_code_attempts' AND COLUMN_NAME = 'kind'");
+        if ($kind->num_rows > 0) {
+            $log[] = '[skip] ta_code_attempts.kind already exists';
+        } else {
+            $conn->query("ALTER TABLE ta_code_attempts ADD COLUMN kind VARCHAR(16) NOT NULL DEFAULT 'code' AFTER ip");
+            $log[] = '[ok] added ta_code_attempts.kind';
+        }
     } else {
         $conn->query('CREATE TABLE ta_code_attempts (
             id INT AUTO_INCREMENT PRIMARY KEY,
             ip VARCHAR(45) NOT NULL,
+            kind VARCHAR(16) NOT NULL DEFAULT \'code\',
             attempted_at DATETIME NOT NULL,
             KEY idx_ip_time (ip, attempted_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');

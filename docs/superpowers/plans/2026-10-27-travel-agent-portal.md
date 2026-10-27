@@ -173,6 +173,7 @@ Handler order: non-string post values → fail; rate-limited IP → fail `'Too m
 
 ## Deploy (owner)
 
-1. Upload new/changed files: `includes/travel_agents.php`, `includes/ta_booking.php`, `includes/ta_mail.php`, `includes/ta_config.php`, `includes/migrations/travel_agents_2026_10_27.php`, `migrate_2026_10_27_travel_agents.php`, `agents/*`, `admin/travel-agents.php`, `admin/_nav.php`, `admin.php`, `api/validate_vendor_ta.php`.
-2. Logged in, open `/migrate_2026_10_27_travel_agents.php` once; every line `[ok]` or `[skip]`; delete the file from the server.
-3. Send agents (Joyce first) the link `/agents/apply.php`.
+1. Upload ONLY the migration first: `includes/migrations/travel_agents_2026_10_27.php` and `migrate_2026_10_27_travel_agents.php`.
+2. Logged in, open `/migrate_2026_10_27_travel_agents.php` once; every line `[ok]` or `[skip]`; then delete `migrate_2026_10_27_travel_agents.php` from the server.
+3. Upload everything else: `includes/travel_agents.php`, `includes/ta_booking.php`, `includes/ta_mail.php`, `includes/ta_config.php`, `agents/*`, `admin/travel-agents.php`, `admin/_nav.php`, `admin.php`, `api/validate_vendor_ta.php` (keep `includes/migrations/travel_agents_2026_10_27.php` in place).
+4. Send agents (Joyce first) the link `/agents/apply.php`.

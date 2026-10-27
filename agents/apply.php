@@ -20,11 +20,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $phone = (string)($_POST['phone'] ?? '');
     try {
         $now = new DateTimeImmutable('now', new DateTimeZone('America/Santiago'));
-        $result = ta_apply($conn, $name, $email, $phone, $now);
+        $result = ta_handle_application($conn, $_POST, (string)($_SERVER['REMOTE_ADDR'] ?? ''), $now);
         if ($result['ok']) {
-            $agent = ta_get($conn, (int)$result['id']);
+            $agent = isset($result['id']) ? ta_get($conn, (int)$result['id']) : null;
             if ($agent) {
-                $adminUrl = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'www.stampstour.com') . '/admin/travel-agents.php';
+                $cfg = require __DIR__ . '/../includes/ta_config.php';
+                $adminUrl = rtrim((string)$cfg['base_url'], '/') . '/admin/travel-agents.php';
                 try {
                     ta_send_email(ta_owner_notification_email($agent, $adminUrl));
                 } catch (Throwable $e) {
@@ -91,6 +92,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
               <div class="form-group">
                 <label for="phone">Phone <span class="text-muted">(optional)</span></label>
                 <input type="text" class="form-control" id="phone" name="phone" maxlength="50" value="<?= ta_h($phone) ?>">
+              </div>
+              <div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+                <label for="website">Leave this field empty</label>
+                <input type="text" id="website" name="website" value="" tabindex="-1" autocomplete="off">
               </div>
               <button type="submit" class="btn btn-primary btn-block">Apply</button>
             </form>

@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS `vendedores` (
 CREATE TABLE IF NOT EXISTS `ta_code_attempts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ip` varchar(45) NOT NULL,
+  `kind` varchar(16) NOT NULL DEFAULT 'code',
   `attempted_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_ip_time` (`ip`,`attempted_at`)

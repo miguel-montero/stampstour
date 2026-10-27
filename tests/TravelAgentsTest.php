@@ -167,10 +167,86 @@ final class TravelAgentsTest extends TestCase
         $this->assertFalse(ta_is_rate_limited($this->conn, $ip, $this->now->modify('+16 minutes')));
     }
 
+    public function test_daily_cap_limits_slow_attacker(): void
+    {
+        $ip = 'TEST-7.7.7.7';
+        for ($i = 0; $i < 29; $i++) {
+            ta_record_failure($this->conn, $ip, $this->now->modify('-' . (20 * 60 - $i * 40) . ' minutes'));
+        }
+        $this->assertFalse(ta_is_rate_limited($this->conn, $ip, $this->now));
+        ta_record_failure($this->conn, $ip, $this->now->modify('-1 minute'));
+        $this->assertTrue(ta_is_rate_limited($this->conn, $ip, $this->now));
+        $this->assertFalse(ta_is_rate_limited($this->conn, 'TEST-7.7.7.8', $this->now));
+        $this->assertFalse(ta_is_rate_limited($this->conn, $ip, $this->now->modify('+25 hours')));
+    }
+
+    public function test_ip_bucket_groups_ipv6_by_slash_64_and_keeps_ipv4(): void
+    {
+        $this->assertSame('203.0.113.9', ta_ip_bucket('203.0.113.9'));
+        $this->assertSame('203.0.113.9', ta_ip_bucket('::ffff:203.0.113.9'));
+        $a = ta_ip_bucket('2001:db8:1:2:aaaa:bbbb:cccc:dddd');
+        $this->assertSame($a, ta_ip_bucket('2001:0db8:0001:0002::1'));
+        $this->assertNotSame($a, ta_ip_bucket('2001:db8:1:3::1'));
+        $this->assertNotSame('', $a);
+
+        $ip1 = '2001:db8:1:2:aaaa:bbbb:cccc:dddd';
+        $ip2 = '2001:db8:1:2:1111:2222:3333:4444';
+        for ($i = 0; $i < 10; $i++) {
+            ta_record_failure($this->conn, $i % 2 ? $ip1 : $ip2, $this->now);
+        }
+        $this->assertTrue(ta_is_rate_limited($this->conn, $ip1, $this->now));
+        $this->assertTrue(ta_is_rate_limited($this->conn, $ip2, $this->now));
+        $this->conn->query("DELETE FROM ta_code_attempts WHERE ip LIKE '2001:db8:%'");
+    }
+
+    private function applyPost(string $n, array $o = []): array
+    {
+        return array_merge(['name' => "TEST_$n", 'email' => "$n@example.test", 'phone' => ''], $o);
+    }
+
+    public function test_honeypot_creates_nothing_and_looks_successful(): void
+    {
+        $r = ta_handle_application($this->conn, $this->applyPost('bot', ['website' => 'http://spam.example']), 'TEST-8.8.8.8', $this->now);
+        $this->assertTrue($r['ok']);
+        $this->assertArrayNotHasKey('id', $r);
+        $n = $this->conn->query("SELECT COUNT(*) FROM vendedores WHERE email = 'bot@example.test'")->fetch_row()[0];
+        $this->assertSame(0, (int)$n);
+        $m = $this->conn->query("SELECT COUNT(*) FROM ta_code_attempts WHERE ip = 'TEST-8.8.8.8'")->fetch_row()[0];
+        $this->assertSame(0, (int)$m);
+    }
+
+    public function test_apply_limited_to_3_per_ip_per_hour(): void
+    {
+        $ip = 'TEST-8.1.1.1';
+        for ($i = 1; $i <= 3; $i++) {
+            $r = ta_handle_application($this->conn, $this->applyPost("lim$i"), $ip, $this->now);
+            $this->assertTrue($r['ok'], (string)($r['error'] ?? ''));
+        }
+        $r = ta_handle_application($this->conn, $this->applyPost('lim4'), $ip, $this->now->modify('+30 minutes'));
+        $this->assertFalse($r['ok']);
+        $this->assertSame('Too many applications from your connection. Please try again later.', $r['error']);
+        $this->assertSame(0, (int)$this->conn->query("SELECT COUNT(*) FROM vendedores WHERE email = 'lim4@example.test'")->fetch_row()[0]);
+
+        $r = ta_handle_application($this->conn, $this->applyPost('other'), 'TEST-8.2.2.2', $this->now->modify('+30 minutes'));
+        $this->assertTrue($r['ok']);
+
+        $r = ta_handle_application($this->conn, $this->applyPost('lim4'), $ip, $this->now->modify('+61 minutes'));
+        $this->assertTrue($r['ok'], (string)($r['error'] ?? ''));
+    }
+
+    public function test_apply_attempts_do_not_count_toward_code_rate_limit(): void
+    {
+        $ip = 'TEST-8.3.3.3';
+        for ($i = 1; $i <= 3; $i++) {
+            ta_handle_application($this->conn, $this->applyPost("sep$i"), $ip, $this->now);
+        }
+        $this->assertFalse(ta_is_rate_limited($this->conn, $ip, $this->now));
+    }
+
     public function test_record_failure_purges_old_rows(): void
     {
         $ip = 'TEST-5.5.5.5';
-        ta_record_failure($this->conn, $ip, $this->now->modify('-20 minutes'));
+        ta_record_failure($this->conn, $ip, $this->now->modify('-25 hours'));
         ta_record_failure($this->conn, $ip, $this->now);
         $n = $this->conn->query("SELECT COUNT(*) FROM ta_code_attempts WHERE ip = '$ip'")->fetch_row()[0];
         $this->assertSame(1, (int)$n);

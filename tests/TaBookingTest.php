@@ -135,6 +135,23 @@ final class TaBookingTest extends TestCase
         $this->assertSame(0, $this->reservaCount());
     }
 
+    public function test_empty_children_and_infants_count_as_zero(): void
+    {
+        $r = $this->handle($this->post(['children' => '', 'infants' => '']));
+        $this->assertTrue($r['ok'], (string)($r['error'] ?? ''));
+        $r = $this->handle($this->post(['adults' => '']));
+        $this->assertFalse($r['ok']);
+    }
+
+    public function test_rejects_date_more_than_two_years_out(): void
+    {
+        $r = $this->handle($this->post(['date_booking' => '10-28-2028']));
+        $this->assertFalse($r['ok']);
+        $this->assertSame('Please choose a tour date within the next two years.', $r['error']);
+        $r = $this->handle($this->post(['date_booking' => '10-27-2028']));
+        $this->assertTrue($r['ok'], (string)($r['error'] ?? ''));
+    }
+
     public function test_rejects_tour_outside_the_four(): void
     {
         $r = $this->handle($this->post(['activity_name' => 'MAIPO_CLASSIC']));

@@ -120,7 +120,7 @@ try {
                 <!-- Date -->
                 <div class="form-group">
                   <label for="fecha_actividad">Tour Date</label>
-                  <input type="date" class="form-control" id="fecha_actividad" name="fecha_actividad" required>
+                  <input type="date" class="form-control" id="fecha_actividad" name="fecha_actividad" min="<?= (new DateTimeImmutable('now', new DateTimeZone('America/Santiago')))->format('Y-m-d') ?>" required>
                 </div>
 
                 <!-- Passengers -->

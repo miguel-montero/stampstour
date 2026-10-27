@@ -74,10 +74,16 @@ function ta_booking_handle(mysqli $conn, array $post, string $ip, DateTimeImmuta
     if ($date < $today->setTime(0, 0)) {
         return $fail('The tour date cannot be in the past.');
     }
+    if ($date > $today->setTime(0, 0)->modify('+2 years')) {
+        return $fail('Please choose a tour date within the next two years.');
+    }
 
     $counts = [];
     foreach (['adults', 'children', 'infants'] as $field) {
         $raw = trim((string)($post[$field] ?? '0'));
+        if ($raw === '' && $field !== 'adults') {
+            $raw = '0';
+        }
         if (preg_match('/^\d{1,2}$/', $raw) !== 1) {
             return $fail('Please enter a valid number of travelers.');
         }

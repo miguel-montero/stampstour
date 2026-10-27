@@ -4,6 +4,9 @@
 
 const TA_RATE_LIMIT_MAX = 10;
 const TA_RATE_LIMIT_WINDOW_MIN = 15;
+const TA_DAILY_LIMIT_MAX = 30;
+const TA_APPLY_LIMIT_MAX = 3;
+const TA_APPLY_LIMIT_WINDOW_MIN = 60;
 
 const TA_DB_DATETIME = 'Y-m-d H:i:s';
 
@@ -138,31 +141,86 @@ function ta_list(mysqli $conn): array
     return $out;
 }
 
-function ta_is_rate_limited(mysqli $conn, string $ip, DateTimeImmutable $now): bool
+/** Rate-limit bucket for an address: IPv6 -> its /64 prefix, IPv4 (and anything else) unchanged. */
+function ta_ip_bucket(string $ip): string
 {
-    $since = $now->modify('-' . TA_RATE_LIMIT_WINDOW_MIN . ' minutes')->format(TA_DB_DATETIME);
-    $stmt = $conn->prepare('SELECT COUNT(*) FROM ta_code_attempts WHERE ip = ? AND attempted_at > ?');
-    $stmt->bind_param('ss', $ip, $since);
+    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
+        return $ip;
+    }
+    $bin = inet_pton($ip);
+    if ($bin === false || strlen($bin) !== 16) {
+        return $ip;
+    }
+    if (substr($bin, 0, 12) === str_repeat("\0", 10) . "\xff\xff") {
+        return implode('.', array_map('ord', str_split(substr($bin, 12))));
+    }
+    return implode(':', str_split(bin2hex(substr($bin, 0, 8)), 4)) . '::/64';
+}
+
+function ta_attempts_since(mysqli $conn, string $bucket, string $kind, DateTimeImmutable $now, string $interval): int
+{
+    $since = $now->modify('-' . $interval)->format(TA_DB_DATETIME);
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM ta_code_attempts WHERE ip = ? AND kind = ? AND attempted_at > ?');
+    $stmt->bind_param('sss', $bucket, $kind, $since);
     $stmt->execute();
     $stmt->bind_result($count);
     $stmt->fetch();
     $stmt->close();
-    return (int)$count >= TA_RATE_LIMIT_MAX;
+    return (int)$count;
 }
 
-function ta_record_failure(mysqli $conn, string $ip, DateTimeImmutable $now): void
+function ta_log_attempt(mysqli $conn, string $ip, string $kind, DateTimeImmutable $now): void
 {
+    $bucket = ta_ip_bucket($ip);
     $at = $now->format(TA_DB_DATETIME);
-    $stmt = $conn->prepare('INSERT INTO ta_code_attempts (ip, attempted_at) VALUES (?, ?)');
-    $stmt->bind_param('ss', $ip, $at);
+    $stmt = $conn->prepare('INSERT INTO ta_code_attempts (ip, kind, attempted_at) VALUES (?, ?, ?)');
+    $stmt->bind_param('sss', $bucket, $kind, $at);
     $stmt->execute();
     $stmt->close();
 
-    $cutoff = $now->modify('-' . TA_RATE_LIMIT_WINDOW_MIN . ' minutes')->format(TA_DB_DATETIME);
+    $cutoff = $now->modify('-24 hours')->format(TA_DB_DATETIME);
     $stmt = $conn->prepare('DELETE FROM ta_code_attempts WHERE attempted_at < ?');
     $stmt->bind_param('s', $cutoff);
     $stmt->execute();
     $stmt->close();
+}
+
+/** 10 failed code checks / 15 min, or 30 / rolling 24h, per IP bucket. No site-wide lockout by design. */
+function ta_is_rate_limited(mysqli $conn, string $ip, DateTimeImmutable $now): bool
+{
+    $bucket = ta_ip_bucket($ip);
+    return ta_attempts_since($conn, $bucket, 'code', $now, TA_RATE_LIMIT_WINDOW_MIN . ' minutes') >= TA_RATE_LIMIT_MAX
+        || ta_attempts_since($conn, $bucket, 'code', $now, '24 hours') >= TA_DAILY_LIMIT_MAX;
+}
+
+function ta_record_failure(mysqli $conn, string $ip, DateTimeImmutable $now): void
+{
+    ta_log_attempt($conn, $ip, 'code', $now);
+}
+
+function ta_apply_is_limited(mysqli $conn, string $ip, DateTimeImmutable $now): bool
+{
+    return ta_attempts_since($conn, ta_ip_bucket($ip), 'apply', $now, TA_APPLY_LIMIT_WINDOW_MIN . ' minutes') >= TA_APPLY_LIMIT_MAX;
+}
+
+/**
+ * Public application entry point: honeypot, per-IP limit, then ta_apply().
+ * A filled honeypot looks like success but creates and records nothing
+ * (result has 'id' absent, so callers send no email).
+ */
+function ta_handle_application(mysqli $conn, array $post, string $ip, DateTimeImmutable $now): array
+{
+    if (trim((string)($post['website'] ?? '')) !== '') {
+        return ['ok' => true];
+    }
+    if (ta_apply_is_limited($conn, $ip, $now)) {
+        return ['ok' => false, 'error' => 'Too many applications from your connection. Please try again later.'];
+    }
+    $result = ta_apply($conn, (string)($post['name'] ?? ''), (string)($post['email'] ?? ''), (string)($post['phone'] ?? ''), $now);
+    if ($result['ok']) {
+        ta_log_attempt($conn, $ip, 'apply', $now);
+    }
+    return $result;
 }
 
 function ta_mask_email(string $email): string
