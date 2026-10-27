@@ -494,6 +494,15 @@ if (!isset($_SESSION['username'])) {
 						<div class="col-md-4 col-sm-6 mb-4">
 							<div class="card h-100 shadow-sm">
 								<div class="card-body">
+									<h5 class="card-title">Travel Agents</h5>
+									<p class="card-text">Approve agent sign-ups and manage agent codes.</p>
+									<a href="/admin/travel-agents.php" class="btn btn-primary btn-sm">Open</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6 mb-4">
+							<div class="card h-100 shadow-sm">
+								<div class="card-body">
 									<h5 class="card-title">Private Booking</h5>
 									<p class="card-text">Custom one-off booking page for a specific reservation.</p>
 									<a href="/admin/private-booking.php" class="btn btn-primary btn-sm">Open</a>

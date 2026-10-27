@@ -9,6 +9,7 @@ function stamp_admin_nav(string $active = ''): void {
         'consolidate-month' => ['label' => 'Consolidate Month', 'href' => '/admin/consolidate-month.php'],
         'closing' => ['label' => 'Closing', 'href' => '/admin/closing.php'],
         'preferentials' => ['label' => 'Preferentials', 'href' => '/admin/preferentials.php'],
+        'travel-agents' => ['label' => 'Travel Agents', 'href' => '/admin/travel-agents.php'],
         'private-booking' => ['label' => 'Private Booking', 'href' => '/admin/private-booking.php'],
         'blog' => ['label' => 'Blog', 'href' => '/admin/blog.php'],
     ];
